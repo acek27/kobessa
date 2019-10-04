@@ -17,13 +17,13 @@
     @endif
 <form method="POST" action="{{route('dataternak.store')}}" role="form">
     @csrf
-    <label style="color:black">Nama Hewan Ternak</label>
+    <label style="color:black">Jenis Hewan Ternak</label>
     <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp" required>
-    <label style="color:black">Jenis Ternak</label>
-    <select class="form-control show-tick" name="idjenis" required>
+    <label style="color:black">Kategori</label>
+    <select class="form-control show-tick" name="idkategori" required>
         <option value="">-- Please select --</option>
-        @foreach($jenis as $values)
-        <option value="{{$values->idjenis}}">{{$values->jenisternak}}</option>
+        @foreach($kategori as $values)
+        <option value="{{$values->idkategori}}">{{$values->kategoriternak}}</option>
         @endforeach
     </select>
     <br>
@@ -43,8 +43,8 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th style="width: 50%; text-align: left; vertical-align: middle" >Nama Hewan Ternak</th>
-                    <th style="width: 40%; text-align: left; vertical-align: middle" >Jenis</th>
+                    <th style="width: 50%; text-align: left; vertical-align: middle" >Jenis Hewan Ternak</th>
+                    <th style="width: 40%; text-align: left; vertical-align: middle" >Nama</th>
                     <th style="width: 60%; text-align: left; vertical-align: middle" >Action</th>
                     
                 </tr>
@@ -70,16 +70,16 @@
             serverSide: true,
             ajax: '{{route('tabel.ternak')}}',
             columns: [{
-                    data: 'idternak',
-                    name: 'idternak'
+                    data: 'idjenis',
+                    name: 'idjenis'
                 },
                 {
-                    data: 'namaternak',
-                    name: 'namaternak'
+                    data: 'jenisternak',
+                    name: 'jenisternak'
                 },
                 {
-                    data: 'namajenis',
-                    name: 'namajenis'
+                    data: 'kategori',
+                    name: 'kategori'
                 },
                 {
                     data: 'action',

@@ -16,9 +16,10 @@
 @endif
 <form method="POST" action="{{route('kepemilikan.store')}}" role="form">
     @csrf
-    <label style="color:black">ID PETERNAK</label>
+    <label style="color:black">NIK</label>
     <input type="text" class="form-control form-control-user" id="idpeternak" name="idpeternak" aria-describedby="emailHelp" placeholder="" required>
     <button type="button" id="tb_nik">Cek ID</button>
+    <br>
     <label style="color:black">Nama Peternak</label>
     <input type="text" class="form-control form-control-user" value="" id="nama" name="nama" aria-describedby="emailHelp" disabled>
     <label style="color:black">Alamat</label>
@@ -31,8 +32,8 @@
         @endforeach
     </select>
     <label style="color:black">Jumlah Ternak</label>
-    <input type="text" class="form-control form-control-user" id="telp" name="jumlah" aria-describedby="emailHelp" placeholder="" required>
-
+    <input type="text" class="form-control form-control-user" id="jumlah" name="jumlah" aria-describedby="emailHelp" placeholder="" required>
+    
 
     <br>
     <button type="submit" style="align-center" class="btn-sm btn-primary shadow-sm">
@@ -121,6 +122,7 @@
                 $.each(x, function(index, z) {
                     $('#nama').val(z.nama);
                     $('#alamat').val(z.alamat);
+                    $('#id').val(z.idpeternak);
                 });
             }
         });

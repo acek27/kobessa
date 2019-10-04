@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\peternakan;
+namespace App\Http\Controllers\pertanian;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 
-class dataTernakController extends Controller
+class keanggotaantaniController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,23 +19,7 @@ class dataTernakController extends Controller
         return view('dashboard');
     }
 
-    public function tabelternak()
-    {
-        return DataTables::of(DB::table('jenisternak')
-            ->join('kategoriternak', 'jenisternak.idkategori', '=', 'kategoriternak.idkategori')
-            ->select('jenisternak.*', 'kategoriternak.kategoriternak as kategori')
-            ->get())
-            ->addColumn('action', function ($data) {
-                $del = '<a href="#" data-id="' . $data->idjenis . '" class="hapus-data"><i class="material-icons">delete</i></a>';
-                $edit = '<a href="#"><i class="material-icons">edit</i></a>';
-                return $edit . '&nbsp' . $del;
-            })
-            ->make(true);
-    }
-
-
-
-
+ 
     /**
      * Show the form for creating a new resource.
      *
@@ -43,9 +27,10 @@ class dataTernakController extends Controller
      */
     public function create()
     {
-        $kategori = DB::table('kategoriternak')->get();
-
-        return view('peternakan.dataternak', compact('kategori'));
+        
+        $kelompok = DB::table('kelompokpetani')->get();
+        $date = date('d-m-Y');
+        return view('peternakan.keanggotaanpeternak',compact('date','kelompok'));
     }
 
     /**
@@ -56,19 +41,9 @@ class dataTernakController extends Controller
      */
     public function store(Request $request)
     {
-        $nama = $request->get('nama');
-        $idkategori = $request->get('idkategori');
-        DB::table('jenisternak')->insert([
-            'jenisternak'      => $nama,
-            'idkategori'     => $idkategori
-        ]);
-
-        \Session::flash("flash_notification", [
-            "level" => "success",
-            "message" => "Berhasil menambah ternak : $request->nama"
-        ]);
-
-        return redirect('/dataternak/create');
+        
+        
+        return redirect('/keanggotaan/create');
     }
 
     /**

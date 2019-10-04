@@ -20,8 +20,21 @@
     <input type="text" class="form-control form-control-user" id="nik"  name="nik" aria-describedby="emailHelp" placeholder="" required>
     <label style="color:black">Nama Peternak</label>
     <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp" placeholder="" required>
+    <label style="color:black">Jenis Kelamin</label>
+    <select class="form-control show-tick" name = "iddesa" required>
+    <option value="">-- Please select --</option>
+    <option value="Laki-Laki">Laki-Laki</option>
+    <option value="Perempuan">Perempuan</option>
+    </select>
     <label style="color:black">Alamat</label>
     <input type="text" class="form-control form-control-user" id="alamat" name="alamat" aria-describedby="emailHelp" placeholder="" required>
+    <label style="color:black">Desa</label>
+    <select class="form-control show-tick" name = "iddesa" required>
+    <option value="">-- Please select --</option>
+    @foreach($desa as $values)
+    <option value="{{$values->iddesa}}">{{$values->desa}}</option>
+    @endforeach
+    </select>
     <label style="color:black">Kecamatan</label>
     <select class="form-control show-tick" name = "idkecamatan" required>
     <option value="">-- Please select --</option>
@@ -52,6 +65,8 @@
                                 <th style="width: 7%;text-align: center; vertical-align: middle">ID</th>
                                 <th style="width: 20%; text-align: left; vertical-align: middle">NIK</th>
                                 <th style="text-align: center; vertical-align: middle">Nama</th>
+                                <th style="text-align: center; vertical-align: middle">Alamat</th>
+                                <th style="text-align: center; vertical-align: middle">Desa</th>
                                 <th style="text-align: center; vertical-align: middle">Kecamatan</th>
                                 <th style="text-align: center; vertical-align: middle">No Telp</th>
                                 <th style="text-align: center; vertical-align: middle">Action</th>

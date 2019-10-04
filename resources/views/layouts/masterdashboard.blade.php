@@ -69,7 +69,7 @@
             <a class="collapse-item active" href="{{route('datapeternak.create')}}">Data Peternak</a>
             <a class="collapse-item active" href="{{route('kelompokpeternak.create')}}">Data Kelompok Peternak</a>
             <a class="collapse-item active" href="{{route('keanggotaanpeternak.create')}}">Data Keanggotaan</a>
-            <a class="collapse-item active" href="{{route('kepemilikan.create')}}">Data Kepemilikan</a>
+            <a class="collapse-item active" href="{{route('kepemilikan.create')}}">Data Kepemilikan Ternak</a>
             <a class="collapse-item active" href="cards.html">Data Kotoran Ternak</a>
           </div>
         </div>
@@ -88,7 +88,8 @@
             <a class="collapse-item active" href="{{route('datatanaman.create')}}">Data Tanaman Pertanian</a>
             <a class="collapse-item active" href="{{route('datapetani.create')}}">Data Petani</a>
             <a class="collapse-item active" href="{{route('kelompokpetani.create')}}">Data Kelompok Petani</a>
-            <a class="collapse-item active" href="utilities-other.html">Data Hasil Pertanian</a>
+            <a class="collapse-item active" href="{{route('keanggotaanpeternak.create')}}">Data Keanggotaan</a>
+            <a class="collapse-item active" href="utilities-other.html">Data Kepemilikan Lahan</a>
             <a class="collapse-item active" href="utilities-other.html">Data Kebutuhan</a>
           </div>
         </div>
@@ -126,7 +127,7 @@
             <a class="collapse-item active" href="{{route('datapeternak.create')}}">Data Peternak</a>
             <a class="collapse-item active" href="{{route('kelompokpeternak.create')}}">Data Kelompok Peternak</a>
             <a class="collapse-item active" href="{{route('keanggotaanpeternak.create')}}">Data Keanggotaan</a>
-            <a class="collapse-item active" href="{{route('kepemilikan.create')}}">Data Kepemilikan</a>
+            <a class="collapse-item active" href="{{route('kepemilikan.create')}}">Data Kepemilikan Ternak</a>
             <a class="collapse-item active" href="cards.html">Data Kotoran Ternak</a>
           </div>
         </div>
@@ -144,7 +145,8 @@
             <a class="collapse-item active" href="{{route('datatanaman.create')}}">Data Tanaman Pertanian</a>
             <a class="collapse-item active" href="{{route('datapetani.create')}}">Data Petani</a>
             <a class="collapse-item active" href="{{route('kelompokpetani.create')}}">Data Kelompok Petani</a>
-            <a class="collapse-item active" href="utilities-other.html">Data Hasil Pertanian</a>
+            <a class="collapse-item active" href="{{route('keanggotaanpetani.create')}}">Data Keanggotaan</a>
+            <a class="collapse-item active" href="utilities-other.html">Data Kepemilikan Lahan</a>
             <a class="collapse-item active" href="utilities-other.html">Data Kebutuhan</a>
            </div>
         </div>

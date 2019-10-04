@@ -56,6 +56,7 @@ class kepemilikanController extends Controller
      */
     public function store(Request $request)
     {
+
         $idpeternak = $request->get('idpeternak');
         $idjenis = $request->get('idjenis');
         $jumlah = $request->get('jumlah');
@@ -73,7 +74,7 @@ class kepemilikanController extends Controller
         return redirect('/kepemilikan/create');
     }
     public function ceknik ($id){
-        $x = DB::table('datapeternak')->where('idpeternak',$id)->get();
+        $x = DB::table('datapeternak')->where('nik',$id)->get();
         return response()->json($x);
     }
 
