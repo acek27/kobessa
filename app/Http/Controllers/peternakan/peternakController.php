@@ -21,9 +21,10 @@ class peternakController extends Controller
    
 
     public function tabelpeternak (){
-        return DataTables::of(DB::table('datapeternak')
-                ->join('kecamatan', 'datapeternak.idkecamatan', '=', 'kecamatan.idkecamatan')
-                ->select('datapeternak.*', 'kecamatan.kecamatan as namakecamatan')
+        return DataTables::of(DB::table('peternak')
+                ->join('kecamatan', 'peternak.idkecamatan', '=', 'kecamatan.idkecamatan')
+                ->join('desa', 'peternak.iddesa', '=', 'desa.iddesa')
+                ->select('peternak.*', 'kecamatan.kecamatan as namakecamatan', 'desa.namadesa as namadesa')
                 ->get())
                 ->addColumn('action', function ($data) {
                     $del = '<a href="#" data-id="' . $data->idpeternak . '" class="hapus-data"><i class="material-icons">delete</i></a>';
@@ -40,9 +41,9 @@ class peternakController extends Controller
      */
     public function create()
     {
-        // $data = DB::table('datapeternak')->get();
+        $desa = DB::table('desa')->get();
         $kecamatan = DB::table('kecamatan')->get();
-        return view('peternakan.datapeternak',compact('kecamatan'));
+        return view('peternakan.datapeternak',compact('kecamatan','desa'));
     }
 
     /**
@@ -55,12 +56,16 @@ class peternakController extends Controller
     {
         $nama = $request->get('nama');
         $alamat = $request->get('alamat');
+        $jk = $request->get('jk');
+        $iddesa = $request->get('iddesa');
         $nik = $request->get('nik');
         $telp = $request->get('telp');
         $idkecamatan = $request->get('idkecamatan');
-        DB::table('datapeternak')->insert([
+        DB::table('peternak')->insert([
             'nik'      => $nik,
             'nama'      => $nama,
+            'jeniskelamin'      => $jk,
+            'iddesa'      => $iddesa,
             'alamat'      => $alamat,
             'telp'      => $telp,
             'idkecamatan'     => $idkecamatan

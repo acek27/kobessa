@@ -21,7 +21,7 @@
     <label style="color:black">Nama Peternak</label>
     <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp" placeholder="" required>
     <label style="color:black">Jenis Kelamin</label>
-    <select class="form-control show-tick" name = "iddesa" required>
+    <select class="form-control show-tick" name = "jk" required>
     <option value="">-- Please select --</option>
     <option value="Laki-Laki">Laki-Laki</option>
     <option value="Perempuan">Perempuan</option>
@@ -32,7 +32,7 @@
     <select class="form-control show-tick" name = "iddesa" required>
     <option value="">-- Please select --</option>
     @foreach($desa as $values)
-    <option value="{{$values->iddesa}}">{{$values->desa}}</option>
+    <option value="{{$values->iddesa}}">{{$values->namadesa}}</option>
     @endforeach
     </select>
     <label style="color:black">Kecamatan</label>
@@ -65,6 +65,7 @@
                                 <th style="width: 7%;text-align: center; vertical-align: middle">ID</th>
                                 <th style="width: 20%; text-align: left; vertical-align: middle">NIK</th>
                                 <th style="text-align: center; vertical-align: middle">Nama</th>
+                                <th style="text-align: center; vertical-align: middle">Jenis Kelamin</th>
                                 <th style="text-align: center; vertical-align: middle">Alamat</th>
                                 <th style="text-align: center; vertical-align: middle">Desa</th>
                                 <th style="text-align: center; vertical-align: middle">Kecamatan</th>
@@ -96,6 +97,9 @@
                     {data: 'idpeternak', name: 'idpeternak'},
                     {data: 'nik', name: 'nik'},
                     {data: 'nama', name: 'nama'},
+                    {data: 'jeniskelamin', name: 'jeniskelamin'},
+                    {data: 'alamat', name: 'alamat'},
+                    {data: 'namadesa', name: 'namadesa'},
                     {data: 'namakecamatan', name: 'namakecamatan'},
                     {data: 'telp', name: 'telp'},
                     {data: 'action', name: 'action', orderable: false, searchable: false, align: 'center'},
