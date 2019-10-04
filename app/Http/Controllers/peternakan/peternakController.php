@@ -54,6 +54,10 @@ class peternakController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'nik' => 'numeric|required',
+            'telp' => 'numeric|required'
+        ]);
         $nama = $request->get('nama');
         $alamat = $request->get('alamat');
         $jk = $request->get('jk');

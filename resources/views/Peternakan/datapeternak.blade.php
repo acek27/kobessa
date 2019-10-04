@@ -16,35 +16,40 @@
     @endif
 <form method="POST" action="{{route('datapeternak.store')}}" role="form">
 @csrf
-    <label style="color:black">NIK</label>
-    <input type="text" class="form-control form-control-user" id="nik"  name="nik" aria-describedby="emailHelp" placeholder="" required>
+    <label style="color:black">NIK</label> 
+    <input type="text" class="form-control form-control-user" id="nik" value="{{old('nik')}}"  name="nik" aria-describedby="emailHelp" placeholder="" required>
+    @if ($errors->any())
+        {!! $errors->first('nik', '<p style="font-size: 12px; color:red">ERROR! input NIK Harus Berupa Angka</p>') !!}
+    @endif
     <label style="color:black">Nama Peternak</label>
-    <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp" placeholder="" required>
+    <input type="text" class="form-control form-control-user" value="{{old('nama')}}" id="nama" name="nama" aria-describedby="emailHelp" placeholder="" required>
     <label style="color:black">Jenis Kelamin</label>
-    <select class="form-control show-tick" name = "jk" required>
+    <select class="form-control show-tick" value="{{old('jk')}}" name = "jk" required>
     <option value="">-- Please select --</option>
     <option value="Laki-Laki">Laki-Laki</option>
     <option value="Perempuan">Perempuan</option>
     </select>
     <label style="color:black">Alamat</label>
-    <input type="text" class="form-control form-control-user" id="alamat" name="alamat" aria-describedby="emailHelp" placeholder="" required>
+    <input type="text" class="form-control form-control-user" value="{{old('alamat')}}" id="alamat" name="alamat" aria-describedby="emailHelp" placeholder="" required>
     <label style="color:black">Desa</label>
-    <select class="form-control show-tick" name = "iddesa" required>
+    <select class="form-control show-tick" value="{{old('iddesa')}}" name = "iddesa" required>
     <option value="">-- Please select --</option>
     @foreach($desa as $values)
     <option value="{{$values->iddesa}}">{{$values->namadesa}}</option>
     @endforeach
     </select>
     <label style="color:black">Kecamatan</label>
-    <select class="form-control show-tick" name = "idkecamatan" required>
+    <select class="form-control show-tick" value="{{old('idkecamatan')}}" name = "idkecamatan" required>
     <option value="">-- Please select --</option>
     @foreach($kecamatan as $values)
     <option value="{{$values->idkecamatan}}">{{$values->kecamatan}}</option>
     @endforeach
     </select>
     <label style="color:black">No Telp</label>
-    <input type="text" class="form-control form-control-user" id="telp" name="telp" aria-describedby="emailHelp" placeholder="" required>
-    
+    <input type="text" class="form-control form-control-user" id="telp" value="{{old('telp')}}" name="telp" aria-describedby="emailHelp" placeholder="" required>
+    @if ($errors->any())
+        {!! $errors->first('telp', '<p style="font-size: 12px; color:red">ERROR! input No Telp Harus Berupa Angka</p>') !!}
+    @endif
     
 <br>
     <button type="submit" style="align-center" class="btn-sm btn-primary shadow-sm">
