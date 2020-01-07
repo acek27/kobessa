@@ -4,6 +4,8 @@ namespace App\Http\Controllers\pertanian;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Yajra\Datatables\Datatables;
 
 class kebutuhanController extends Controller
 {
@@ -17,6 +19,24 @@ class kebutuhanController extends Controller
         //
     }
 
+    public function tabellahan()
+    {
+        return DataTables::of(DB::table('keanggotaanpoktan')
+        ->join('kelompok', 'kelompok.idkelompok', '=', 'keanggotaanpoktan.idkelompok')
+        ->join('lahan', 'lahan.idlahan', '=', 'keanggotaanpoktan.idlahan')
+        ->join('biodatauser', 'lahan.nik', '=', 'biodatauser.nik')
+        ->join('desa', 'desa.iddesa', '=', 'kelompok.iddesa')
+
+            ->select('keanggotaanpoktan.*','biodatauser.nama as nama','lahan.namalahan as namalahan','lahan.luaslahan as luaslahan','biodatauser.nik as nik','biodatauser.alamat as alamat', 'desa.namadesa as namadesa', 'kelompok.namakelompok as namakelompok')
+            ->get())
+            ->addColumn('action', function ($data) {
+                $pilih = "<a href=\"" . route('kebutuhansaprodi.show', $data->idkeanggotaan) . "\"><i class=\"material-icons\" title=\"Data Kebutuhan Saprodi\">Pilih</i></a>";
+                return $pilih;
+            })
+            ->make(true);
+    }
+
+   
     /**
      * Show the form for creating a new resource.
      *
@@ -24,7 +44,13 @@ class kebutuhanController extends Controller
      */
     public function create()
     {
-        //
+        return view('pertanian.kebutuhansaprodi');
+        
+    }
+    public function cari()
+    {
+
+        return view('pertanian.carilahan');
     }
 
     /**
@@ -34,8 +60,29 @@ class kebutuhanController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    { 
+        for($i=1; $i<=15; $i++)
+        {
+            $id = $request->get('idkeanggotaan');
+            $idlahan = $request->get('idlahan');
+            $idsaprodi = $request->get('idsaprodi'.$i);
+            $kebutuhan = $request->get('kebutuhan'.$i);
+            if ($idsaprodi != null || $kebutuhan != null){
+                DB::table('kebutuhansaprodi')->insert([
+                    'idlahan' => $idlahan,
+                    'idsaprodi' => $idsaprodi,
+                    'kebutuhan' => $kebutuhan
+                    ]);
+            }
+       
+        }
+        \Session::flash("flash_notification", [
+            "level" => "success",
+            "message" => "Berhasil menambah data petani : $request->nama"
+        ]);
+        
+        return redirect('/kebutuhansaprodi'.'/'.$id);
+
     }
 
     /**
@@ -46,7 +93,14 @@ class kebutuhanController extends Controller
      */
     public function show($id)
     {
-        //
+         $saprodi = DB::table('saprodi')->get();
+         $data = DB::table('keanggotaanpoktan')
+         ->join('kelompok', 'kelompok.idkelompok', '=', 'keanggotaanpoktan.idkelompok')
+         ->join('lahan', 'lahan.idlahan', '=', 'keanggotaanpoktan.idlahan')
+         ->join('biodatauser', 'lahan.nik', '=', 'biodatauser.nik')
+         ->join('desa', 'desa.iddesa', '=', 'kelompok.iddesa')
+            ->where('idkeanggotaan', '=', $id)->get();
+        return view('pertanian.kebutuhansaprodi', compact('data', 'saprodi'));
     }
 
     /**

@@ -6,7 +6,7 @@
 @section('isi')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Data Tanaman</h1>
+    <h1 class="h3 mb-0 text-gray-800">Data Tanaman Pertanian</h1>
     <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
 </div>
 @if (session()->has('flash_notification.message'))
@@ -17,13 +17,13 @@
     @endif
 <form method="POST" action="{{route('datatanaman.store')}}" role="form">
     @csrf
-    <label style="color:black">Nama Tanaman</label>
-    <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp" required>
     <label style="color:black">Jenis Tanaman</label>
-    <select class="form-control show-tick" name="idjenis" required>
+    <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp" required>
+    <label style="color:black">Kategori</label>
+    <select class="form-control show-tick" id="idkategori" name="idkategori" required>
         <option value="">-- Please select --</option>
-        @foreach($jenis as $values)
-        <option value="{{$values->idjenis}}">{{$values->jenistanaman}}</option>
+        @foreach($kategori as $values)
+        <option value="{{$values->idkategori}}">{{$values->kategoritanaman}}</option>
         @endforeach
     </select>
     <br>
@@ -43,8 +43,8 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th style="width: 50%; text-align: left; vertical-align: middle" >Nama Tanaman</th>
-                    <th style="width: 40%; text-align: left; vertical-align: middle" >Jenis</th>
+                    <th style="width: 50%; text-align: left; vertical-align: middle" >Jenis Tanaman</th>
+                    <th style="width: 40%; text-align: left; vertical-align: middle" >Kategori</th>
                     <th style="width: 60%; text-align: left; vertical-align: middle" >Action</th>
                     
                 </tr>
@@ -70,16 +70,16 @@
             serverSide: true,
             ajax: '{{route('tabel.tanaman')}}',
             columns: [{
-                    data: 'idtanaman',
-                    name: 'idtanaman'
+                    data: 'idjenis',
+                    name: 'idjenis'
                 },
                 {
-                    data: 'namatanaman',
-                    name: 'namatanaman'
+                    data: 'jenistanaman',
+                    name: 'jenistanaman'
                 },
                 {
-                    data: 'namajenis',
-                    name: 'namajenis'
+                    data: 'namakategori',
+                    name: 'namakategori'
                 },
                 {
                     data: 'action',
@@ -90,6 +90,61 @@
                 },
             ]
         });
+        var del = function (id) {
+                swal({
+                    title: "Apakah anda yakin?",
+                    text: "Anda tidak dapat mengembalikan data yang sudah terhapus!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Iya!",
+                    cancelButtonText: "Tidak!",
+                }).then(
+                    function (result) {
+                        $.ajax({
+                            url: "{{route('datatanaman.index')}}/" + id,
+                            method: "DELETE",
+                        }).done(function (msg) {
+                         dt.ajax.reload();
+                            $('#nama').val("");
+                            $('#id').val("");
+                            $('#idkategori').val("");
+                            $('#simpan').text("SIMPAN");
+                            swal("Deleted!", "Data sudah terhapus.", "success");
+                        }).fail(function (textStatus) {
+                            alert("Request failed: " + textStatus);
+                        });
+                    }, function (dismiss) {
+                        // dismiss can be 'cancel', 'overlay', 'esc' or 'timer'
+                        swal("Cancelled", "Data batal dihapus", "error");
+                    });
+            };
+
+            $('body').on('click', '.hapus-data', function () {
+                del($(this).attr('data-id'));
+            });
+
+            $('body').on("click", '.edit-modal', function () {
+                var idjenis = $(this).attr('data-id');
+                $.ajax({
+                    url: "/datatanaman/"+ idjenis+"/edit",
+                    type: 'GET',
+                    datatype: 'json',
+                    success: function (x) {
+                        $.each(x, function (index, z) {
+                            $('#nama').val(z.jenistanaman);
+                            $('#id').val(z.idjenis);
+                            $('#idkategori').val(z.idkategori);
+                            $('#simpan').text("UPDATE");
+                        });
+
+                    }
+                });
+            });
+    
+    
     });
+
+    
 </script>
 @endpush

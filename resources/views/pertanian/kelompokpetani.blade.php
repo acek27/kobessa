@@ -16,38 +16,52 @@
     @endif
 <form method="POST" action="{{route('kelompokpetani.store')}}" role="form">
     @csrf
+    <div class="row">
+  <!-- Content Column Ke 1-->
+  <div class="col-lg-6 mb-4">
+    <!-- Project Card Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">DAFTAR KEOMPOK TANI</h6>
+      </div>
+      <div class="card-body">
     <label style="color:black">Nama Kelompok</label>
     <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp" placeholder="" required>
-    <label style="color:black">Alamat</label>
+    <input type="text" class="form-control form-control-user" id="id" name="id" aria-describedby="emailHelp" placeholder="" hidden>
+    <label style="color:black">Alamat Sekretariat</label>
     <input type="text" class="form-control form-control-user" id="alamat" name="alamat" aria-describedby="emailHelp" placeholder="" required>
-    <label style="color:black">Desa</label>
-    <select class="form-control show-tick" name="iddesa" required>
-        <option value="">-- Please select --</option>
-        @foreach($desa as $values)
-        <option value="{{$values->iddesa}}">{{$values->namadesa}}</option>
-        @endforeach
-    </select>
     <label style="color:black">Kecamatan</label>
-    <select class="form-control show-tick" name="idkecamatan" required>
-        <option value="">-- Please select --</option>
-        @foreach($kecamatan as $values)
-        <option value="{{$values->idkecamatan}}">{{$values->kecamatan}}</option>
-        @endforeach
-    </select>
+    <label style="color:black">Kecamatan</label>
+        <select class="form-control show-tick" id="idkecamatan" name="idkecamatan" required>
+            <option value="">-- Please select --</option>
+            @foreach($kecamatan as $value)
+                <option style="text-transform: lowercase" value="{{$value->idkecamatan}}">{{$value->kecamatan}}</option>
+            @endforeach
+        </select>
+        <label style="color:black">Desa</label>
+        <select class="form-control show-tick" id="iddesa" name="iddesa" required>
+            <option value="">-- Please select --</option>
+
+        </select>
     <label style="color:black">Tahun Pembentukan</label>
     <input type="text" class="form-control form-control-user" id="thn" name="thn" aria-describedby="emailHelp" placeholder="" required>
     <label style="color:black">Jenis Kelompok</label>
-    <select class="form-control show-tick" name="jeniskelompok" required>
+    <select class="form-control show-tick" id="jeniskelompok" name="jeniskelompok" required>
         <option value="">-- Please select --</option>
         @foreach($jenis as $values)
         <option value="{{$values->jeniskelompok}}">{{$values->jeniskelompok}}</option>
         @endforeach
     </select>
         <br>
-    <button type="submit" style="align-center" class="btn-sm btn-primary shadow-sm">
+    <button type="submit" id="simpan" style="align-center" class="btn-sm btn-primary shadow-sm">
         SIMPAN</button>
 
 </form>
+</div>
+        </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block bg-pertanian"></div>
+</div>
 @csrf
 <br>
 <div class="card shadow mb-4">
@@ -61,7 +75,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Nama Kelompok Peternak</th>
-                    <th>AlamatSekretariat</th>
+                    <th>Alamat Sekretariat</th>
                     <th>Desa</th>
                     <th>Kecamatan</th>
                     <th>Tahun Pembentukan</th>
@@ -125,7 +139,91 @@
                     align: 'center'
                 },
             ]
-        });
-    });
+        });var del = function (id) {
+                    swal({
+                        title: "Apakah anda yakin?",
+                        text: "Anda tidak dapat mengembalikan data yang sudah terhapus!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Iya!",
+                        cancelButtonText: "Tidak!",
+                    }).then(
+                        function (result) {
+                            $.ajax({
+                                url: "{{route('kelompokpetani.index')}}/" + id,
+                                method: "DELETE",
+                            }).done(function (msg) {
+                                dt.ajax.reload();
+                                $('#nama').val("");
+                                $('#alamat').val("");
+                                $('#desa').val("");
+                                $('#thn').val("");
+                                $('#jeniskelompok').val("");
+                                $('#simpan').text("SIMPAN");
+                                swal("Deleted!", "Data sudah terhapus.", "success");
+                            }).fail(function (textStatus) {
+                                alert("Request failed: " + textStatus);
+                            });
+                        }, function (dismiss) {
+                            // dismiss can be 'cancel', 'overlay', 'esc' or 'timer'
+                            swal("Cancelled", "Data batal dihapus", "error");
+                        });
+                };
+                $('body').on('click', '.hapus-data', function () {
+                    del($(this).attr('data-id'));
+                });
+                $('body').on("click", '.edit-modal', function () {
+                    var idkelompokpetani = $(this).attr('data-id');
+                    $.ajax({
+                        url: "{{url('/cekkelompokpetani')}}/" + idkelompokpetani,
+                        type: 'GET',
+                        datatype: 'json',
+                        success: function (x) {
+                            $.each(x, function (index, z) {
+                                $('#nama').val(z.namakelompok);
+                                $('#id').val(z.idkelompok);
+                                $('#alamat').val(z.alamatsekretariat);
+                                $('#desa').val(z.iddesa);
+                                $('#jeniskelompok').val(z.jeniskelompok);
+                                $('#thn').val(z.tahunpembentukan);
+                                $('#simpan').text("UPDATE");
+                            });
+                        }
+                    });
+                });
+
+                var start = new Date().getFullYear();
+                var end = start - 50;
+                var options = "";
+                for (var year = start; year >= end; year--) {
+                    options += "<option>" + year + "</option>";
+                }
+                document.getElementById("thn").innerHTML = options;
+            });
 </script>
+ <script>
+        $(document).ready(function () {
+            $('#idkecamatan').change(function () {
+                var id = $(this).val();
+                $.ajax({
+                    url: "/datadesa/" + id,
+                    method: "POST",
+                    data: {id: id},
+                    async: true,
+                    dataType: 'json',
+                    success: function (data) {
+                        var html = '';
+                        var i;
+                        for (i = 0; i < data.length; i++) {
+                            html += '<option style="text-transform: lowercase;" value=' + data[i].iddesa + '>' + data[i].namadesa + '</option>';
+                        }
+                        $('#iddesa').html(html);
+                    }
+                });
+                return false;
+            });
+
+        });
+    </script>
 @endpush

@@ -18,20 +18,31 @@ class peternakController extends Controller
     {
         return view('dashboard');
     }
-   
 
-    public function tabelpeternak (){
-        return DataTables::of(DB::table('peternak')
-                ->join('kecamatan', 'peternak.idkecamatan', '=', 'kecamatan.idkecamatan')
-                ->join('desa', 'peternak.iddesa', '=', 'desa.iddesa')
-                ->select('peternak.*', 'kecamatan.kecamatan as namakecamatan', 'desa.namadesa as namadesa')
-                ->get())
-                ->addColumn('action', function ($data) {
-                    $del = '<a href="#" data-id="' . $data->idpeternak . '" class="hapus-data"><i class="material-icons">delete</i></a>';
-                    $edit = '<a href="#"><i class="material-icons">edit</i></a>';
-                    return $edit . '&nbsp' . $del;
-                })
-                ->make(true);
+
+    public function tabelpeternak()
+    {
+        return DataTables::of(DB::table('biodatauser')
+            ->join('desa', 'biodatauser.iddesa', '=', 'desa.iddesa')
+            ->join('kecamatan', 'kecamatan.idkecamatan', '=', 'desa.idkecamatan')
+            ->select('biodatauser.*', 'kecamatan.kecamatan as namakecamatan', 'desa.namadesa as namadesa')
+            ->get())
+            ->addColumn('action', function ($data) {
+                $del = '<a href="#" data-id="' . $data->nik . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
+                $edit = '<a href="#" data-id="' . $data->nik . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
+                return $edit . '&nbsp' . '&nbsp' . $del;
+            })
+            ->make(true);
+    }
+
+    public function cekpeternak($id)
+    {
+        $x = DB::table('biodatauser')
+            -> join  ('desa','biodatauser.iddesa','=','desa.iddesa')
+            -> join  ('kecamatan','desa.idkecamatan','=','kecamatan.idkecamatan')
+            ->where('nik', $id)
+            ->get();
+        return response()->json($x);
     }
 
     /**
@@ -43,42 +54,70 @@ class peternakController extends Controller
     {
         $desa = DB::table('desa')->get();
         $kecamatan = DB::table('kecamatan')->get();
-        return view('peternakan.datapeternak',compact('kecamatan','desa'));
+        return view('peternakan.datapeternak', compact('kecamatan', 'desa'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $request->validate([
-            'nik' => 'numeric|required',
             'telp' => 'numeric|required'
         ]);
         $nama = $request->get('nama');
+        $tl = $request->get('tl');
+        $tgl = $request->get('tgl');
         $alamat = $request->get('alamat');
         $jk = $request->get('jk');
         $iddesa = $request->get('iddesa');
         $nik = $request->get('nik');
         $telp = $request->get('telp');
-        $idkecamatan = $request->get('idkecamatan');
-        DB::table('peternak')->insert([
-            'nik'      => $nik,
-            'nama'      => $nama,
-            'jeniskelamin'      => $jk,
-            'iddesa'      => $iddesa,
-            'alamat'      => $alamat,
-            'telp'      => $telp,
-            'idkecamatan'     => $idkecamatan
-        ]);
+     
+        $pengecekan = DB::table('biodatauser')->select('*')
+            ->where('nik', '=', $nik);
 
-        \Session::flash("flash_notification", [
-            "level" => "success",
-            "message" => "Berhasil menambah peternak : $request->nama"
-        ]);
+        if ($pengecekan->exists()) {
+            DB::table('biodatauser')
+                ->where('nik','=',$nik)
+                ->update([
+                'nama' => $nama,
+                'tempatlahir' => $tl,
+                'tgllahir' => $tgl,
+                'jeniskelamin' => $jk,
+                'iddesa' => $iddesa,
+                'alamat' => $alamat,
+                'telp' => $telp
+
+            ]);
+
+            \Session::flash("flash_notification", [
+                "level" => "success",
+                "message" => "Data Peternak $request->nama Berhasil diupdate!"
+            ]);
+        } else {
+            $request->validate([
+                'nik' => 'numeric|required'
+            ]);
+            DB::table('biodatauser')->insert([
+                'nik' => $nik,
+                'nama' => $nama,
+                'tempatlahir' => $tl,
+                'tgllahir' => $tgl,
+                'jeniskelamin' => $jk,
+                'iddesa' => $iddesa,
+                'alamat' => $alamat,
+                'telp' => $telp
+            ]);
+
+            \Session::flash("flash_notification", [
+                "level" => "success",
+                "message" => "Berhasil menambah data peternak : $request->nama"
+            ]);
+        }
 
         return redirect('/datapeternak/create');
     }
@@ -86,7 +125,7 @@ class peternakController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -97,7 +136,7 @@ class peternakController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -108,8 +147,8 @@ class peternakController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -120,11 +159,11 @@ class peternakController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        DB::table('biodatauser')->where('nik', '=', $id)->delete();
     }
 }

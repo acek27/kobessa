@@ -21,14 +21,14 @@ class datatanamanController extends Controller
 
     public function tabeltanaman()
     {
-        return DataTables::of(DB::table('tanaman')
-            ->join('jenistanaman', 'tanaman.idjenis', '=', 'jenistanaman.idjenis')
-            ->select('tanaman.*', 'jenistanaman.jenistanaman as namajenis')
+        return DataTables::of(DB::table('jenistanaman')
+            ->join('kategoritanaman', 'jenistanaman.idkategori', '=', 'kategoritanaman.idkategori')
+            ->select('jenistanaman.*', 'kategoritanaman.kategoritanaman as namakategori')
             ->get())
             ->addColumn('action', function ($data) {
-                $del = '<a href="#" data-id="' . $data->idtanaman . '" class="hapus-data"><i class="material-icons">delete</i></a>';
-                $edit = '<a href="#"><i class="material-icons">edit</i></a>';
-                return $edit . '&nbsp' . $del;
+                $del = '<a href="#" data-id="' . $data->idjenis . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
+                $edit = '<a href="#" data-id="' . $data->idjenis . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
+                return $edit . '&nbsp' . '&nbsp' . $del;
             })
             ->make(true);
     }
@@ -40,8 +40,8 @@ class datatanamanController extends Controller
      */
     public function create()
     {
-        $jenis = DB::table('jenistanaman')->get();
-        return view('pertanian.datatanaman', compact('jenis'));
+        $kategori = DB::table('kategoritanaman')->get();
+        return view('pertanian.datatanaman', compact('kategori'));
     }
 
     /**
@@ -52,21 +52,40 @@ class datatanamanController extends Controller
      */
     public function store(Request $request)
     {
+        $id = $request->get('id');
         $nama = $request->get('nama');
-        $idjenis = $request->get('idjenis');
-        DB::table('tanaman')->insert([
-            'namatanaman'      => $nama,
-            'idjenis'     => $idjenis
-        ]);
+        $idkategori = $request->get('idkategori');
+        $pengecekan = DB::table('jenistanaman')->select('*')
+            ->where('idjenis', '=', $id)
+            ->where('jenistanaman', '=', $nama);
 
-        \Session::flash("flash_notification", [
-            "level" => "success",
-            "message" => "Berhasil menambah data : $request->nama"
-        ]);
+        if ($pengecekan->exists()) {
+            DB::table('jenistanaman')
+                ->where('idjenis',$id)
+                ->update([
+                'jenistanaman' => $nama,
+                'idkategori' => $idkategori
+            ]);
 
-        return redirect('/datatanaman/create');
+            \Session::flash("flash_notification", [
+                "level" => "success",
+                "message" => "Data Berhasil Diupdate!"
+            ]);
+        } else {
+            DB::table('jenistanaman')->insert([
+                    'jenistanaman'      => $nama,
+                    'idkategori'     => $idkategori
+                ]);
+        
+                \Session::flash("flash_notification", [
+                    "level" => "success",
+                    "message" => "Berhasil menambah data : $request->nama"
+                ]);
+        }
+               return redirect('/datatanaman/create');
     }
 
+    
     /**
      * Display the specified resource.
      *
@@ -86,7 +105,10 @@ class datatanamanController extends Controller
      */
     public function edit($id)
     {
-        //
+        $x = DB::table('jenistanaman')
+        ->where('idjenis', '=', $id)
+        ->get();
+    return response()->json($x);
     }
 
     /**
@@ -109,6 +131,6 @@ class datatanamanController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::table('jenistanaman')->where('idjenis', '=', $id)->delete();
     }
 }

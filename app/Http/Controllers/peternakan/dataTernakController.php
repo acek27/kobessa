@@ -26,15 +26,23 @@ class dataTernakController extends Controller
             ->select('jenisternak.*', 'kategoriternak.kategoriternak as kategori')
             ->get())
             ->addColumn('action', function ($data) {
-                $del = '<a href="#" data-id="' . $data->idjenis . '" class="hapus-data"><i class="material-icons">delete</i></a>';
-                $edit = '<a href="#"><i class="material-icons">edit</i></a>';
-                return $edit . '&nbsp' . $del;
+                $del = '<a href="#" data-id="' . $data->idjenis . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
+                $edit = '<a href="#" data-id="' . $data->idjenis . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
+                return $edit . '&nbsp' . '&nbsp' . $del;
             })
             ->make(true);
     }
-
-
-
+// Cara pertama dengan Route resource maka format URLnya : /Alamat/parameter/function (parameter ditengah)
+// Cara kedua tidak menggunakan resource maka format URLnya: "{{url('/cekternak')}}/" + idpeternak, (Route/web.php harus diberi 
+//  route::get('cekternak/{id}','peternakan\dataTernakController@cekternak')
+ // funcion dibawah ini  bisa dipakai.
+    // public function cekternak($id)
+    // {
+    //      $x = DB::table('jenisternak')
+    //         ->where('idjenis', '=', $id)
+    //         ->get();
+    //     return response()->json($x);
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -51,22 +59,41 @@ class dataTernakController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
+        $id = $request->get('id');
         $nama = $request->get('nama');
         $idkategori = $request->get('idkategori');
-        DB::table('jenisternak')->insert([
-            'jenisternak'      => $nama,
-            'idkategori'     => $idkategori
-        ]);
+        $pengecekan = DB::table('jenisternak')->select('*')
+            ->where('idjenis', '=', $id)
+            ->where('jenisternak', '=', $nama);
 
-        \Session::flash("flash_notification", [
-            "level" => "success",
-            "message" => "Berhasil menambah ternak : $request->nama"
-        ]);
+        if ($pengecekan->exists()) {
+            DB::table('jenisternak')
+                ->where('idjenis',$id)
+                ->update([
+                'jenisternak' => $nama,
+                'idkategori' => $idkategori
+            ]);
+
+            \Session::flash("flash_notification", [
+                "level" => "success",
+                "message" => "Data Berhasil Diupdate!"
+            ]);
+        } else {
+            DB::table('jenisternak')->insert([
+                'jenisternak' => $nama,
+                'idkategori' => $idkategori
+            ]);
+
+            \Session::flash("flash_notification", [
+                "level" => "success",
+                "message" => "Berhasil menambah data ternak : $request->nama"
+            ]);
+        }
 
         return redirect('/dataternak/create');
     }
@@ -74,7 +101,7 @@ class dataTernakController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -85,19 +112,22 @@ class dataTernakController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        //
+    {    
+        $x = DB::table('jenisternak')
+        ->where('idjenis', '=', $id)
+        ->get();
+    return response()->json($x);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -108,11 +138,11 @@ class dataTernakController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        DB::table('jenisternak')->where('idjenis', '=', $id)->delete();
     }
 }
