@@ -1,8 +1,0 @@
-    <script src="{{asset('plugins/jquery-datatables-editable/jquery.dataTables.js')}}"></script>
-    <script src="{{asset('plugins/datatables/dataTables.bootstrap.js')}}"></script>
-    <script src="{{asset('js/jquery.datatables.init.js')}}"></script>
-
-
-<link rel="stylesheet" href="{{asset('plugins/jquery-datatables-editable/datatables.css')}}"/>
-    <!-- DataTables -->
-    <link href="{{asset('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>

@@ -58,29 +58,7 @@
         <div class="sidebar-heading">
             Sektor
         </div>
-    @can('peternakan')
-        <!-- Nav Item - peternakan Menu -->
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePeternakan"
-                   aria-expanded="true" aria-controls="collapsePeternakan">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Sektor Peternakan</span>
-                </a>
-                <div id="collapsePeternakan" class="collapse" aria-labelledby="headingPeternakan"
-                     data-parent="#accordionSidebar">
-                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Menu:</h6>
-                        <!-- <a class="collapse-item active" href="{{route('dataternak.create')}}">Data Hewan Ternak</a>
-                        <a class="collapse-item active" href="{{route('datapeternak.create')}}">Data Peternak</a>
-                        <a class="collapse-item active" href="{{route('kelompokpeternak.create')}}">Data Kelompok
-                            Peternak</a>
-                        <a class="collapse-item active" href="{{route('keanggotaanpeternak.create')}}">Data
-                            Keanggotaan</a>
-                        <a class="collapse-item active" href="{{route('hasilpeternakan.cari')}}">Data Hasil Ternak</a> -->
-                    </div>
-                </div>
-            </li>
-    @endcan
+
                         @can('pertanian')
                         <li class="nav-item">
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePertanian"
@@ -126,28 +104,6 @@
     @endcan
 
     @can('super')
-        <!-- Nav Item - peternakan Menu -->
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePeternakan"
-                   aria-expanded="true" aria-controls="collapsePeternakan">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Sektor Peternakan</span>
-                </a>
-                <div id="collapsePeternakan" class="collapse" aria-labelledby="headingPeternakan"
-                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Menu:</h6>
-                        <!-- <a class="collapse-item active" href="{{route('dataternak.create')}}">Data Hewan Ternak</a>
-                        <a class="collapse-item active" href="{{route('datapeternak.create')}}">Data Peternak</a>
-                        <a class="collapse-item active" href="{{route('kelompokpeternak.create')}}">Data Kelompok
-                            Peternak</a>
-                        <a class="collapse-item active" href="{{route('keanggotaanpeternak.create')}}">Data
-                            Keanggotaan</a>
-                        <a class="collapse-item active" href="{{route('hasilpeternakan.cari')}}">Hasil Ternak</a> -->
-                    </div>
-                </div>
-            </li>
-
             <!-- Nav Item - Pertanian Menu -->
             <li class="nav-item">
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePertanian"
@@ -166,7 +122,7 @@
                         <a class="collapse-item active" href="{{route('kelompokpetani.create')}}">Data Kelompok Petani</a>
                         <a class="collapse-item active" href="{{route('kepemilikanlahan.create')}}">Kepemilikan Lahan</a>
                         <a class="collapse-item active" href="{{route('kebutuhan.cari')}}">Kebutuhan Saprodi</a>
-                        <!-- <a class="collapse-item active" href="{{route('kebutuhansaprodi.create')}}">Kebutuhan Saprodi</a> --> 
+                        <!-- <a class="collapse-item active" href="{{route('kebutuhansaprodi.create')}}">Kebutuhan Saprodi</a> -->
                         <a class="collapse-item active" href="{{route('hasilpertanian.cari')}}">Hasil Pertanian</a>
                     </div>
                 </div>
@@ -203,7 +159,7 @@
             <!-- <a class="nav-link" href="#" aria-expanded="true"
                    aria-controls="collapseEkonomi">Informasi Kualias Pakan Ternak</a>
             </li>
-    
+
         </div>
 
         <!-- Divider -->

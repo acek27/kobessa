@@ -18,36 +18,6 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 });
-/*Peternakan*/
-Route::resource('dataternak', 'peternakan\dataTernakController');
-Route::get('tabelternak', 'peternakan\dataTernakController@tabelternak')->name('tabel.ternak');
-Route::get('cekternak/{id}', 'peternakan\dataTernakController@cekternak');
-
-Route::resource('datapeternak', 'peternakan\peternakController');
-Route::get('tabelpeternak', 'peternakan\peternakController@tabelpeternak')->name('tabel.peternak');
-Route::get('cekpeternak/{id}', 'peternakan\peternakController@cekpeternak');
-
-Route::resource('kelompokpeternak', 'peternakan\kelompokpeternakController');
-Route::get('tabelkelompokpeternak', 'peternakan\kelompokpeternakController@tabelkelompokpeternak')->name('tabel.kelompokpeternak');
-Route::get('cekkelompokpeternak/{id}', 'peternakan\kelompokpeternakController@cekkelompokpeternak');
-
-Route::resource('keanggotaanpeternak', 'peternakan\keanggotaanpeternakController');
-Route::get('tabelkeanggotaanpeternak', 'peternakan\keanggotaanpeternakController@tabelpokter')->name('tabel.pokter');
-Route::get('ceknik/{id}', 'peternakan\keanggotaanpeternakController@ceknik');
-Route::get('cekkeanggotaanpeternak/{id}', 'peternakan\keanggotaanpeternakController@cekkeanggotaanpeternak');
-
-Route::get('cekhasil/{id}/{no}', 'peternakan\hasilpeternakanController@cekhasil');
-Route::get('penjualan/', 'peternakan\hasilpeternakanController@penjualan')->name('hasilpeternakan.penjualan');
-// Route::resource('kepemilikan', 'peternakan\kepemilikanController');
-// Route::get('tabelkepemilikan', 'peternakan\kepemilikanController@tabelkepemilikan')->name('tabel.kepemilikan');
-// Route::get('ceknik/{id}', 'peternakan\kepemilikanController@ceknik');
-
-// Route::resource('kotoranternak', 'peternakan\kotoraternakController');
-Route::resource('hasilpeternakan', 'peternakan\hasilpeternakanController');
-Route::get('tabelhasil', 'peternakan\hasilpeternakanController@tabelhasil')->name('tabel.hasil');
-Route::get('tabelhasilpeternakan', 'peternakan\hasilpeternakanController@tabelcaripeternak')->name('tabel.caripeternak');
-Route::get('caripeternak', 'peternakan\hasilpeternakanController@cari')->name('hasilpeternakan.cari');
-
 
 
 /* Pertanian */
@@ -92,8 +62,6 @@ Route::resource('datasaprodi', 'pertanian\saprodiController');
 Route::get('tabelsaprodi', 'pertanian\saprodiController@tabelsaprodi')->name('tabel.saprodi');
 
 
-//dependency
-Route::post('/datadesa/{id}', 'peternakan\kelompokpeternakController@datadesa');
 Route::post('/datakelompok/{id}', 'pertanian\daftarpetaniController@datakelompok');
 
 //fullcalender
