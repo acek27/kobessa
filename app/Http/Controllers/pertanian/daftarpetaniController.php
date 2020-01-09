@@ -36,9 +36,10 @@ class daftarpetaniController extends Controller
             })
             ->make(true);
     }
+
     public function datakelompok($id)
     {
-        $data = DB::table('kelompok')->where('sektor', '=','pertanian')->where('iddesa', '=', $id)
+        $data = DB::table('kelompok')->where('sektor', '=', 'pertanian')->where('iddesa', '=', $id)
             ->get();
         return response()->json($data);
     }
@@ -46,8 +47,8 @@ class daftarpetaniController extends Controller
     public function cekpetani($id)
     {
         $x = DB::table('biodatauser')
-            -> join  ('desa','biodatauser.iddesa','=','desa.iddesa')
-            -> join  ('kecamatan','desa.idkecamatan','=','kecamatan.idkecamatan')
+            ->join('desa', 'biodatauser.iddesa', '=', 'desa.iddesa')
+            ->join('kecamatan', 'desa.idkecamatan', '=', 'kecamatan.idkecamatan')
             ->where('nik', $id)
             ->get();
         return response()->json($x);
@@ -63,7 +64,7 @@ class daftarpetaniController extends Controller
         $kelompok = DB::table('kelompok')->get();
         $desa = DB::table('desa')->get();
         $kecamatan = DB::table('kecamatan')->get();
-        return view('pertanian.daftarpetani', compact('kecamatan', 'desa','kelompok'));
+        return view('pertanian.daftarpetani', compact('kecamatan', 'desa', 'kelompok'));
     }
 
     /**
@@ -85,7 +86,7 @@ class daftarpetaniController extends Controller
         $jk = $request->get('jk');
         $iddesa = $request->get('iddesa');
         $nik = $request->get('nik');
-        $nikemail = $nik.'@kobessa.com';
+        $nikemail = $nik . '@kobessa.com';
         $telp = $request->get('telp');
 
         //lahan
@@ -125,7 +126,7 @@ class daftarpetaniController extends Controller
             'telp' => $telp
         ]);
 
-        $idl = DB::table('lahan')->orderBy ('idlahan','desc')->first();
+        $idl = DB::table('lahan')->orderBy('idlahan', 'desc')->first();
         DB::table('keanggotaanpoktan')->insert([
             'idkelompok' => $idkelompok,
             'idlahan' => $idl->idlahan
@@ -141,12 +142,69 @@ class daftarpetaniController extends Controller
         return redirect('/daftarpetani/create');
     }
 
-    public function print ($id)
+    public function print($id)
     {
-        $data =   DB::table('biodatauser')->get();
-        $pdf = PDF::loadView('myPDF', compact('data'))->setPaper('folio', 'potrait');
+        $tanggal = date('Y-m-d');
+        $bulan = array(
+            1 => 'Januari',
+            'Februari',
+            'Maret',
+            'April',
+            'Mei',
+            'Juni',
+            'Juli',
+            'Agustus',
+            'September',
+            'Oktober',
+            'November',
+            'Desember'
+        );
+
+        $hari = date ("D");
+
+        switch($hari){
+            case 'Sun':
+                $hari_ini = "Minggu";
+                break;
+
+            case 'Mon':
+                $hari_ini = "Senin";
+                break;
+
+            case 'Tue':
+                $hari_ini = "Selasa";
+                break;
+
+            case 'Wed':
+                $hari_ini = "Rabu";
+                break;
+
+            case 'Thu':
+                $hari_ini = "Kamis";
+                break;
+
+            case 'Fri':
+                $hari_ini = "Jumat";
+                break;
+
+            case 'Sat':
+                $hari_ini = "Sabtu";
+                break;
+
+            default:
+                $hari_ini = "Tidak di ketahui";
+                break;
+        }
+
+        $pecahkan = explode('-', $tanggal);
+        $bulanindo = $bulan[(int)$pecahkan[1]];
+        $biodata =   DB::table('biodatauser')->where('nik','=',$id)
+            ->join('desa','biodatauser.iddesa','=','desa.iddesa')
+            ->join('kecamatan','desa.idkecamatan','=','kecamatan.idkecamatan')->first();
+        $pdf = PDF::loadView('myPDF', compact('biodata','bulanindo','hari_ini'))->setPaper('folio', 'potrait');
         return $pdf->stream('MoU Kobessa');
     }
+
     /**
      * Display the specified resource.
      *

@@ -11,15 +11,20 @@
 <style type="text/css">
     table tr td,
     table tr th {
-        font-size: 9pt;
+        font-size: 12pt;
+        border: 1px solid black;
     }
-
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
     table tr th {
         text-align: center;
     }
 
     td {
         text-transform: capitalize;
+        height: 0px!important;
     }
 
     .hang {
@@ -38,20 +43,21 @@
     Nomor : ..........................................
 </h6>
 
+@php date_default_timezone_set('Asia/Jakarta') @endphp
 <br>
 <p style="text-align: justify; margin-top: 5px; margin-bottom: 5px;">
-    Pada hari ini ............... tanggal ............... bulan ............... tahun ...............,
+    Pada hari ini {{$hari_ini}}, tanggal {{date('d')}} bulan {{$bulanindo}} tahun {{(int)date('Y')}}
     kami yang bertanda tangan di bawah ini :
 </p>
-<pre style="line-height: 32pt;font-weight: bold;font-size: 11pt">
+<pre style="line-height: 32pt;font-weight: bold;font-size: 12pt">
 
 Nama                               :H. TOLAK ATIN
 Jabatan                            :Ketua Koperasi Mandiri Abadi
 Yang Bertindak untuk dan Atas nama :Koperasi Berkah Mandiri Abadi Berdasarkan
-                                    Akte pendirian .......... :188/1702/431.202/2017
+                                    Akta pendirian :188/1702/431.202/2017
                                     tanggal 3 November 2017
 Yang berkedudukan di               :Desa ...............................
-                                    Kec. ............... Kabupaten Situbondo
+                                    Kec. ............... Kab. Situbondo
 
 </pre>
 
@@ -60,14 +66,14 @@ Yang berkedudukan di               :Desa ...............................
 </h6>
 <br>
 <br>
-<pre style="line-height: 32pt;font-weight: bold;font-size: 11pt">
+<pre style="line-height: 32pt;font-weight: bold;font-size: 12pt">
 
-Nama            :........................
+Nama            :{{$biodata->nama}}
 Jabatan         :Petani
-Yang Bertindak untuk dan Atas nama  :...........................................
-                                     ...........................................
-Yang berkedudukan di                :...........................................
-                                     ...........................................
+Yang Bertindak untuk dan Atas nama  :.................................
+                                     .................................
+Yang berkedudukan di                :Desa {{$biodata->namadesa}}
+                                     Kec. {{$biodata->kecamatan}} Kab. Situbondo
 
 </pre>
 <h6 style="text-align: center; margin-top: 5px; margin-bottom: 5px;">
@@ -207,15 +213,16 @@ Yang berkedudukan di                :...........................................
     </thead>
     <tbody>
     <tr>
-        <td style="text-align: center;font-size: 11pt"><br><br><br><strong>............................</strong></td>
+        <td style="text-align: center;font-size: 11pt"><br><br><br><strong>{{$biodata->nama}}</strong></td>
         <td style="text-align: center;font-size: 11pt"><br><br><br>
             <strong><u>H.TOLAK ATIN</u></strong>
-            <br>Ketua Koperasi Berkah Mandiri Abadi</td>
+            <br>Ketua Koperasi Berkah Mandiri Abadi
+        </td>
     </tr>
     </tbody>
 </table>
 <div style="page-break-after: always"></div>
-<pre style="line-height: 32pt;font-weight: bold;font-size: 11pt">
+<pre style="line-height: 25pt;font-weight: bold;font-size: 12pt">
 
 Lampiran               :Jumlah Pinjaman Saprodi
 Nama Petani            :......................
@@ -231,7 +238,7 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
 <p style="text-align: center; margin-top: 5px; margin-bottom: 5px;">
     <strong>Program Ekonomi Kebersamaan</strong>
 </p>
-<table class='table table-bordered' style="font-weight: bold;text-align: center;">
+<table class='' style="font-weight: bold;text-align: center;">
     <thead>
     <tr>
         <th>No.</th>
@@ -244,7 +251,7 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
     </thead>
     <tbody>
     @php $i=1 @endphp
-    @foreach($data as $p)
+    @foreach($biodata as $p)
         <tr style="height: 0">
             <td>{{ $i++ }}</td>
             <td>Bokashi</td>
@@ -253,22 +260,22 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
             <td>800</td>
             <td>1.600.000</td>
         </tr>
-        <tr style="height: 0">
-            <td>{{ $i++ }}</td>
-            <td colspan="4" style="text-align: left!important;">Biaya 13 kali semprot x Rp100.000</td>
-            <td>1.300.000</td>
-        </tr>
-        <tr style="height: 0">
-            <td>{{ $i++ }}</td>
-            <td colspan="4" style="text-align: left!important;">Penaburan Bokasi 50 Sak @Rp6.000</td>
-            <td>300.000</td>
-        </tr>
-        <tr style="height: 0">
-            <td></td>
-            <td colspan="4" style="text-align: left!important;">Total pinjaman biaya petani</td>
-            <td>-----</td>
-        </tr>
     @endforeach
+    <tr style="height: 0">
+        <td>{{ $i++ }}</td>
+        <td colspan="4" style="text-align: left!important;">Biaya 13 kali semprot x Rp100.000</td>
+        <td>1.300.000</td>
+    </tr>
+    <tr style="height: 0">
+        <td>{{ $i++ }}</td>
+        <td colspan="4" style="text-align: left!important;">Penaburan Bokasi 50 Sak @Rp6.000</td>
+        <td>300.000</td>
+    </tr>
+    <tr style="height: 0">
+        <td></td>
+        <td colspan="4" style="text-align: left!important;">Total pinjaman biaya petani</td>
+        <td>-----</td>
+    </tr>
     </tbody>
 </table>
 <br>
@@ -292,7 +299,7 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
 </table>
 
 <div style="page-break-after: always"></div>
-<pre style="line-height: 32pt;font-weight: bold;font-size: 11pt">
+<pre style="line-height: 25pt;font-weight: bold;font-size: 12pt">
 
 Lampiran               :Jumlah Pinjaman Saprodi
 Nama Petani            :......................
@@ -308,7 +315,7 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
 <p style="text-align: center; margin-top: 5px; margin-bottom: 5px;">
     <strong>Program Ekonomi Kebersamaan</strong>
 </p>
-<table class='table table-bordered' style="font-weight: bold;text-align: center;">
+<table class='' style="font-weight: bold;text-align: center;">
     <thead>
     <tr>
         <th>No.</th>
@@ -321,7 +328,7 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
     </thead>
     <tbody>
     @php $i=1 @endphp
-    @foreach($data as $p)
+    @foreach($biodata as $p)
         <tr style="height: 0">
             <td>{{ $i++ }}</td>
             <td>Bokashi</td>
@@ -330,12 +337,12 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
             <td>800</td>
             <td>1.600.000</td>
         </tr>
-        <tr style="height: 0">
-            <td></td>
-            <td colspan="4" style="text-align: left!important;">Total pinjaman biaya petani</td>
-            <td>-----</td>
-        </tr>
     @endforeach
+    <tr style="height: 0">
+        <td></td>
+        <td colspan="4" style="text-align: left!important;">Total pinjaman biaya petani</td>
+        <td>-----</td>
+    </tr>
     </tbody>
 </table>
 <br>
