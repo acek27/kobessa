@@ -30,7 +30,7 @@ class petaniController extends Controller
             ->addColumn('action', function ($data) {
                 $del = '<a href="#" data-id="' . $data->nik . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
                 $edit = '<a href="#" data-id="' . $data->nik . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
-                $print = '<a href="' . route('mou.print', $data->nik) . '" class="print-data" target="_blank"><i class="fa fa-print"></i></a>';
+                $print = '<a href="' . route('daftarpetani.show', $data->nik) . '" class="print-data"><i class="fa fa-print"></i></a>';
                 return $edit . '&nbsp' . '&nbsp' . $del. '&nbsp' . '&nbsp' .$print;
             })
             ->make(true);

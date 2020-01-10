@@ -1,8 +1,9 @@
 @extends('layouts.masterdashboard')
 @section('css')
-    <link href="{{url('https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/css/gijgo.min.css')}}" rel="stylesheet"/>
+    <link href="{{url('https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/css/gijgo.min.css')}}"
+          rel="stylesheet"/>
     <link href="{{asset('vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-    @endsection
+@endsection
 @section('isi')
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -18,84 +19,92 @@
     @endif
     <form method="POST" action="{{route('kepemilikanlahan.store')}}" role="form">
         @csrf
-        
-  <div class="row">
-  <!-- Content Column Ke 1-->
-  <div class="col-lg-6 mb-4">
-    <!-- Project Card Example -->
-    <div class="card shadow mb-4">
-      <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">DAFTAR KEPEMILIKAN LAHAN</h6>
-      </div>
-      <div class="card-body">
-        <label style="color:black">NIK</label>
-        <input type="text" class="form-control form-control-user" id="nik" name="nik" aria-describedby="emailHelp"
-               placeholder="">
-        <label style="color:black">Nama Petani</label>
-        <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp"
-               placeholder="" disabled>
-        <label style="color:black">Alamat</label>
-        <input type="text" class="form-control form-control-user" id="alamat" name="alamat" aria-describedby="emailHelp"
-               placeholder="" disabled>
-        <label style="color:black">Jenis Lahan Yang Dimiliki</label>
-        <select class="form-control show-tick" id="idjenis" name="idjenis">
-            <option value="">-- Please select --</option>
-            @foreach($jenislahan as $values)
-                <option value="{{$values->idjenis}}">{{$values->jenislahan}}</option>
-            @endforeach
-        </select>
-        <label style="color:black">Nama Lahan</label>
-        <input type="text" class="form-control form-control-user" id="namalahan" name="namalahan" aria-describedby="emailHelp"
-               placeholder="">
-        <label style="color:black">Luas Lahan yang dimiliki (Ha)</label>
-        <input type="text" class="form-control form-control-user" id="luas" name="luas" aria-describedby="emailHelp"
-               placeholder="">
 
-        <br><label style="color:black">LOKASI LAHAN:</label>
-        <br>
-        <label style="color:black">Kecamatan</label>
-        <select class="form-control show-tick" id="idkecamatan" name="idkecamatan" required>
-            <option value="">-- Please select --</option>
-            @foreach($kecamatan as $value)
-                <option style="text-transform: lowercase" value="{{$value->idkecamatan}}">{{$value->kecamatan}}</option>
-            @endforeach
-        </select>
-        <label style="color:black">Desa</label>
-        <select class="form-control show-tick" id="iddesa" name="iddesa" required>
-            <option value="">-- Please select --</option>
+        <div class="row">
+            <!-- Content Column Ke 1-->
+            <div class="col-lg-6 mb-4">
+                <!-- Project Card Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">DAFTAR KEPEMILIKAN LAHAN</h6>
+                    </div>
+                    <div class="card-body">
+                        <label style="color:black">NIK</label>
+                        <input type="text" class="form-control form-control-user" id="nik" name="nik"
+                               aria-describedby="emailHelp"
+                               placeholder="">
+                        <label style="color:black">Nama Petani</label>
+                        <input type="text" class="form-control form-control-user" id="nama" name="nama"
+                               aria-describedby="emailHelp"
+                               placeholder="" disabled>
+                        <label style="color:black">Alamat</label>
+                        <input type="text" class="form-control form-control-user" id="alamat" name="alamat"
+                               aria-describedby="emailHelp"
+                               placeholder="" disabled>
+                        <label style="color:black">Jenis Lahan Yang Dimiliki</label>
+                        <select class="form-control show-tick" id="idjenis" name="idjenis">
+                            <option value="">-- Please select --</option>
+                            @foreach($jenislahan as $values)
+                                <option value="{{$values->idjenis}}">{{$values->jenislahan}}</option>
+                            @endforeach
+                        </select>
+                        <label style="color:black">Nama Lahan</label>
+                        <input type="text" class="form-control form-control-user" id="namalahan" name="namalahan"
+                               aria-describedby="emailHelp"
+                               placeholder="">
+                        <label style="color:black">Luas Lahan yang dimiliki (Ha)</label>
+                        <input type="text" class="form-control form-control-user" id="luas" name="luas"
+                               aria-describedby="emailHelp"
+                               placeholder="">
 
-        </select>
+                        <br><label style="color:black">LOKASI LAHAN:</label>
+                        <br>
+                        <label style="color:black">Kecamatan</label>
+                        <select class="form-control show-tick" id="idkecamatan" name="idkecamatan" required>
+                            <option value="">-- Please select --</option>
+                            @foreach($kecamatan as $value)
+                                <option style="text-transform: lowercase"
+                                        value="{{$value->idkecamatan}}">{{$value->kecamatan}}</option>
+                            @endforeach
+                        </select>
+                        <label style="color:black">Desa</label>
+                        <select class="form-control show-tick" id="iddesa" name="iddesa" required>
+                            <option value="">-- Please select --</option>
 
-        <label style="color:black">Keterangan</label>
-        <input type="text" class="form-control form-control-user" id="keterangan" name="keterangan"
-               aria-describedby="emailHelp" required>
-        <input type="text" class="form-control form-control-user" id="idpetani" name="idpetani"
-               aria-describedby="emailHelp" placeholder="" hidden>
-               <label style="color:black">Nama Kelompok Tani</label> 
-        <a href="{{route('kelompokpetani.create')}}" target="_blank" class="btn btn-sm btn-primary shadow-sm">Daftar Kelompok</a>
-        <select class="form-control show-tick" id="idkelompok" name="idkelompok" required>
-            <option value="">-- Please select --</option>
-            @foreach($kelompok as $value)
-                <option style="text-transform: lowercase" value="{{$value->idkelompok}}">{{$value->namakelompok}}</option>
-            @endforeach
-        </select>
-        <br>
-        <button type="submit" id="simpan" class="btn-sm btn-primary shadow-sm">
-            SIMPAN
-        </button>
+                        </select>
+
+                        <label style="color:black">Keterangan</label>
+                        <input type="text" class="form-control form-control-user" id="keterangan" name="keterangan"
+                               aria-describedby="emailHelp" required>
+                        <input type="text" class="form-control form-control-user" id="idpetani" name="idpetani"
+                               aria-describedby="emailHelp" placeholder="" hidden>
+                        <label style="color:black">Nama Kelompok Tani</label>
+                        <a href="{{route('kelompokpetani.create')}}" target="_blank"
+                           class="btn btn-sm btn-primary shadow-sm">Daftar Kelompok</a>
+                        <select class="form-control show-tick" id="idkelompok" name="idkelompok" required>
+                            <option value="">-- Please select --</option>
+                            @foreach($kelompok as $value)
+                                <option style="text-transform: lowercase"
+                                        value="{{$value->idkelompok}}">{{$value->namakelompok}}</option>
+                            @endforeach
+                        </select>
+                        <br>
+                        <button type="submit" id="simpan" class="btn-sm btn-primary shadow-sm">
+                            SIMPAN
+                        </button>
 
     </form>
     </div>
-        </div>
-        </div>
-        </div>
-        <div class="col-lg-6 d-none d-lg-block bg-pertanian"></div>
+    </div>
+    </div>
+    </div>
+    <div class="col-lg-6 d-none d-lg-block bg-pertanian"></div>
     <br>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Daftar Kepemilikan Lahan Petani</h6>
         </div>
-     <div class="card-body">
+        <div class="card-body">
             <div class="table-responsive">
                 <table style="text-align: center" id="datalahan"
                        class="table table-bordered table-striped table-hover">
@@ -152,7 +161,7 @@
                         name: 'luaslahan'
                     },
                     {
-                        data:'namadesa',
+                        data: 'namadesa',
                         name: 'namadesa'
                     },
                     {
@@ -206,7 +215,7 @@
             });
         });
 
-       
+
         $(document).ready(function () {
             $('#idkecamatan').change(function () {
                 var id = $(this).val();
@@ -277,27 +286,27 @@
         });
 
         $('body').on("click", '.edit-modal', function () {
-                    var idkeanggotaan = $(this).attr('data-id');
-                    $.ajax({
-                        url: "{{url('/cekkepemilikan')}}/" + idkeanggotaan,
-                        type: 'GET',
-                        datatype: 'json',
-                        success: function (x) {
-                            $.each(x, function (index, z) {
-                                $('#nik').val(z.nik);
-                                document.getElementById("nik").readOnly =true;
-                                $('#nama').val(z.nama);
-                                $('#luas').val(z.luaslahan);
-                                $('#alamat').val(z.alamat);
-                                $('#idjenis').val(z.idjenis);
-                                $('#idkelompok').val(z.idkelompok);
-                                
-                                
-                                $('#simpan').text("UPDATE");
-                            });
-                        }
+            var idkeanggotaan = $(this).attr('data-id');
+            $.ajax({
+                url: "{{url('/cekkepemilikan')}}/" + idkeanggotaan,
+                type: 'GET',
+                datatype: 'json',
+                success: function (x) {
+                    $.each(x, function (index, z) {
+                        $('#nik').val(z.nik);
+                        document.getElementById("nik").readOnly = true;
+                        $('#nama').val(z.nama);
+                        $('#luas').val(z.luaslahan);
+                        $('#alamat').val(z.alamat);
+                        $('#idjenis').val(z.idjenis);
+                        $('#idkelompok').val(z.idkelompok);
+
+
+                        $('#simpan').text("UPDATE");
                     });
-                });
+                }
+            });
+        });
 
     </script>
 @endpush

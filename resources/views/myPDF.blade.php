@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>
-        Koperasi Berkah Mandiri Abadi
+        Berkas MoU KOBESSA
     </title>
 </head>
 <body>
@@ -14,17 +14,19 @@
         font-size: 12pt;
         border: 1px solid black;
     }
+
     table {
         border-collapse: collapse;
         width: 100%;
     }
+
     table tr th {
         text-align: center;
     }
 
     td {
         text-transform: capitalize;
-        height: 0px!important;
+        height: 0px !important;
     }
 
     .hang {
@@ -199,12 +201,13 @@ Yang berkedudukan di                :Desa {{$biodata->namadesa}}
 </p>
 <br>
 <br>
+<br>
 <p style="text-align: right; margin-top: 5px; margin-bottom: 5px;">
     Situbondo, ................................................
 </p>
 <br>
 <br>
-<table class='table table-borderless' style="border: 1px solid white">
+<table class='table table-borderless' style="margin-left: 50px">
     <thead>
     <tr>
         <th style="font-size: 11pt">PIHAK KEDUA</th>
@@ -224,12 +227,12 @@ Yang berkedudukan di                :Desa {{$biodata->namadesa}}
 <div style="page-break-after: always"></div>
 <pre style="line-height: 25pt;font-weight: bold;font-size: 12pt">
 
-Lampiran               :Jumlah Pinjaman Saprodi
-Nama Petani            :......................
-Jenis Kelamin          :......................
-Alamat                 :......................
-Kelompok Tani          :......................
-Luas                   :......................
+Lampiran               : Jumlah Pinjaman Saprodi
+Nama Petani            : {{$biodata->nama}}
+Jenis Kelamin          : {{$biodata->jeniskelamin}}
+Alamat                 : {{$biodata->alamat}}
+Kelompok Tani          : {{$biodata->namakelompok}}
+Luas                   : {{$biodata->luaslahan}}
 Jumlah Pinjaman        :...............(....................... Rupiah)
 </pre>
 <p style="text-align: center; margin-top: 5px; margin-bottom: 5px;">
@@ -250,16 +253,22 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
     </tr>
     </thead>
     <tbody>
-    @php $i=1 @endphp
-    @foreach($biodata as $p)
+    @php
+        $i=1;
+    $total = 0
+    @endphp
+    @foreach($saprodi as $pinjam)
         <tr style="height: 0">
             <td>{{ $i++ }}</td>
-            <td>Bokashi</td>
-            <td>2000</td>
-            <td>Kg</td>
-            <td>800</td>
-            <td>1.600.000</td>
+            <td>{{$pinjam->namasaprodi}}</td>
+            <td>{{$pinjam->kebutuhan}}</td>
+            <td>{{$pinjam->satuan}}</td>
+            <td>{{number_format($pinjam->hargasatuan,0,',','.')}}</td>
+            <td>{{number_format($pinjam->hargasatuan*$pinjam->kebutuhan,0,',','.')}}</td>
         </tr>
+        @php
+            $total += $pinjam->hargasatuan*$pinjam->kebutuhan
+        @endphp
     @endforeach
     <tr style="height: 0">
         <td>{{ $i++ }}</td>
@@ -274,10 +283,11 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
     <tr style="height: 0">
         <td></td>
         <td colspan="4" style="text-align: left!important;">Total pinjaman biaya petani</td>
-        <td>-----</td>
+        <td>{{number_format($total = $total+300000+1300000,0,',','.')}}</td>
     </tr>
     </tbody>
 </table>
+<br>
 <br>
 <p style="text-align: right; margin-top: 5px; margin-bottom: 5px;">
     Situbondo, ................................................
@@ -298,71 +308,5 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
     </tbody>
 </table>
 
-<div style="page-break-after: always"></div>
-<pre style="line-height: 25pt;font-weight: bold;font-size: 12pt">
-
-Lampiran               :Jumlah Pinjaman Saprodi
-Nama Petani            :......................
-Jenis Kelamin          :......................
-Alamat                 :......................
-Kelompok Tani          :......................
-Luas                   :......................
-Jumlah Pinjaman        :...............(....................... Rupiah)
-</pre>
-<p style="text-align: center; margin-top: 5px; margin-bottom: 5px;">
-    <strong>Data Pinjaman Saprodi</strong>
-</p>
-<p style="text-align: center; margin-top: 5px; margin-bottom: 5px;">
-    <strong>Program Ekonomi Kebersamaan</strong>
-</p>
-<table class='' style="font-weight: bold;text-align: center;">
-    <thead>
-    <tr>
-        <th>No.</th>
-        <th>Nama Saprodi</th>
-        <th>Jumlah</th>
-        <th>Satuan</th>
-        <th>Harga Satuan</th>
-        <th>Jumlah</th>
-    </tr>
-    </thead>
-    <tbody>
-    @php $i=1 @endphp
-    @foreach($biodata as $p)
-        <tr style="height: 0">
-            <td>{{ $i++ }}</td>
-            <td>Bokashi</td>
-            <td>2000</td>
-            <td>Kg</td>
-            <td>800</td>
-            <td>1.600.000</td>
-        </tr>
-    @endforeach
-    <tr style="height: 0">
-        <td></td>
-        <td colspan="4" style="text-align: left!important;">Total pinjaman biaya petani</td>
-        <td>-----</td>
-    </tr>
-    </tbody>
-</table>
-<br>
-<p style="text-align: right; margin-top: 5px; margin-bottom: 5px;">
-    Situbondo, ................................................
-</p>
-<table class='table table-borderless' style="border: 1px solid white">
-    <thead>
-    <tr>
-        <th style="font-size: 11pt">Mengetahui dan menyetujui</th>
-        <th style="font-size: 11pt">Yang Menerima</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td style="text-align: center;font-size: 11pt"><br><br><br><strong>............................</strong></td>
-        <td style="text-align: center;font-size: 11pt"><br><br><br>
-            <strong>............................</strong>
-    </tr>
-    </tbody>
-</table>
 </body>
 </html>

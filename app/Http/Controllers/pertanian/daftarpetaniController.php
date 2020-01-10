@@ -198,10 +198,17 @@ class daftarpetaniController extends Controller
 
         $pecahkan = explode('-', $tanggal);
         $bulanindo = $bulan[(int)$pecahkan[1]];
-        $biodata =   DB::table('biodatauser')->where('nik','=',$id)
-            ->join('desa','biodatauser.iddesa','=','desa.iddesa')
-            ->join('kecamatan','desa.idkecamatan','=','kecamatan.idkecamatan')->first();
-        $pdf = PDF::loadView('myPDF', compact('biodata','bulanindo','hari_ini'))->setPaper('folio', 'potrait');
+        $biodata =   DB::table('keanggotaanpoktan')
+            ->join('kelompok', 'kelompok.idkelompok', '=', 'keanggotaanpoktan.idkelompok')
+            ->join('lahan', 'lahan.idlahan', '=', 'keanggotaanpoktan.idlahan')
+            ->join('biodatauser', 'lahan.nik', '=', 'biodatauser.nik')
+            ->join('desa', 'desa.iddesa', '=', 'kelompok.iddesa')
+            ->join('kecamatan','desa.idkecamatan','=','kecamatan.idkecamatan')
+            ->where('lahan.idlahan','=',$id)->first();
+        $saprodi =   DB::table('kebutuhansaprodi')
+            ->join('saprodi', 'kebutuhansaprodi.idsaprodi', '=', 'saprodi.idsaprodi')
+            ->where('idlahan','=',$id)->get();
+        $pdf = PDF::loadView('myPDF', compact('biodata','bulanindo','hari_ini','saprodi'))->setPaper('folio', 'potrait');
         return $pdf->stream('MoU Kobessa');
     }
 
@@ -213,7 +220,23 @@ class daftarpetaniController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = $id;
+        return view('pertanian.cetaklahan',compact('data'));
+    }
+    public function mouLahan ($id){
+        return DataTables::of(DB::table('keanggotaanpoktan')
+            ->join('kelompok', 'kelompok.idkelompok', '=', 'keanggotaanpoktan.idkelompok')
+            ->join('lahan', 'lahan.idlahan', '=', 'keanggotaanpoktan.idlahan')
+            ->join('biodatauser', 'lahan.nik', '=', 'biodatauser.nik')
+            ->join('desa', 'desa.iddesa', '=', 'kelompok.iddesa')
+            ->select('keanggotaanpoktan.*','biodatauser.nama as nama','lahan.namalahan as namalahan','lahan.luaslahan as luaslahan','biodatauser.nik as nik','biodatauser.alamat as alamat', 'desa.namadesa as namadesa', 'kelompok.namakelompok as namakelompok')
+            ->where('lahan.nik','=',$id)
+            ->get())
+            ->addColumn('action', function ($data) {
+                $print = '<a href="' . route('mou.print', $data->idlahan) . '" class="print-data" target="_blank"><i class="fa fa-print"></i></a>';
+                return $print;
+            })
+            ->make(true);
     }
 
     /**

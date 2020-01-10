@@ -29,7 +29,6 @@ Route::get('cektanaman/{id}', 'pertanian\datatanamanController@cektanaman');
 Route::resource('datapetani', 'pertanian\petaniController');
 Route::resource('kebutuhansaprodi', 'pertanian\kebutuhanController');
 Route::get('tabelpetani', 'pertanian\petaniController@tabelpetani')->name('tabel.petani');
-Route::get('mouprint/{id}', 'pertanian\daftarpetaniController@print')->name('mou.print');
 Route::get('cekpetani/{id}', 'pertanian\petaniController@cekpetani');
 // Route::post('getdesa/{id}', 'pertanian\petaniController@getdesa')->name('getdesa');
 
@@ -73,3 +72,7 @@ Route::post('fullcalendar/delete','FullCalendarController@destroy');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+//razak
+Route::get('tabelmoulahan/{id}', 'pertanian\daftarpetaniController@mouLahan')->name('mou.lahan');
+Route::get('mouprint/{id}', 'pertanian\daftarpetaniController@print')->name('mou.print');
