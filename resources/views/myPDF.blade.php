@@ -271,19 +271,9 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
         @endphp
     @endforeach
     <tr style="height: 0">
-        <td>{{ $i++ }}</td>
-        <td colspan="4" style="text-align: left!important;">Biaya 13 kali semprot x Rp100.000</td>
-        <td>1.300.000</td>
-    </tr>
-    <tr style="height: 0">
-        <td>{{ $i++ }}</td>
-        <td colspan="4" style="text-align: left!important;">Penaburan Bokasi 50 Sak @Rp6.000</td>
-        <td>300.000</td>
-    </tr>
-    <tr style="height: 0">
         <td></td>
         <td colspan="4" style="text-align: left!important;">Total pinjaman biaya petani</td>
-        <td>{{number_format($total = $total+300000+1300000,0,',','.')}}</td>
+        <td>{{number_format($total = $total,0,',','.')}}</td>
     </tr>
     </tbody>
 </table>
