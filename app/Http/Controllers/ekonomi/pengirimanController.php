@@ -19,17 +19,16 @@ class pengirimanController extends Controller
     {
         //
     }
-    
+
 
     public function tabelpesanan()
     {
         return DataTables::of(DB::table('pesanansaprodi')
-            ->join('biodatauser', 'biodatauser.nik', '=', 'pesanansaprodi.nik')
-            ->join('saprodi','saprodi.idsaprodi', '=', 'pesanansaprodi.idsaprodi')
-            ->join('desa', 'desa.iddesa', '=', 'biodatauser.iddesa')
-            ->join('kecamatan', 'desa.idkecamatan', '=', 'kecamatan.idkecamatan')
-            ->select(DB::raw('count(*) as user_count, PO','jumlah','tglpesan','tglkirim','biodatauser.nama as nama','desa.namadesa as namadesa','kecamatan.kecamatan as namakecamatan','saprodi.namasaprodi as namasaprodi'))
-            ->groupBy('PO')
+            ->select('PO','tglpesan','tglkirim','biodatauser.nama as nama','desa.namadesa as namadesa','kecamatan.kecamatan as namakecamatan',DB::raw('count(PO) as user_count'))
+            ->join('biodatauser','pesanansaprodi.nik','=','biodatauser.nik')
+            ->join('desa','desa.iddesa','=','biodatauser.iddesa')
+            ->join('kecamatan','kecamatan.idkecamatan','=','desa.idkecamatan')
+            ->groupBy('PO','tglpesan','tglkirim','biodatauser.nama','desa.namadesa','kecamatan.kecamatan')
             ->get())
             ->addColumn('action', function ($data) {
                 $pilih = "<a href=\"" . route('pengiriman.show', $data->PO) . "\"><i class=\"material-icons\" title=\"Data Pesanan\">Pilih</i></a>";
@@ -74,15 +73,15 @@ class pengirimanController extends Controller
          ->join('saprodi','saprodi.idsaprodi', '=', 'pesanansaprodi.idsaprodi')
          ->select('biodatauser.nama as namapemesan','biodatauser.alamat as alamat','biodatauser.telp as telp','pesanansaprodi.jumlah as jumlah','saprodi.namasaprodi as nama','pesanansaprodi.tglpesan as tglpesan','pesanansaprodi.tglkirim as tglkirim')
          ->where('PO', '=', $id)->get();
-        
+
          $pesanan2 = DB::table('pesanansaprodi')
          ->join('suplier','suplier.idsuplier', '=', 'pesanansaprodi.idsuplier')
          ->join('biodatauser','biodatauser.nik', '=', 'pesanansaprodi.nik')
          ->join('saprodi','saprodi.idsaprodi', '=', 'pesanansaprodi.idsaprodi')
          ->select('biodatauser.nama as namapemesan','biodatauser.alamat as alamat','biodatauser.telp as telp','pesanansaprodi.jumlah as jumlah','saprodi.namasaprodi as nama','pesanansaprodi.tglpesan as tglpesan','pesanansaprodi.tglkirim as tglkirim')
-         
+
          ->where('PO', '=', $id)->first();
-        
+
         return view('ekonomi.pengirimansaprodi', compact('pesanan', 'saprodi','pesanan2'));
     }
 

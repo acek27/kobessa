@@ -14,16 +14,15 @@
             <table style="text-align: center" id="tabelpesanan" class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
-                        <th style="width: 20%; text-align: left; vertical-align: middle">No PO</th>
+                        <th>No PO</th>
                         <th style="text-align: center; vertical-align: middle">Nama Pemesan</th>
                         <th style="text-align: center; vertical-align: middle">Kecamatan</th>
-                        <th style="text-align: center; vertical-align: middle">Desa</th>
-                        <th style="text-align: center; vertical-align: middle">Nama Saprodi</th>
-                        <th style="text-align: center; vertical-align: middle">Jumlah</th>
+                        <th style="text-align: center; vertical-align: middle">Desa</th>>
                         <th style="text-align: center; vertical-align: middle">Tgl Pesan</th>
                         <th style="text-align: center; vertical-align: middle">Tgl Kirim</th>
+                        <th style="text-align: center; vertical-align: middle">Jumlah Pesanan</th>
                         <th style="text-align: center; vertical-align: middle">Action</th>
-                        
+
                     </tr>
                 </thead>
                 <tbody>
@@ -64,14 +63,6 @@ $(document).ready(function() {
                         name: 'namadesa'
                     },
                     {
-                        data: 'namasaprodi',
-                        name: 'namasaprodi'
-                    },
-                    {
-                        data: 'jumlah',
-                        name: 'jumlah'
-                    },
-                    {
                         data: 'tglpesan',
                         name: 'tglpesan'
                     },
@@ -79,19 +70,22 @@ $(document).ready(function() {
                         data: 'tglkirim',
                         name: 'tglkirim'
                     },
-                    
+                {
+                    data: 'user_count',
+                    name: 'user_count'
+                },
                 {
                     data: 'action',
                     name: 'action',
                     orderable: false,
                     searchable: false,
                     align: 'center'
-                    
+
                 },
             ]
         });
     });
-       
+
     </script>
 @endpush
 
