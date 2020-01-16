@@ -1,14 +1,11 @@
 <?php
-
 namespace App\Http\Controllers\pertanian;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade as PDF;
-
 class daftarpetaniController extends Controller
 {
     /**
@@ -20,8 +17,6 @@ class daftarpetaniController extends Controller
     {
         return view('dashboard');
     }
-
-
     public function tabelpetani()
     {
         return DataTables::of(DB::table('biodatauser')
@@ -36,14 +31,12 @@ class daftarpetaniController extends Controller
             })
             ->make(true);
     }
-
     public function datakelompok($id)
     {
         $data = DB::table('kelompok')->where('sektor', '=', 'pertanian')->where('iddesa', '=', $id)
             ->get();
         return response()->json($data);
     }
-
     public function cekpetani($id)
     {
         $x = DB::table('biodatauser')
@@ -53,7 +46,6 @@ class daftarpetaniController extends Controller
             ->get();
         return response()->json($x);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -66,7 +58,6 @@ class daftarpetaniController extends Controller
         $kecamatan = DB::table('kecamatan')->get();
         return view('pertanian.daftarpetani', compact('kecamatan', 'desa', 'kelompok'));
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -75,7 +66,6 @@ class daftarpetaniController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'telp' => 'numeric|required'
         ]);
@@ -88,14 +78,12 @@ class daftarpetaniController extends Controller
         $nik = $request->get('nik');
         $nikemail = $nik . '@kobessa.com';
         $telp = $request->get('telp');
-
         //lahan
         $namalahan = $request->get('namalahan');
         $luas = $request->get('luas');
         $iddesa2 = $request->get('iddesa2');
         $alamatlahan = $request->get('alamatlahan');
         $idkelompok = $request->get('idkelompok');
-
         $request->validate([
             'nik' => 'numeric|required'
         ]);
@@ -106,7 +94,6 @@ class daftarpetaniController extends Controller
             'password' => Hash::make($nik),
             'role_id' => 3,
         ]);
-
         DB::table('lahan')->insert([
             'nik' => $nik,
             'namalahan' => $namalahan,
@@ -114,7 +101,6 @@ class daftarpetaniController extends Controller
             'iddesa' => $iddesa2,
             'keterangan' => $alamatlahan,
         ]);
-
         DB::table('biodatauser')->insert([
             'nik' => $nik,
             'nama' => $nama,
@@ -125,23 +111,17 @@ class daftarpetaniController extends Controller
             'alamat' => $alamat,
             'telp' => $telp
         ]);
-
         $idl = DB::table('lahan')->orderBy('idlahan', 'desc')->first();
         DB::table('keanggotaanpoktan')->insert([
             'idkelompok' => $idkelompok,
             'idlahan' => $idl->idlahan
-
         ]);
-
-
         \Session::flash("flash_notification", [
             "level" => "success",
             "message" => "Berhasil menambah data petani. Silahkan gunakan Username : $nikemail, Password : $nik untuk login aplikasi!"
         ]);
-
         return redirect('/daftarpetani/create');
     }
-
     public function print($id)
     {
         $tanggal = date('Y-m-d');
@@ -159,43 +139,33 @@ class daftarpetaniController extends Controller
             'November',
             'Desember'
         );
-
         $hari = date ("D");
-
         switch($hari){
             case 'Sun':
                 $hari_ini = "Minggu";
                 break;
-
             case 'Mon':
                 $hari_ini = "Senin";
                 break;
-
             case 'Tue':
                 $hari_ini = "Selasa";
                 break;
-
             case 'Wed':
                 $hari_ini = "Rabu";
                 break;
-
             case 'Thu':
                 $hari_ini = "Kamis";
                 break;
-
             case 'Fri':
                 $hari_ini = "Jumat";
                 break;
-
             case 'Sat':
                 $hari_ini = "Sabtu";
                 break;
-
             default:
                 $hari_ini = "Tidak di ketahui";
                 break;
         }
-
         $pecahkan = explode('-', $tanggal);
         $bulanindo = $bulan[(int)$pecahkan[1]];
         $biodata =   DB::table('keanggotaanpoktan')
@@ -211,7 +181,6 @@ class daftarpetaniController extends Controller
         $pdf = PDF::loadView('myPDF', compact('biodata','bulanindo','hari_ini','saprodi'))->setPaper('folio', 'potrait');
         return $pdf->stream('MoU Kobessa');
     }
-
     /**
      * Display the specified resource.
      *
@@ -238,7 +207,6 @@ class daftarpetaniController extends Controller
             })
             ->make(true);
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -249,7 +217,6 @@ class daftarpetaniController extends Controller
     {
         //
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -261,7 +228,6 @@ class daftarpetaniController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      *

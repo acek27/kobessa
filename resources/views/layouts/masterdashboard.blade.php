@@ -58,8 +58,24 @@
         <div class="sidebar-heading">
             Sektor
         </div>
-
-                        @can('pertanian')
+    @can('peternakan')
+        <!-- Nav Item - peternakan Menu -->
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePeternakan"
+                   aria-expanded="true" aria-controls="collapsePeternakan">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Sektor Peternakan</span>
+                </a>
+                <div id="collapsePeternakan" class="collapse" aria-labelledby="headingPeternakan"
+                     data-parent="#accordionSidebar">
+                     <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Menu:</h6>
+                        
+                    </div>
+                </div>
+            </li>
+    @endcan
+    @can('pertanian')
                         <li class="nav-item">
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePertanian"
                    aria-expanded="true" aria-controls="collapsePertanian">
@@ -69,21 +85,64 @@
                 <div id="collapsePertanian" class="collapse" aria-labelledby="headingPertanian"
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item active" href="{{route('datatanaman.create')}}">Data Tanaman
-                            Pertanian</a>
-                        <a class="collapse-item active" href="{{route('datapetani.create')}}">Data Petani</a>
-                        <a class="collapse-item active" href="{{route('kelompokpetani.create')}}">Data Kelompok
-                            Petani</a>
-                        <a class="collapse-item active" href="{{route('keanggotaanpetani.create')}}">Data
-                            Keanggotaan</a>
+                    <h6 class="collapse-header">Menu:</h6>
+                        <a class="collapse-item active" href="{{route('datatanaman.create')}}">Data Tanaman Pertanian</a>
                         <a class="collapse-item active" href="{{route('soppertanian.create')}}">SOP Pertanian</a>
-                        <a class="collapse-item active" href="{{route('hasilpertanian.cari')}}">Hasil Pertanian</a>
+                        <a class="collapse-item active" href="{{route('datasaprodi.create')}}">Data Saprodi</a>
+                        <a class="collapse-item active" href="{{route('datapetani.create')}}">Data Petani</a>
+                        <a class="collapse-item active" href="{{route('kelompokpetani.create')}}">Data Kelompok Petani</a>
+                        <a class="collapse-item active" href="{{route('kepemilikanlahan.create')}}">Kepemilikan Lahan</a>
+                        <a class="collapse-item active" href="{{route('kebutuhan.cari')}}">Kebutuhan Saprodi</a>
                     </div>
                 </div>
             </li>
             </li>
     @endcan
+    @can('ppl')
+                        <li class="nav-item">
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePertanian"
+                   aria-expanded="true" aria-controls="collapsePertanian">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Sektor Pertanian</span>
+                </a>
+                <div id="collapsePertanian" class="collapse" aria-labelledby="headingPertanian"
+                     data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Menu:</h6>
+                      
+                        <a class="collapse-item active" href="{{route('datapetani.create')}}">Data Petani</a>
+                        <a class="collapse-item active" href="{{route('kelompokpetani.create')}}">Data Kelompok Petani</a>
+                        <a class="collapse-item active" href="{{route('kepemilikanlahan.create')}}">Kepemilikan Lahan</a>
+                        <a class="collapse-item active" href="{{route('kebutuhan.cari')}}">Kebutuhan Saprodi</a>
+                        <a class="collapse-item active" href="{{route('aktivitas.index')}}">Monitoring</a> 
+                        <a class="collapse-item active" href="{{route('ordersaprodi.cari')}}">Order Saprodi</a>
+                    </div>
+                </div>
+            </li>
+            </li>
+    @endcan
+    @can('petani')
+                        <li class="nav-item">
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePertanian"
+                   aria-expanded="true" aria-controls="collapsePertanian">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Sektor Pertanian</span>
+                </a>
+                <div id="collapsePertanian" class="collapse" aria-labelledby="headingPertanian"
+                     data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Menu:</h6>
+                        <a class="collapse-item active" href="{{route('rencanatanam.index')}}">Rencana Tanam</a> 
+                        <a class="collapse-item active" href="{{route('aktivitas.index')}}">Aktivitas</a> 
+                        <a class="collapse-item active" href="{{route('ordersaprodi.cari')}}">Order Saprodi</a> 
+                        <a class="collapse-item active" href="{{route('hasilpertanian.cari')}}">Hasil Pertanian</a>
+                       
+                    </div>
+                </div>
+            </li>
+            </li>
+    @endcan
+ 
     @can('koperasi')
         <!-- Nav Item -Ekonomi Menu -->
             <li class="nav-item">
@@ -96,14 +155,53 @@
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item active" href="utilities-border.html">Data Kebutuhan Product</a>
-                        <a class="collapse-item active" href="utilities-other.html">Data Hasil Penjualan</a>
+                        <a class="collapse-item active" href="{{route('daftarpetani.create')}}">Pendaftaran Petani</a>
+                        <a class="collapse-item active" href="{{route('datasuplier.create')}}">Pendaftaran Suplier</a>
+                        <a class="collapse-item active" href="{{route('pesanan.cari')}}">Pengiriman Saprodi</a>
+
                     </div>
                 </div>
             </li>
     @endcan
+    @can('juruair')
+        <!-- Nav Item -Ekonomi Menu -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+            <div class="sidebar-heading">
+                Addons
+                <li class="nav-item">
+                   <a class="nav-link" href="{{url('fullcalendar')}}" aria-expanded="true"
+                    aria-controls="collapseEkonomi">JADWAL ALIRAN IRIGASI</a>
+                <!-- <a class="nav-link" href="#" aria-expanded="true"
+                    aria-controls="collapseEkonomi">Rekomendasi Masa Kawin</a> -->
+                <!-- <a class="nav-link" href="#" aria-expanded="true"
+                    aria-controls="collapseEkonomi">Informasi Kualias Pakan Ternak</a>
+                </li>
+
+                </div>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider d-none d-md-block">
+    @endcan
 
     @can('super')
+        <!-- Nav Item - peternakan Menu -->
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePeternakan"
+                   aria-expanded="true" aria-controls="collapsePeternakan">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Sektor Peternakan</span>
+                </a>
+                <div id="collapsePeternakan" class="collapse" aria-labelledby="headingPeternakan"
+                     data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Menu:</h6>
+                        
+                    </div>
+                </div>
+            </li>
+
             <!-- Nav Item - Pertanian Menu -->
             <li class="nav-item">
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePertanian"
@@ -114,7 +212,7 @@
                 <div id="collapsePertanian" class="collapse" aria-labelledby="headingPertanian"
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Menu:</h6>
+                        <h6 class="collapse-header">Menu PPL:</h6>
                         <a class="collapse-item active" href="{{route('datatanaman.create')}}">Data Tanaman Pertanian</a>
                         <a class="collapse-item active" href="{{route('soppertanian.create')}}">SOP Pertanian</a>
                         <a class="collapse-item active" href="{{route('datasaprodi.create')}}">Data Saprodi</a>
@@ -122,7 +220,10 @@
                         <a class="collapse-item active" href="{{route('kelompokpetani.create')}}">Data Kelompok Petani</a>
                         <a class="collapse-item active" href="{{route('kepemilikanlahan.create')}}">Kepemilikan Lahan</a>
                         <a class="collapse-item active" href="{{route('kebutuhan.cari')}}">Kebutuhan Saprodi</a>
-                        <!-- <a class="collapse-item active" href="{{route('kebutuhansaprodi.create')}}">Kebutuhan Saprodi</a> -->
+                        <h6 class="collapse-header">Menu PETANI:</h6>
+                        <a class="collapse-item active" href="{{route('rencanatanam.index')}}">Rencana Tanam</a> 
+                        <a class="collapse-item active" href="{{route('aktivitas.index')}}">Aktivitas</a> 
+                        <a class="collapse-item active" href="{{route('ordersaprodi.cari')}}">Order Saprodi</a> 
                         <a class="collapse-item active" href="{{route('hasilpertanian.cari')}}">Hasil Pertanian</a>
                     </div>
                 </div>
@@ -138,11 +239,12 @@
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item active" href="utilities-border.html">STOK PRODUK</a>
+                        <a class="collapse-item active" href="{{route('datasuplier.create')}}">Data Suplier</a>
+                        <a class="collapse-item active" href="{{route('pesanan.cari')}}">Pengiriman Saprodi</a>
                     </div>
                 </div>
             </li>
-    @endcan
+    
     <!-- Divider -->
         <hr class="sidebar-divider">
 
@@ -159,12 +261,12 @@
             <!-- <a class="nav-link" href="#" aria-expanded="true"
                    aria-controls="collapseEkonomi">Informasi Kualias Pakan Ternak</a>
             </li>
-
+    
         </div>
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
-
+        @endcan
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">
             <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -350,10 +452,11 @@
                     <div class="topbar-divider d-none d-sm-block"></div>
 
                     <!-- Nav Item - User Information -->
+                    
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Doank</span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::User()->name}}[{{Auth::User()->id}}]</span>
                             <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
                         </a>
                         <!-- Dropdown - User Information -->

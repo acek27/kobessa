@@ -5,10 +5,78 @@
 
 @section('isi')
 <!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">SOP Pertanian</h1>
-    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+
+<div class="row">
+  <!-- Content Column Ke 1-->
+  <div class="col-lg-6 mb-4">
+    <!-- Project Card Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">DAFTAR VERSI SAPRODI</h6>
+      </div>
+      <div class="card-body">
+        <!-- <div class="row"> -->
+        @if (session()->has('flash_notification.message'))
+        <div class="alert alert-{{ session()->get('flash_notification.level') }}">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          {!! session()->get('flash_notification.message') !!}
+        </div>
+        @endif
+       
+        <form method="POST" action="{{route('soppertanian.save')}}" role="form">
+          @csrf
+            <label style="color:black">Nama SOP Pertanian</label>
+            <input type="text" class="form-control form-control-user" id="versi" name="versi" aria-describedby="emailHelp" required>
+            <label style="color:black">Pemilik SOP</label>
+            <input type="text" class="form-control form-control-user" id="pemilik" name="pemilik" aria-describedby="emailHelp" required>
+            <br>
+          <button type="submit" style="align-center" class="btn-sm btn-primary shadow-sm">
+            SIMPAN</button>
+          
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 mb-4">
+    <!-- Project Card Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">VERSI SAPRODI TERDAFTAR</h6>
+      </div>
+      <div class="card-body">
+        <!-- <div class="row"> -->
+           <div class="table-responsive">
+        <table class="table table-bordered" id="tabelversisop" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th style="width: 40%; text-align: left; vertical-align: middle" >Versi SOP</th>
+                    <th style="width: 40%; text-align: left; vertical-align: middle" >Pemilik SOP</th>
+                    <th style="width: 60%; text-align: left; vertical-align: middle" >Action</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+
+       
+       
+        
+      </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+<div class="col-lg-12 mb-4">
+<div class="card shadow mb-4">
+<div class="card-header py-3">
+<h6 class="m-0 font-weight-bold text-primary">SOP Pertanian</h6>  
 </div>
+<div class="card-body">
 @if (session()->has('flash_notification.message'))
         <div class="alert alert-{{ session()->get('flash_notification.level') }}">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -17,6 +85,13 @@
     @endif
 <form method="POST" action="{{route('soppertanian.store')}}" role="form">
     @csrf
+    <label style="color:black">Versi SOP</label>
+    <select class="form-control show-tick" id="idversisop" name="idversisop" required>
+        <option value="">-- Please select --</option>
+        @foreach($versi as $values)
+        <option value="{{$values->idversi}}">{{$values->versisop}}</option>
+        @endforeach
+    </select>
     <label style="color:black">Fase</label>
     <select class="form-control show-tick" id="idfase" name="idfase" required>
         <option value="">-- Please select --</option>
@@ -31,8 +106,10 @@
     <br>
     <button class="btn btn-sm btn-primary shadow-sm">
         SIMPAN</button>
-
-</form>
+  </form>
+</div>
+</div>
+</div>
 
 <br>
 <div class="card shadow mb-4">
@@ -56,6 +133,7 @@
             </tbody>
         </table>
     </div>
+
 </div>
 </div>
 
@@ -67,6 +145,7 @@
   <script src="{{asset('asetsba2/js/demo/datatables-demo.js')}}"></script>
 
 <script>
+    
     $(document).ready(function() {
         var dt = $('#tabelsop').DataTable({
             processing: true,
@@ -156,4 +235,34 @@
 
     
 </script>
+<script>
+$(document).ready(function() {
+        var dt = $('#tabelversisop').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{route('tabel.versisop')}}',
+            columns: [{
+                    data: 'idversi',
+                    name: 'idversi'
+                },
+                {
+                    data: 'versisop',
+                    name: 'versisop'
+                },
+                {
+                    data: 'pemiliksop',
+                    name: 'pemiliksop'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false,
+                    align: 'center'
+                },
+            ]
+        });
+});
+</script>
+
 @endpush

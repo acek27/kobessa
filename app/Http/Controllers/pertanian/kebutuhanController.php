@@ -5,6 +5,7 @@ namespace App\Http\Controllers\pertanian;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Yajra\Datatables\Datatables;
 
 class kebutuhanController extends Controller
@@ -32,6 +33,19 @@ class kebutuhanController extends Controller
             ->addColumn('action', function ($data) {
                 $pilih = "<a href=\"" . route('kebutuhansaprodi.show', $data->idkeanggotaan) . "\"><i class=\"material-icons\" title=\"Data Kebutuhan Saprodi\">Pilih</i></a>";
                 return $pilih;
+            })
+            ->make(true);
+    }
+    public function tabelkebutuhan()
+    {
+        return DataTables::of(DB::table('kebutuhansaprodi')
+        ->join('saprodi', 'saprodi.idsaprodi', '=', 'kebutuhansaprodi.idsaprodi')
+        ->select('kebutuhansaprodi.*','saprodi.namasaprodi as namasaprodi','saprodi.satuan as satuan')
+        ->get())
+        ->addColumn('action', function ($data) {
+            $del = '<a href="#" data-id="' . $data->idkebutuhansaprodi . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
+            $edit = '<a href="#" data-id="' . $data->idkebutuhansaprodi . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
+            return $edit . '&nbsp' . '&nbsp' . $del;
             })
             ->make(true);
     }
@@ -63,6 +77,7 @@ class kebutuhanController extends Controller
     { 
         for($i=1; $i<=15; $i++)
         {
+            $iduser = Auth::User()->id;
             $id = $request->get('idkeanggotaan');
             $idlahan = $request->get('idlahan');
             $idsaprodi = $request->get('idsaprodi'.$i);
@@ -71,7 +86,8 @@ class kebutuhanController extends Controller
                 DB::table('kebutuhansaprodi')->insert([
                     'idlahan' => $idlahan,
                     'idsaprodi' => $idsaprodi,
-                    'kebutuhan' => $kebutuhan
+                    'kebutuhan' => $kebutuhan,
+                    'id' => $iduser
                     ]);
             }
        
@@ -84,6 +100,14 @@ class kebutuhanController extends Controller
         return redirect('/kebutuhansaprodi'.'/'.$id);
 
     }
+    
+    public function hargasaprodi($id)
+    {
+        $x = DB::table('saprodi')->where('idsaprodi', '=', $id)
+            ->get();
+        return response()->json($x);
+    }
+
 
     /**
      * Display the specified resource.

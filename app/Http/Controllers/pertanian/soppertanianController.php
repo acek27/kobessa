@@ -21,13 +21,23 @@ class soppertanianController extends Controller
 
     public function tabelsoptani()
     {
-        return DataTables::of(DB::table('soptani')
-            ->join('fasetanam', 'fasetanam.idfase', '=', 'soptani.idfase')
-            ->select('soptani.*', 'fasetanam.namafase as fase')
+        return DataTables::of(DB::table('soptanidetail')
+            ->join('fasetanam', 'fasetanam.idfase', '=', 'soptanidetail.idfase')
+            ->select('soptanidetail.*', 'fasetanam.namafase as fase')
             ->get())
             ->addColumn('action', function ($data) {
                 $del = '<a href="#" data-id="' . $data->idsop . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
                 $edit = '<a href="#" data-id="' . $data->idsop . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
+                return $edit . '&nbsp' . '&nbsp' . $del;
+            })
+            ->make(true);
+    }
+    public function tabelversisop()
+    {
+        return DataTables::of(DB::table('soppertanian') ->get())
+            ->addColumn('action', function ($data) {
+                $del = '<a href="#" data-id="' . $data->idversi . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
+                $edit = '<a href="#" data-id="' . $data->idversi . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
                 return $edit . '&nbsp' . '&nbsp' . $del;
             })
             ->make(true);
@@ -41,7 +51,8 @@ class soppertanianController extends Controller
     public function create()
     {
         $fase = DB::table('fasetanam')->get();
-        return view('pertanian.soppertanian', compact('fase'));
+        $versi = DB::table('soppertanian')->get();
+        return view('pertanian.soppertanian', compact('fase','versi'));
     }
     /**
      * Store a newly created resource in storage.
@@ -53,14 +64,17 @@ class soppertanianController extends Controller
     public function store(Request $request)
     {
         $idfase = $request->get('idfase');
+        $idversi = $request->get('idversisop');
         $nama = $request->get('nama');
         $waktu = $request->get('waktu');
-        $pengecekan = DB::table('soptani')->select('*')
+        $pengecekan = DB::table('soptanidetail')->select('*')
+            ->where('idversi', '=', $idversi)
             ->where('idfase', '=', $idfase)
             ->where('kegiatan', '=', $nama);
 
         if ($pengecekan->exists()) {
-            DB::table('soptani')
+            DB::table('soptanidetail')
+                ->where('idversi', '=', $idversi)
                 ->where('idfase',$idfase)
                 ->update([
                 'kegiatan' => $nama,
@@ -72,8 +86,9 @@ class soppertanianController extends Controller
                 "message" => "Data Berhasil Diupdate!"
             ]);
         } else {
-            DB::table('soptani')->insert([
+            DB::table('soptanidetail')->insert([
                     'idfase'      => $idfase,
+                    'idversi'      => $idversi,
                     'kegiatan'     => $nama,
                     'waktu'     => $waktu
 
@@ -84,6 +99,24 @@ class soppertanianController extends Controller
                     "message" => "Berhasil menambah data!"
                 ]);
         }
+               return redirect('/soppertanian/create');
+    }
+
+    public function save(Request $request)
+    {
+        $nama = $request->get('versi');
+        $pemilik = $request->get('pemilik');
+        DB::table('soppertanian')->insert([
+                    'versisop'     => $nama,
+                    'pemiliksop'     => $pemilik
+
+                ]);
+        
+                \Session::flash("flash_notification", [
+                    "level" => "success",
+                    "message" => "Berhasil menambah data!"
+                ]);
+        
                return redirect('/soppertanian/create');
     }
 

@@ -60,6 +60,22 @@
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Sektor') }}</label>
+
+                            <div class="col-md-6">
+                                <select class="form-control show-tick" id="role_id" name="role_id" required>
+                                <option value="">-- Please select --</option>
+                                <option value="2">Dinas Peternakan</option>
+                                <option value="3">Dinas Pertanian</option>
+                                <option value="4">Koperasi</option>
+                                <option value="5">PPL</option>
+                                <option value="6">Petani</option>
+                                <option value="7">Juru Air</option>
+                                
+                                </select>
+                                </div>
+                        </div>
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">

@@ -18,8 +18,6 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 });
-
-
 /* Pertanian */
 //Route::post('/dataProvinsi/{id}', 'dataPengunjungController@dataProvinsi')->name('data.provinsi');
 Route::resource('datatanaman', 'pertanian\datatanamanController');
@@ -47,12 +45,22 @@ Route::get('tabelhasil', 'pertanian\hasilpertanianController@tabelhasil')->name(
 Route::get('tabelhasilpertanian', 'pertanian\hasilpertanianController@tabelcaritani')->name('tabel.caritani');
 Route::get('caripetani', 'pertanian\hasilpertanianController@cari')->name('hasilpertanian.cari');
 
+Route::resource('ordersaprodi', 'pertanian\ordersaprodiController');
+Route::get('tabelsuplier', 'pertanian\ordersaprodiController@tabelsuplier')->name('tabel.suplier');
+Route::get('tabelpesansaprodi', 'pertanian\ordersaprodiController@tabelpesanansaprodi')->name('tabel.pesanansaprodi');
+Route::get('carisuplier', 'pertanian\ordersaprodiController@cari')->name('ordersaprodi.cari');
+
+
 Route::resource('kebutuhan', 'pertanian\kebutuhanController');
 Route::get('tabellahan', 'pertanian\kebutuhanController@tabellahan')->name('tabel.lahan');
+Route::get('tabelkebutuhan', 'pertanian\kebutuhanController@tabelkebutuhan')->name('tabel.kebutuhan');
 Route::get('carilahan', 'pertanian\kebutuhanController@cari')->name('kebutuhan.cari');
 
+//SOP PERTANIAN
 Route::resource('soppertanian', 'pertanian\soppertanianController');
 Route::get('tabelsoptani', 'pertanian\soppertanianController@tabelsoptani')->name('tabel.soptani');
+Route::get('tabelversisop', 'pertanian\soppertanianController@tabelversisop')->name('tabel.versisop');
+Route::post('saprodisave','pertanian\soppertanianController@save')->name('soppertanian.save');
 
 Route::resource('daftarpetani', 'pertanian\daftarpetaniController');
 
@@ -60,7 +68,16 @@ Route::resource('daftarpetani', 'pertanian\daftarpetaniController');
 Route::resource('datasaprodi', 'pertanian\saprodiController');
 Route::get('tabelsaprodi', 'pertanian\saprodiController@tabelsaprodi')->name('tabel.saprodi');
 
+Route::resource('rencanatanam', 'pertanian\rencanatanamController');
+Route::get('tabelhistori', 'pertanian\rencanatanamController@tabelhistori')->name('tabel.histori');
 
+Route::resource('aktivitas', 'pertanian\aktivitasController');
+Route::get('tabelaktivitas', 'pertanian\aktivitasController@tabelaktivitas')->name('tabel.aktivitas');
+
+//dependency
+Route::post('/sopdetail/{id}', 'pertanian\aktivitasController@sopdetail');
+Route::post('/datadesa/{id}', 'pertanian\kelompokpetaniController@datadesa');
+Route::post('/hargasaprodi/{id}', 'pertanian\kebutuhanController@hargasaprodi');
 Route::post('/datakelompok/{id}', 'pertanian\daftarpetaniController@datakelompok');
 
 //fullcalender
@@ -69,10 +86,17 @@ Route::post('fullcalendar/create','FullCalendarController@create');
 Route::post('fullcalendar/update','FullCalendarController@update');
 Route::post('fullcalendar/delete','FullCalendarController@destroy');
 
+
+//EKONOMI
+Route::resource('datasuplier','ekonomi\datasuplierController');
+
+Route::resource('pengiriman', 'ekonomi\pengirimanController');
+Route::get('caripesanan', 'ekonomi\pengirimanController@cari')->name('pesanan.cari');
+Route::get('tabelpesanan', 'ekonomi\pengirimanController@tabelpesanan')->name('tabel.pesanan');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-//razak
 Route::get('tabelmoulahan/{id}', 'pertanian\daftarpetaniController@mouLahan')->name('mou.lahan');
 Route::get('mouprint/{id}', 'pertanian\daftarpetaniController@print')->name('mou.print');
