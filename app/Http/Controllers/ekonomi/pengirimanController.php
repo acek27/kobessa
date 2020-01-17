@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
+use App\order;
 
 
 class pengirimanController extends Controller
@@ -24,14 +25,27 @@ class pengirimanController extends Controller
     public function tabelpesanan()
     {
         return DataTables::of(DB::table('pesanansaprodi')
-            ->select('PO','tglpesan','tglkirim','biodatauser.nama as nama','desa.namadesa as namadesa','kecamatan.kecamatan as namakecamatan',DB::raw('count(PO) as user_count'))
-            ->join('biodatauser','pesanansaprodi.nik','=','biodatauser.nik')
-            ->join('desa','desa.iddesa','=','biodatauser.iddesa')
-            ->join('kecamatan','kecamatan.idkecamatan','=','desa.idkecamatan')
-            ->groupBy('PO','tglpesan','tglkirim','biodatauser.nama','desa.namadesa','kecamatan.kecamatan')
+            ->select('PO', 'tglpesan', 'status', 'tglkirim', 'biodatauser.nama as nama', 'desa.namadesa as namadesa', 'kecamatan.kecamatan as namakecamatan', DB::raw('count(PO) as user_count'))
+            ->join('biodatauser', 'pesanansaprodi.nik', '=', 'biodatauser.nik')
+            ->join('desa', 'desa.iddesa', '=', 'biodatauser.iddesa')
+            ->join('kecamatan', 'kecamatan.idkecamatan', '=', 'desa.idkecamatan')
+            ->groupBy('PO', 'tglpesan', 'status', 'tglkirim', 'biodatauser.nama', 'desa.namadesa', 'kecamatan.kecamatan')
             ->get())
+            ->addColumn('status', function ($data) {
+                if ($data->status == 1) {
+                    return "Belum Disetujui";
+                } elseif ($data->status == 2) {
+                    return "Disetujui";
+                } elseif ($data->status == 3) {
+                    return "Dalam Pengiriman";
+                } elseif ($data->status == 4) {
+                    return "Telah Diterima Petani";
+                } elseif ($data->status == 9) {
+                    return "Pesanan Ditolak";
+                }
+            })
             ->addColumn('action', function ($data) {
-                $pilih = "<a href=\"" . route('pengiriman.show', $data->PO) . "\"><i class=\"material-icons\" title=\"Data Pesanan\">Pilih</i></a>";
+                $pilih = "<a href=\"" . route('pengiriman.show', $data->PO) . "\"><i class=\"fa fa-search\" title=\"Data Pesanan\"></i></a>";
                 return $pilih;
             })
             ->make(true);
@@ -47,10 +61,41 @@ class pengirimanController extends Controller
         //
     }
 
+    public function order($id, Request $request)
+    {
+        $status = $request->get('status');
+        if ($status == 1) {
+            order::where('PO', $id)->update(
+                ['status' => 2]
+            );
+        } elseif ($status == 2) {
+            order::where('PO', $id)->update(
+                ['status' => 3]
+            );
+        }
+//        $order = order::where('PO', $id)->findOrFail();
+//        if ($order->status == 1) {
+//            $order->status = 2;
+//            $order->update();
+//        } elseif ($order->status == 2){
+//            $order->status = 3;
+//            $order->update();
+//        }
+        return redirect()->route('pesanan.cari');
+    }
+
+    public function tolaksaprodi($id)
+    {
+        order::where('PO', $id)->update(
+            ['status' => 9]
+        );
+        return redirect()->route('pesanan.cari');
+    }
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -61,28 +106,26 @@ class pengirimanController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-         $saprodi = DB::table('saprodi')->get();
-         $pesanan = DB::table('pesanansaprodi')
-         ->join('suplier','suplier.idsuplier', '=', 'pesanansaprodi.idsuplier')
-         ->join('biodatauser','biodatauser.nik', '=', 'pesanansaprodi.nik')
-         ->join('saprodi','saprodi.idsaprodi', '=', 'pesanansaprodi.idsaprodi')
-         ->select('biodatauser.nama as namapemesan','biodatauser.alamat as alamat','biodatauser.telp as telp','pesanansaprodi.jumlah as jumlah','saprodi.namasaprodi as nama','pesanansaprodi.tglpesan as tglpesan','pesanansaprodi.tglkirim as tglkirim')
-         ->where('PO', '=', $id)->get();
+        $saprodi = DB::table('saprodi')->get();
+        $pesanan = DB::table('pesanansaprodi')
+            ->join('suplier', 'suplier.idsuplier', '=', 'pesanansaprodi.idsuplier')
+            ->join('biodatauser', 'biodatauser.nik', '=', 'pesanansaprodi.nik')
+            ->join('saprodi', 'saprodi.idsaprodi', '=', 'pesanansaprodi.idsaprodi')
+            ->select('biodatauser.nama as namapemesan', 'biodatauser.alamat as alamat', 'biodatauser.telp as telp', 'pesanansaprodi.jumlah as jumlah', 'saprodi.namasaprodi as nama', 'pesanansaprodi.tglpesan as tglpesan', 'pesanansaprodi.tglkirim as tglkirim')
+            ->where('PO', '=', $id)->get();
 
-         $pesanan2 = DB::table('pesanansaprodi')
-         ->join('suplier','suplier.idsuplier', '=', 'pesanansaprodi.idsuplier')
-         ->join('biodatauser','biodatauser.nik', '=', 'pesanansaprodi.nik')
-         ->join('saprodi','saprodi.idsaprodi', '=', 'pesanansaprodi.idsaprodi')
-         ->select('biodatauser.nama as namapemesan','biodatauser.alamat as alamat','biodatauser.telp as telp','pesanansaprodi.jumlah as jumlah','saprodi.namasaprodi as nama','pesanansaprodi.tglpesan as tglpesan','pesanansaprodi.tglkirim as tglkirim')
-
-         ->where('PO', '=', $id)->first();
-
-        return view('ekonomi.pengirimansaprodi', compact('pesanan', 'saprodi','pesanan2'));
+        $pesanan2 = DB::table('pesanansaprodi')
+            ->join('suplier', 'suplier.idsuplier', '=', 'pesanansaprodi.idsuplier')
+            ->join('biodatauser', 'biodatauser.nik', '=', 'pesanansaprodi.nik')
+            ->join('saprodi', 'saprodi.idsaprodi', '=', 'pesanansaprodi.idsaprodi')
+            ->select('biodatauser.nama as namapemesan', 'PO', 'status', 'biodatauser.alamat as alamat', 'biodatauser.telp as telp', 'pesanansaprodi.jumlah as jumlah', 'saprodi.namasaprodi as nama', 'pesanansaprodi.tglpesan as tglpesan', 'pesanansaprodi.tglkirim as tglkirim')
+            ->where('PO', '=', $id)->first();
+        return view('ekonomi.pengirimansaprodi', compact('pesanan', 'saprodi', 'pesanan2'));
     }
 
     public function cari()
@@ -95,7 +138,7 @@ class pengirimanController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -106,8 +149,8 @@ class pengirimanController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -118,7 +161,7 @@ class pengirimanController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

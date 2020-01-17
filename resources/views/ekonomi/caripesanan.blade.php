@@ -1,36 +1,37 @@
 @extends('layouts.masterdashboard')
 @section('css')
-<link href="{{asset('vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+    <link href="{{asset('vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
 
 @endsection
 @section('isi')
 
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">DATA PESANAN</h6>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table style="text-align: center" id="tabelpesanan" class="table table-bordered table-striped table-hover">
-                <thead>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">DATA PESANAN</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table style="text-align: center" id="tabelpesanan"
+                       class="table table-bordered table-striped table-hover">
+                    <thead>
                     <tr>
                         <th>No PO</th>
                         <th style="text-align: center; vertical-align: middle">Nama Pemesan</th>
                         <th style="text-align: center; vertical-align: middle">Kecamatan</th>
-                        <th style="text-align: center; vertical-align: middle">Desa</th>>
+                        <th style="text-align: center; vertical-align: middle">Desa</th>
                         <th style="text-align: center; vertical-align: middle">Tgl Pesan</th>
                         <th style="text-align: center; vertical-align: middle">Tgl Kirim</th>
                         <th style="text-align: center; vertical-align: middle">Jumlah Pesanan</th>
+                        <th style="text-align: center; vertical-align: middle">Status</th>
                         <th style="text-align: center; vertical-align: middle">Action</th>
-
                     </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 @endsection
 
 @push('script')
@@ -41,15 +42,15 @@
     <script src="{{asset('asetsba2/js/demo/datatables-demo.js')}}"></script>
 
     <script>
-$(document).ready(function() {
-        var dt = $('#tabelpesanan').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: '{{route('tabel.pesanan')}}',
-            columns: [{
+        $(document).ready(function () {
+            var dt = $('#tabelpesanan').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{route('tabel.pesanan')}}',
+                columns: [{
                     data: 'PO',
                     name: 'PO'
-                   },
+                },
                     {
                         data: 'nama',
                         name: 'nama'
@@ -70,21 +71,25 @@ $(document).ready(function() {
                         data: 'tglkirim',
                         name: 'tglkirim'
                     },
-                {
-                    data: 'user_count',
-                    name: 'user_count'
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false,
-                    align: 'center'
+                    {
+                        data: 'user_count',
+                        name: 'user_count'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        align: 'center'
 
-                },
-            ]
+                    },
+                ]
+            });
         });
-    });
 
     </script>
 @endpush

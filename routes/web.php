@@ -100,3 +100,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('tabelmoulahan/{id}', 'pertanian\daftarpetaniController@mouLahan')->name('mou.lahan');
 Route::get('mouprint/{id}', 'pertanian\daftarpetaniController@print')->name('mou.print');
+Route::POST('ordersaprodi/{id}', 'ekonomi\pengirimanController@order')->name('order.saprodi');
+Route::get('tolaksaprodi/{id}', 'ekonomi\pengirimanController@tolaksaprodi')->name('tolak.saprodi');
