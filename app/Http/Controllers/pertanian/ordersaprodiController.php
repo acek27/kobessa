@@ -17,7 +17,27 @@ class ordersaprodiController extends Controller
      */
     public function index()
     {
-        //
+        return view('pertanian/historypesanan');
+    }
+
+    public function create()
+    {
+        return view('pertanian.ordersaprodi');
+
+    }
+
+    public function show($id)
+    {
+
+        $nopo = DB::table('pesanansaprodi')->orderBy('PO', 'desc')->value('PO');
+
+        $saprodi = DB::table('saprodi')->get();
+        $suplier = DB::table('suplier')
+            ->where('idsuplier', '=', $id)->get();
+
+        // return $nopo;
+        return view('pertanian.ordersaprodi', compact('suplier', 'saprodi', 'nopo'));
+
     }
 
     public function tabelsuplier()
@@ -25,7 +45,7 @@ class ordersaprodiController extends Controller
         return DataTables::of(DB::table('suplier')
             ->join('desa', 'desa.iddesa', '=', 'suplier.iddesa')
             ->join('kecamatan', 'desa.idkecamatan', '=', 'kecamatan.idkecamatan')
-            ->select('suplier.*','desa.namadesa as namadesa','kecamatan.kecamatan as namakecamatan')
+            ->select('suplier.*', 'desa.namadesa as namadesa', 'kecamatan.kecamatan as namakecamatan')
             ->get())
             ->addColumn('action', function ($data) {
                 $pilih = "<a href=\"" . route('ordersaprodi.show', $data->idsuplier) . "\"><i class=\"material-icons\" title=\"Data Kebutuhan Saprodi\">Pilih</i></a>";
@@ -33,34 +53,68 @@ class ordersaprodiController extends Controller
             })
             ->make(true);
     }
-    public function tabelpesanansaprodi()
+
+    public function tabelpesanansaprodi($id)
     {
         $nikuser = Auth::User()->nik;
         return DataTables::of(DB::table('pesanansaprodi')
-        ->join('saprodi', 'saprodi.idsaprodi', '=', 'pesanansaprodi.idsaprodi')
-        ->join('suplier', 'suplier.idsuplier', '=', 'pesanansaprodi.idsuplier')
-        ->select('pesanansaprodi.*','saprodi.namasaprodi as namasaprodi','saprodi.satuan as satuan','suplier.namasuplier as namasuplier')
-        ->where('nik','=', $nikuser)
-        ->get())
-        ->addColumn('action', function ($data) {
-            $del = '<a href="#" data-id="' . $data->idpesanan . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
-            $edit = '<a href="#" data-id="' . $data->idpesanan . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
-            return $edit . '&nbsp' . '&nbsp' . $del;
+            ->join('saprodi', 'saprodi.idsaprodi', '=', 'pesanansaprodi.idsaprodi')
+            ->select('pesanansaprodi.*', 'saprodi.namasaprodi as namasaprodi', 'saprodi.satuan as satuan')
+            ->where('nik', '=', $nikuser)
+            ->where('idsuplier', '=', $id)
+            ->get())
+            ->addColumn('status', function ($data) {
+                if ($data->status == 1) {
+                    return "Belum Disetujui";
+                } elseif ($data->status == 2) {
+                    return "Disetujui";
+                } elseif ($data->status == 3) {
+                    return "Dalam Pengiriman";
+                } elseif ($data->status == 4) {
+                    return "Telah Diterima Petani";
+                } elseif ($data->status == 9) {
+                    return "Pesanan Ditolak";
+                }
+            })
+            ->addColumn('action', function ($data) {
+                $del = '<a href="#" data-id="' . $data->idpesanan . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
+                return $del;
             })
             ->make(true);
     }
 
-   
+    public function tabelhistory()
+    {
+        $nikuser = Auth::User()->nik;
+        return DataTables::of(DB::table('pesanansaprodi')
+            ->join('saprodi', 'saprodi.idsaprodi', '=', 'pesanansaprodi.idsaprodi')
+            ->join('suplier', 'suplier.idsuplier', '=', 'pesanansaprodi.idsuplier')
+            ->select('pesanansaprodi.*', 'saprodi.namasaprodi as namasaprodi', 'saprodi.satuan as satuan', 'suplier.namasuplier as namasuplier')
+            ->where('nik', '=', $nikuser)
+            ->get())
+            ->addColumn('status', function ($data) {
+                if ($data->status == 1) {
+                    return "Belum Disetujui";
+                } elseif ($data->status == 2) {
+                    return "Disetujui";
+                } elseif ($data->status == 3) {
+                    return "Dalam Pengiriman";
+                } elseif ($data->status == 4) {
+                    return "Telah Diterima Petani";
+                } elseif ($data->status == 9) {
+                    return "Pesanan Ditolak";
+                }
+            })
+            ->make(true);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        return view('pertanian.ordersaprodi');
-        
-    }
+
     public function cari()
     {
 
@@ -70,69 +124,56 @@ class ordersaprodiController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    { 
-       
-        for($i=1; $i<=15; $i++)
-        {
+    {
+
+        for ($i = 1; $i <= 15; $i++) {
             $idsuplier = $request->get('idsuplier');
             $tglkirim = $request->get('tglkirim');
             $po = $request->get('po1');
             $nik = $request->get('nik');
             $todayDate = date("Y-m-d");
-            $idsaprodi = $request->get('idsaprodi'.$i);
-            $kebutuhan = $request->get('kebutuhan'.$i);
-            if ($idsaprodi != null || $kebutuhan != null){
+            $idsaprodi = $request->get('idsaprodi' . $i);
+            $kebutuhan = $request->get('kebutuhan' . $i);
+            if ($idsaprodi != null || $kebutuhan != null) {
                 DB::table('pesanansaprodi')->insert([
                     'idsuplier' => $idsuplier,
                     'nik' => $nik,
                     'PO' => $po,
-                    'idsaprodi' => $idsaprodi, 
+                    'idsaprodi' => $idsaprodi,
                     'jumlah' => $kebutuhan,
-                    'tglpesan' => $todayDate,  
-                    'tglkirim' => $tglkirim,  
+                    'tglpesan' => $todayDate,
+                    'tglkirim' => $tglkirim,
                     'status' => 1
-                    ]);
+                ]);
             }
-       
+
         }
         \Session::flash("flash_notification", [
             "level" => "success",
             "message" => "Berhasil menambah data petani : $request->nama"
         ]);
-        
-        return redirect('/ordersaprodi'.'/'.$idsuplier);
-    
+
+        return redirect('/ordersaprodi' . '/' . $idsuplier);
+
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-          
-            $nopo = DB::table('pesanansaprodi')->orderBy ('PO','desc')->value('PO');
 
-         $saprodi = DB::table('saprodi')->get();
-         $suplier = DB::table('suplier')
-         ->where('idsuplier', '=', $id)->get();
-        
-        // return $nopo;
-        return view('pertanian.ordersaprodi', compact('suplier', 'saprodi','nopo'));
-        
-    }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -143,8 +184,8 @@ class ordersaprodiController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -155,7 +196,7 @@ class ordersaprodiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

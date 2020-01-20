@@ -134,7 +134,8 @@
                     <h6 class="collapse-header">Menu:</h6>
                         <a class="collapse-item active" href="{{route('rencanatanam.index')}}">Rencana Tanam</a> 
                         <a class="collapse-item active" href="{{route('aktivitas.index')}}">Aktivitas</a> 
-                        <a class="collapse-item active" href="{{route('ordersaprodi.cari')}}">Pesan Saprodi</a> 
+                        <a class="collapse-item active" href="{{route('ordersaprodi.cari')}}">Pesan Saprodi</a>
+                        <a class="collapse-item active" href="{{route('ordersaprodi.index')}}">History Pesanan</a>  
                         <a class="collapse-item active" href="{{route('hasilpertanian.cari')}}">Hasil Pertanian</a>
                        
                     </div>
@@ -224,6 +225,7 @@
                         <a class="collapse-item active" href="{{route('rencanatanam.index')}}">Rencana Tanam</a> 
                         <a class="collapse-item active" href="{{route('aktivitas.index')}}">Aktivitas</a> 
                         <a class="collapse-item active" href="{{route('ordersaprodi.cari')}}">Pesan Saprodi</a> 
+                        <a class="collapse-item active" href="{{route('ordersaprodi.index')}}">History Pesanan</a> 
                         <a class="collapse-item active" href="{{route('hasilpertanian.cari')}}">Hasil Pertanian</a>
                     </div>
                 </div>

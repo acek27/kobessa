@@ -47,7 +47,8 @@ Route::get('caripetani', 'pertanian\hasilpertanianController@cari')->name('hasil
 
 Route::resource('ordersaprodi', 'pertanian\ordersaprodiController');
 Route::get('tabelsuplier', 'pertanian\ordersaprodiController@tabelsuplier')->name('tabel.suplier');
-Route::get('tabelpesansaprodi', 'pertanian\ordersaprodiController@tabelpesanansaprodi')->name('tabel.pesanansaprodi');
+Route::get('tabelpesanansaprodi/{id}', 'pertanian\ordersaprodiController@tabelpesanansaprodi')->name('tabel.pesanansaprodi');
+Route::get('tabelhistory', 'pertanian\ordersaprodiController@tabelhistory')->name('tabel.history');
 Route::get('carisuplier', 'pertanian\ordersaprodiController@cari')->name('ordersaprodi.cari');
 
 
