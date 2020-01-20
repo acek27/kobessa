@@ -39,18 +39,26 @@
                             <th>Jumlah Dikirim</th>
 
                         </tr>
+                        @php($i = 0)
                         @foreach($pesanan as $value)
                             <tr>
-                                <td><input type="text" class="form-control form-control-user" id="nama"
-                                           value="{{$value->nama}}" name="nama" aria-describedby="emailHelp" disabled>
+                                <td><input type="text" class="form-control form-control-user" id="idpesanan"
+                                           value="{{$value->idpesanan}}" name="idpesanan{{$i+1}}"
+                                           aria-describedby="emailHelp" hidden>
+                                    <input type="text" class="form-control form-control-user" id="nama"
+                                           value="{{$value->nama}}" name="nama{{$i+1}}" aria-describedby="emailHelp"
+                                           disabled>
                                 </td>
                                 <td><input type="text" class="form-control form-control-user" id="kebutuhan"
-                                           value="{{$value->jumlah}}" name="kebutuhan" aria-describedby="emailHelp"
+                                           value="{{$value->jumlah}}" name="kebutuhan{{$i+1}}"
+                                           aria-describedby="emailHelp"
                                            disabled></td>
-                                <td><input type="text" class="form-control form-control-user" id="jumlahkirim"
-                                           name="jumlahkirim" aria-describedby="emailHelp">
+                                <td><input type="text" class="form-control form-control-user" id="jumlahkirim{{$i+1}}"
+                                           value="{{$value->jumlahkirim}}" name="jumlahkirim{{$i+1}}"
+                                           aria-describedby="emailHelp" @if($value->status > 1) disabled @endif>
                                 </td>
                             </tr>
+                            @php($i++)
                         @endforeach
                     </table>
                     <br>
@@ -59,7 +67,8 @@
                            name="status" value="{{$pesanan2->status}}" hidden>
                     @if($pesanan2->status == 1)
                         <button class="btn btn-sm btn-primary shadow-sm"><i class="fa fa-check"> SETUJUI</i></button>
-                        <a class="btn btn-sm btn-danger" href="{{route('tolak.saprodi',$pesanan2->PO)}}"><i class="fa fa-ban" style="color: white"> TOLAK</i></a>
+                        <a class="btn btn-sm btn-danger" href="{{route('tolak.saprodi',$pesanan2->PO)}}"><i
+                                class="fa fa-ban" style="color: white"> TOLAK</i></a>
                     @elseif($pesanan2->status == 2)
                         <button class="btn btn-sm btn-primary shadow-sm"><i class="fa fa-truck"> KIRIM SEKARANG</i>
                         </button>

@@ -68,6 +68,14 @@ class pengirimanController extends Controller
             order::where('PO', $id)->update(
                 ['status' => 2]
             );
+            $count = order::where('PO', $id)->count('*');
+            for ($i = 1; $i <= $count; $i++) {
+                order::where('PO', $id)->where('idpesanan', $request->get('idpesanan' . $i))->update([
+                        'jumlahkirim' => $request->get('jumlahkirim' . $i),
+                        'DO' => $id
+                    ]
+                );
+            }
         } elseif ($status == 2) {
             order::where('PO', $id)->update(
                 ['status' => 3]
@@ -116,7 +124,7 @@ class pengirimanController extends Controller
             ->join('suplier', 'suplier.idsuplier', '=', 'pesanansaprodi.idsuplier')
             ->join('biodatauser', 'biodatauser.nik', '=', 'pesanansaprodi.nik')
             ->join('saprodi', 'saprodi.idsaprodi', '=', 'pesanansaprodi.idsaprodi')
-            ->select('biodatauser.nama as namapemesan', 'biodatauser.alamat as alamat', 'biodatauser.telp as telp', 'pesanansaprodi.jumlah as jumlah', 'saprodi.namasaprodi as nama', 'pesanansaprodi.tglpesan as tglpesan', 'pesanansaprodi.tglkirim as tglkirim')
+            ->select('jumlahkirim', 'idpesanan', 'biodatauser.nama as namapemesan', 'biodatauser.alamat as alamat', 'biodatauser.telp as telp', 'pesanansaprodi.jumlah as jumlah', 'saprodi.namasaprodi as nama', 'pesanansaprodi.tglpesan as tglpesan', 'pesanansaprodi.tglkirim as tglkirim','status')
             ->where('PO', '=', $id)->get();
 
         $pesanan2 = DB::table('pesanansaprodi')
