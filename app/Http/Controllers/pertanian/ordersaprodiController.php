@@ -5,6 +5,7 @@ namespace App\Http\Controllers\pertanian;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Yajra\Datatables\Datatables;
 
 class ordersaprodiController extends Controller
@@ -34,9 +35,12 @@ class ordersaprodiController extends Controller
     }
     public function tabelpesanansaprodi()
     {
+        $nikuser = Auth::User()->nik;
         return DataTables::of(DB::table('pesanansaprodi')
         ->join('saprodi', 'saprodi.idsaprodi', '=', 'pesanansaprodi.idsaprodi')
-        ->select('pesanansaprodi.*','saprodi.namasaprodi as namasaprodi','saprodi.satuan as satuan')
+        ->join('suplier', 'suplier.idsuplier', '=', 'pesanansaprodi.idsuplier')
+        ->select('pesanansaprodi.*','saprodi.namasaprodi as namasaprodi','saprodi.satuan as satuan','suplier.namasuplier as namasuplier')
+        ->where('nik','=', $nikuser)
         ->get())
         ->addColumn('action', function ($data) {
             $del = '<a href="#" data-id="' . $data->idpesanan . '" class="hapus-data"><i class="fas fa-trash"></i></a>';

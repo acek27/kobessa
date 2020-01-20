@@ -115,7 +115,7 @@
                         <a class="collapse-item active" href="{{route('kepemilikanlahan.create')}}">Kepemilikan Lahan</a>
                         <a class="collapse-item active" href="{{route('kebutuhan.cari')}}">Kebutuhan Saprodi</a>
                         <a class="collapse-item active" href="{{route('aktivitas.index')}}">Monitoring</a> 
-                        <a class="collapse-item active" href="{{route('ordersaprodi.cari')}}">Order Saprodi</a>
+                       
                     </div>
                 </div>
             </li>
@@ -134,7 +134,7 @@
                     <h6 class="collapse-header">Menu:</h6>
                         <a class="collapse-item active" href="{{route('rencanatanam.index')}}">Rencana Tanam</a> 
                         <a class="collapse-item active" href="{{route('aktivitas.index')}}">Aktivitas</a> 
-                        <a class="collapse-item active" href="{{route('ordersaprodi.cari')}}">Order Saprodi</a> 
+                        <a class="collapse-item active" href="{{route('ordersaprodi.cari')}}">Pesan Saprodi</a> 
                         <a class="collapse-item active" href="{{route('hasilpertanian.cari')}}">Hasil Pertanian</a>
                        
                     </div>
@@ -157,7 +157,7 @@
                         <h6 class="collapse-header">Menu:</h6>
                         <a class="collapse-item active" href="{{route('daftarpetani.create')}}">Pendaftaran Petani</a>
                         <a class="collapse-item active" href="{{route('datasuplier.create')}}">Pendaftaran Suplier</a>
-                        <a class="collapse-item active" href="{{route('pesanan.cari')}}">Pengiriman Saprodi</a>
+                        <a class="collapse-item active" href="{{route('pesanan.cari')}}">Pesanan Saprodi</a>
 
                     </div>
                 </div>
@@ -223,7 +223,7 @@
                         <h6 class="collapse-header">Menu PETANI:</h6>
                         <a class="collapse-item active" href="{{route('rencanatanam.index')}}">Rencana Tanam</a> 
                         <a class="collapse-item active" href="{{route('aktivitas.index')}}">Aktivitas</a> 
-                        <a class="collapse-item active" href="{{route('ordersaprodi.cari')}}">Order Saprodi</a> 
+                        <a class="collapse-item active" href="{{route('ordersaprodi.cari')}}">Pesan Saprodi</a> 
                         <a class="collapse-item active" href="{{route('hasilpertanian.cari')}}">Hasil Pertanian</a>
                     </div>
                 </div>
@@ -239,8 +239,9 @@
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
+                        <a class="collapse-item active" href="{{route('daftarpetani.create')}}">Pendaftaran Petani</a>
                         <a class="collapse-item active" href="{{route('datasuplier.create')}}">Data Suplier</a>
-                        <a class="collapse-item active" href="{{route('pesanan.cari')}}">Pengiriman Saprodi</a>
+                        <a class="collapse-item active" href="{{route('pesanan.cari')}}">Pesanan Saprodi</a>
                     </div>
                 </div>
             </li>
@@ -252,8 +253,8 @@
         <div class="sidebar-heading">
             Addons
             <li class="nav-item">
-            <a class="nav-link" href="{{route('daftarpetani.create')}}" aria-expanded="true"
-                   aria-controls="collapseEkonomi">PENDAFTARAN PETANI</a>
+            <!-- <a class="nav-link" href="{{route('daftarpetani.create')}}" aria-expanded="true"
+                   aria-controls="collapseEkonomi">PENDAFTARAN PETANI</a> -->
             <a class="nav-link" href="{{url('fullcalendar')}}" aria-expanded="true"
                    aria-controls="collapseEkonomi">JADWAL ALIRAN IRIGASI</a>
              <!-- <a class="nav-link" href="#" aria-expanded="true"

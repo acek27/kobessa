@@ -109,10 +109,14 @@
         <table class="table table-bordered" id="tabelpesanan" width="100%" cellspacing="0">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>No.PO</th>
+                    <th style="width: 50%; text-align: left; vertical-align: middle" >Nama Suplier</th>
                     <th style="width: 50%; text-align: left; vertical-align: middle" >Nama Saprodi</th>
                     <th style="width: 40%; text-align: left; vertical-align: middle" >Kebutuhan</th>
                     <th style="width: 40%; text-align: left; vertical-align: middle" >Satuan</th>
+                    <th style="width: 40%; text-align: left; vertical-align: middle" >Tgl Pesan</th>
+                    <th style="width: 40%; text-align: left; vertical-align: middle" >Tgl Kirim</th>
+                    <th style="width: 40%; text-align: left; vertical-align: middle" >Status</th>
                     <th style="width: 60%; text-align: left; vertical-align: middle" >Action</th>
                     
                 </tr>
@@ -138,8 +142,12 @@
             serverSide: true,
             ajax: '{{route('tabel.pesanansaprodi')}}',
             columns: [{
-                    data: 'idpesanan',
-                    name: 'idpesanan'
+                    data: 'PO',
+                    name: 'PO'
+                },
+                {
+                    data: 'namasuplier',
+                    name: 'namasuplier'
                 },
                 {
                     data: 'namasaprodi',
@@ -152,6 +160,18 @@
                 {
                     data: 'satuan',
                     name: 'satuan'
+                },
+                {
+                    data: 'tglpesan',
+                    name: 'tglpesan'
+                },
+                {
+                    data: 'tglkirim',
+                    name: 'tglkirim'
+                },
+                {
+                    data: 'status',
+                    name: 'status'
                 },
                 {
                     data: 'action',
