@@ -55,7 +55,7 @@
                                            disabled></td>
                                 <td><input type="text" class="form-control form-control-user" id="jumlahkirim{{$i+1}}"
                                            value="{{$value->jumlahkirim}}" name="jumlahkirim{{$i+1}}"
-                                           aria-describedby="emailHelp" @if($value->status > 1) disabled @endif>
+                                           aria-describedby="emailHelp" @if($value->status > 1) disabled @endif required>
                                 </td>
                             </tr>
                             @php($i++)

@@ -72,7 +72,8 @@ class pengirimanController extends Controller
             for ($i = 1; $i <= $count; $i++) {
                 order::where('PO', $id)->where('idpesanan', $request->get('idpesanan' . $i))->update([
                         'jumlahkirim' => $request->get('jumlahkirim' . $i),
-                        'DO' => $id
+                        'DO' => $id,
+                        'tglpengiriman' => date('yy-m-d')
                     ]
                 );
             }
