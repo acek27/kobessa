@@ -30,7 +30,7 @@ class petaniController extends Controller
             ->addColumn('action', function ($data) {
                 $del = '<a href="#" data-id="' . $data->nik . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
                 $edit = '<a href="#" data-id="' . $data->nik . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
-                $print = '<a href="' . route('daftarpetani.show', $data->nik) . '" class="print-data"><i class="fa fa-print"></i></a>';
+		 $print = '<a href="' . route('daftarpetani.show', $data->nik) . '" class="print-data"><i class="fa fa-print"></i></a>';
                 return $edit . '&nbsp' . '&nbsp' . $del. '&nbsp' . '&nbsp' .$print;
             })
             ->make(true);
@@ -66,7 +66,7 @@ class petaniController extends Controller
      */
     public function store(Request $request)
     {
-
+        
         $request->validate([
             'telp' => 'numeric|required'
         ]);
@@ -78,7 +78,7 @@ class petaniController extends Controller
         $iddesa = $request->get('iddesa');
         $nik = $request->get('nik');
         $telp = $request->get('telp');
-
+ 
         $pengecekan = DB::table('biodatauser')->select('*')
             ->where('nik', '=', $nik);
 
@@ -95,7 +95,7 @@ class petaniController extends Controller
                 'telp' => $telp
 
             ]);
-
+            
             \Session::flash("flash_notification", [
                 "level" => "success",
                 "message" => "Data petani $request->nama Berhasil diupdate!"

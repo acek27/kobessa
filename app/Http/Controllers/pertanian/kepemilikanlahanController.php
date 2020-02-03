@@ -16,6 +16,7 @@ class kepemilikanlahanController extends Controller
      */
     public function index()
     {
+        
         return view('dashboard');
     }
 
@@ -25,7 +26,7 @@ class kepemilikanlahanController extends Controller
             ->join('kelompok', 'kelompok.idkelompok', '=', 'keanggotaanpoktan.idkelompok')
             ->join('lahan', 'lahan.idlahan', '=', 'keanggotaanpoktan.idlahan')
             ->join('biodatauser', 'lahan.nik', '=', 'biodatauser.nik')
-            ->join('desa', 'desa.iddesa', '=', 'kelompok.iddesa')
+            ->join('desa', 'desa.iddesa', '=', 'lahan.iddesa')
             ->select('keanggotaanpoktan.*','biodatauser.nama as nama','lahan.namalahan as namalahan','lahan.luaslahan as luaslahan','biodatauser.nik as nik','biodatauser.alamat as alamat', 'desa.namadesa as namadesa', 'kelompok.namakelompok as namakelompok')
             ->get())
             ->addColumn('action', function ($data) {
@@ -39,13 +40,13 @@ class kepemilikanlahanController extends Controller
 
 
     public function cekniktani ($id){
-        $pengecekan = DB::table('petani')->where('nik','=',$id);
+        $pengecekan = DB::table('biodatauser')->where('nik','=',$id);
         if ($pengecekan->exists()){
-            $x = DB::table('petani')->where('nik',$id)->get();
+            $x = DB::table('biodatauser')->where('nik',$id)->get();
             return response()->json($x);
         } else {
             $value = array();
-            $x = DB::table('petani')->where('nik',$value)->get();
+            $x = DB::table('biodatauser')->where('nik',$value)->get();
         return response()->json($x);
         }
         
@@ -58,21 +59,27 @@ class kepemilikanlahanController extends Controller
      */
     public function create()
     {
-        
+        $polygon = DB::table('lahan')
+        ->join('statuslahan','statuslahan.idstatus','=','lahan.idstatus')
+        ->join('biodatauser','biodatauser.nik','=','lahan.nik')
+        ->join('desa','desa.iddesa','=','lahan.iddesa')
+        ->get();
+        $jumlah = DB::table('lahan')->count();
         $kecamatan = DB::table('kecamatan')->get();
-        $jenislahan = DB::table('jenislahan')->get();
         $kelompok = DB::table('kelompok')
         ->where('sektor','=','pertanian')
         ->get();
+        $desa = DB::table('desa')->get();
         $date = date('d-m-Y');
-        return view('pertanian.kepemilikanlahan',compact('date','kelompok','kecamatan','jenislahan'));
+        return view('pertanian.kepemilikanlahan',compact('date','kelompok','kecamatan','polygon','jumlah','desa'));
     }
 
     public function cekkepemilikan($id)
     {
         $x = DB::table('keanggotaanpoktan')
-            ->join('biodatauser','biodatauser.nik','=','keanggotaanpoktan.nik')
-            ->join('jenislahan','jenislahan.idjenis','=','keanggotaanpoktan.idjenis')
+            ->join('lahan','lahan.idlahan','=','keanggotaanpoktan.idlahan')
+            ->join('biodatauser','biodatauser.nik','=','lahan.nik')
+            ->join('desa','desa.iddesa','=','lahan.iddesa')
             ->join('kelompok','kelompok.idkelompok','=','keanggotaanpoktan.idkelompok')
             ->where('idkeanggotaan', $id)
             ->get();
@@ -88,19 +95,47 @@ class kepemilikanlahanController extends Controller
     public function store(Request $request)
     {
         $nik = $request->get('nik');
-        $idjenis = $request->get('idjenis');
         $namalahan = $request->get('namalahan');
         $luas = $request->get('luas');
         $iddesa = $request->get('iddesa');
         $keterangan = $request->get('keterangan');
         $idkelompok = $request->get('idkelompok');
+        $koordinat = $request->get('koordinat');
+        $idlahan = $request->get('idlahan');
+        $idstatus = $request->get('idstatus');
 
+        $pengecekan = DB::table('lahan')->select('*')
+        ->where('idlahan', '=', $idlahan);
+
+    if ($pengecekan->exists()) {
+        DB::table('lahan')
+            ->where('idlahan','=',$idlahan)
+            ->update([
+                'namalahan' => $namalahan,
+                'luaslahan' => $luas,
+                'iddesa' => $iddesa,
+                'keterangan' => $keterangan,
+                'idstatus' => $idstatus,
+                'koordinat' => $koordinat,
+        ]);
+       
+        DB::table('keanggotaanpoktan')->where('idlahan','=',$idlahan)->update([
+            'idkelompok'  => $idkelompok,
+        ]);
+
+        \Session::flash("flash_notification", [
+            "level" => "success",
+            "message" => "Data petani $request->nama Berhasil diupdate!"
+        ]);
+    } else {
         DB::table('lahan')->insert([
                 'nik' => $nik,
                 'namalahan' => $namalahan,
                 'luaslahan' => $luas,
                 'iddesa' => $iddesa,
                 'keterangan' => $keterangan,
+                'idstatus' => $idstatus,
+                'koordinat' => $koordinat,
             ]);
 
         $idl = DB::table('lahan')->orderBy ('idlahan','desc')->first();
@@ -113,8 +148,15 @@ class kepemilikanlahanController extends Controller
             "level" => "success",
             "message" => "Berhasil menambah data!"
         ]);
-        
+    }
         return redirect('/kepemilikanlahan/create');
+    }
+
+    public function ambilkoordinat($id)
+    {
+        $data = DB::table('desa')->where('iddesa', '=', $id)
+            ->first();
+        return response()->json($data);
     }
 
     /**

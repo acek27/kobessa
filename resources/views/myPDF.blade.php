@@ -51,7 +51,7 @@
     Pada hari ini {{$hari_ini}}, tanggal {{date('d')}} bulan {{$bulanindo}} tahun {{(int)date('Y')}}
     kami yang bertanda tangan di bawah ini :
 </p>
-<pre style="line-height: 32pt;font-weight: bold;font-size: 12pt">
+<pre style="line-height: 32pt;font-weight: bold;font-size: 12pt;">
 
 Nama                               :H. TOLAK ATIN
 Jabatan                            :Ketua Koperasi Mandiri Abadi
@@ -270,6 +270,7 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
             $total += $pinjam->hargasatuan*$pinjam->kebutuhan
         @endphp
     @endforeach
+
     <tr style="height: 0">
         <td></td>
         <td colspan="4" style="text-align: left!important;">Total pinjaman biaya petani</td>

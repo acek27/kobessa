@@ -44,6 +44,9 @@ class AuthServiceProvider extends ServiceProvider
         });
         Gate::define('juruair', function ($user) {
             return $user->role_id == 7;
+        });    
+        Gate::define('suplier', function ($user) {
+            return $user->role_id == 8;
         });
     }
 }

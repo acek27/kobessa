@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\Hash;
 
 
 class datasuplierController extends Controller
@@ -28,9 +29,10 @@ class datasuplierController extends Controller
      */
     public function create()
     {
+        $suplier = DB::table('suplier')->get();
         $desa = DB::table('desa')->get();
         $kecamatan = DB::table('kecamatan')->get();
-        return view('ekonomi.datasuplier', compact('kecamatan', 'desa'));
+        return view('ekonomi.datasuplier', compact('kecamatan', 'desa','suplier'));
     }
 
     /**
@@ -50,6 +52,9 @@ class datasuplierController extends Controller
         $alamat = $request->get('alamat');
         $iddesa = $request->get('iddesa');
         $telp = $request->get('telp');
+        $lat = $request->get('latitude');
+        $lng = $request->get('longitude');
+        $email = $request->get('email');
  
         $pengecekan = DB::table('suplier')->select('*')
             ->where('siup', '=', $siup);
@@ -62,7 +67,9 @@ class datasuplierController extends Controller
                 'tglpendirian' => $tgl,
                 'iddesa' => $iddesa,
                 'alamatsuplier' => $alamat,
-                'telpsuplier' => $telp
+                'telpsuplier' => $telp,
+                'latitude' => $lat,
+                'longitude' => $lng,
 
             ]);
             
@@ -71,18 +78,30 @@ class datasuplierController extends Controller
                 "message" => "Data Suplier $request->nama Berhasil diupdate!"
             ]);
         } else {
+
            DB::table('suplier')->insert([
                 'namasuplier' => $nama,
                 'siup' => $siup,
                 'tglpendirian' => $tgl,
                 'iddesa' => $iddesa,
                 'alamatsuplier' => $alamat,
-                'telpsuplier' => $telp
+                'telpsuplier' => $telp,
+                'latitude' => $lat,
+                'longitude' => $lng
+            ]);
+
+            $idsup = DB::table('suplier')->orderBy ('idsuplier','desc')->first();
+            DB::table('users')->insert([
+                'nik' => $idsup->idsuplier,
+                'name' => $nama,
+                'email' => $email,
+                'password' => Hash::make("123456789"),
+                'role_id' => 8,
             ]);
 
             \Session::flash("flash_notification", [
                 "level" => "success",
-                "message" => "Berhasil menambah data Suplier : $request->nama"
+                "message" => "Berhasil menambah data Suplier, Silahkan gunakan Username : $email, Password : 123456789 untuk login aplikasi!"
             ]);
         }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\Auth;
 use App\order;
 
 
@@ -24,11 +25,13 @@ class pengirimanController extends Controller
 
     public function tabelpesanan()
     {
+        $idsuplier = Auth::User()->nik;
         return DataTables::of(DB::table('pesanansaprodi')
             ->select('PO', 'tglpesan', 'status', 'tglkirim', 'biodatauser.nama as nama', 'desa.namadesa as namadesa', 'kecamatan.kecamatan as namakecamatan', DB::raw('count(PO) as user_count'))
             ->join('biodatauser', 'pesanansaprodi.nik', '=', 'biodatauser.nik')
             ->join('desa', 'desa.iddesa', '=', 'biodatauser.iddesa')
             ->join('kecamatan', 'kecamatan.idkecamatan', '=', 'desa.idkecamatan')
+            ->where('idsuplier','=',$idsuplier)
             ->groupBy('PO', 'tglpesan', 'status', 'tglkirim', 'biodatauser.nama', 'desa.namadesa', 'kecamatan.kecamatan')
             ->get())
             ->addColumn('status', function ($data) {

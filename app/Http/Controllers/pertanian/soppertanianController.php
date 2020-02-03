@@ -22,8 +22,9 @@ class soppertanianController extends Controller
     public function tabelsoptani()
     {
         return DataTables::of(DB::table('soptanidetail')
+            ->join('soppertanian', 'soppertanian.idversi', '=', 'soptanidetail.idversi')
             ->join('fasetanam', 'fasetanam.idfase', '=', 'soptanidetail.idfase')
-            ->select('soptanidetail.*', 'fasetanam.namafase as fase')
+            ->select('soptanidetail.*', 'fasetanam.namafase as fase','soppertanian.versisop as namasop')
             ->get())
             ->addColumn('action', function ($data) {
                 $del = '<a href="#" data-id="' . $data->idsop . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
@@ -34,7 +35,10 @@ class soppertanianController extends Controller
     }
     public function tabelversisop()
     {
-        return DataTables::of(DB::table('soppertanian') ->get())
+        return DataTables::of(DB::table('soppertanian') 
+        ->join('jenistanaman','soppertanian.idjenis','=','jenistanaman.idjenis')
+        ->select('soppertanian.*','jenistanaman.jenistanaman as jenis')
+        ->get())
             ->addColumn('action', function ($data) {
                 $del = '<a href="#" data-id="' . $data->idversi . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
                 $edit = '<a href="#" data-id="' . $data->idversi . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
@@ -50,9 +54,10 @@ class soppertanianController extends Controller
      */
     public function create()
     {
+        $jenis = DB::table('jenistanaman')->get();
         $fase = DB::table('fasetanam')->get();
         $versi = DB::table('soppertanian')->get();
-        return view('pertanian.soppertanian', compact('fase','versi'));
+        return view('pertanian.soppertanian', compact('fase','versi','jenis'));
     }
     /**
      * Store a newly created resource in storage.
@@ -106,9 +111,11 @@ class soppertanianController extends Controller
     {
         $nama = $request->get('versi');
         $pemilik = $request->get('pemilik');
+        $idjenis = $request->get('idjenis');
         DB::table('soppertanian')->insert([
                     'versisop'     => $nama,
-                    'pemiliksop'     => $pemilik
+                    'pemiliksop'     => $pemilik,
+                    'idjenis'  => $idjenis
 
                 ]);
         

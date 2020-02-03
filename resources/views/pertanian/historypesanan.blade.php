@@ -8,7 +8,7 @@
 <!-- Page Heading -->
 <!-- TAMPIL TABEL -->
 <div class="row">
-<div class="col-lg-12 mb-4">
+<div class="col-lg-12 mb-4"> 
 <div class="card shadow mb-4">
             <div class="card-header py-3">
               <h6 class="m-0 font-weight-bold text-primary">HISTORY PESANAN SAPRODI</h6>
@@ -19,14 +19,15 @@
             <thead>
                 <tr>
                     <th>No.PO</th>
-                    <th style="">Nama Suplier</th>
-                    <th style="">Nama Saprodi</th>
-                    <th style="">Kebutuhan</th>
-                    <th style="" >Satuan</th>
-                    <th style="" >Tgl Pesan</th>
-                    <th style="" >Tgl Kirim</th>
-                    <th style="" >Status</th>
-
+                    <th style="width: 50%; text-align: left; vertical-align: middle" >Nama Suplier</th>
+                    <th style="width: 50%; text-align: left; vertical-align: middle" >Nama Saprodi</th>
+                    <th style="width: 40%; text-align: left; vertical-align: middle" >Kebutuhan</th>
+                    <th style="width: 40%; text-align: left; vertical-align: middle" >Satuan</th>
+                    <th style="width: 40%; text-align: left; vertical-align: middle" >Tgl Pesan</th>
+                    <th style="width: 40%; text-align: left; vertical-align: middle" >Tgl Kirim</th>
+                    <th style="width: 40%; text-align: left; vertical-align: middle" >Status</th>
+                    <th style="width: 40%; text-align: left; vertical-align: middle" >Action</th>
+                                  
                 </tr>
             </thead>
             <tbody>
@@ -34,9 +35,9 @@
         </table>
     </div>
 </div>
-</div>
-</div>
-</div>
+</div> 
+</div> 
+</div> 
 @endsection
 
 @push('script')
@@ -83,11 +84,18 @@
                     data: 'status',
                     name: 'status'
                 },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false,
+                    align: 'center'
+                },
                 ]
         });
-
+            
     });
 
-
+    
 </script>
 @endpush

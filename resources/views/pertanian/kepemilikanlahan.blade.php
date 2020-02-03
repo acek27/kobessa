@@ -37,20 +37,19 @@
         <label style="color:black">Alamat</label>
         <input type="text" class="form-control form-control-user" id="alamat" name="alamat" aria-describedby="emailHelp"
                placeholder="" disabled>
-        <label style="color:black">Jenis Lahan Yang Dimiliki</label>
-        <select class="form-control show-tick" id="idjenis" name="idjenis">
-            <option value="">-- Please select --</option>
-            @foreach($jenislahan as $values)
-                <option value="{{$values->idjenis}}">{{$values->jenislahan}}</option>
-            @endforeach
-        </select>
         <label style="color:black">Nama Lahan</label>
         <input type="text" class="form-control form-control-user" id="namalahan" name="namalahan" aria-describedby="emailHelp"
                placeholder="">
         <label style="color:black">Luas Lahan yang dimiliki (Ha)</label>
         <input type="text" class="form-control form-control-user" id="luas" name="luas" aria-describedby="emailHelp"
                placeholder="">
-
+        <label style="color:black">Status Lahan</label>
+        <select class="form-control show-tick" id="idstatus" name="idstatus" required>
+            <option value="5">-- Tidak diketahui --</option>
+            <option value="4">Pengolahan Lahan</option>
+            <option value="1">Tanam</option>
+            <option value="2">Panen</option>
+            </select>
         <br><label style="color:black">LOKASI LAHAN:</label>
         <br>
         <label style="color:black">Kecamatan</label>
@@ -63,6 +62,9 @@
         <label style="color:black">Desa</label>
         <select class="form-control show-tick" id="iddesa" name="iddesa" required>
             <option value="">-- Please select --</option>
+            @foreach($desa as $value)
+                <option style="text-transform: lowercase" value="{{$value->iddesa}}">{{$value->namadesa}}</option>
+            @endforeach
 
         </select>
 
@@ -70,6 +72,8 @@
         <input type="text" class="form-control form-control-user" id="keterangan" name="keterangan"
                aria-describedby="emailHelp" required>
         <input type="text" class="form-control form-control-user" id="idpetani" name="idpetani"
+               aria-describedby="emailHelp" placeholder="" hidden>
+        <input type="text" class="form-control form-control-user" id="idlahan" name="idlahan"
                aria-describedby="emailHelp" placeholder="" hidden>
                <label style="color:black">Nama Kelompok Tani</label> 
         <a href="{{route('kelompokpetani.create')}}" target="_blank" class="btn btn-sm btn-primary shadow-sm">Daftar Kelompok</a>
@@ -80,16 +84,38 @@
             @endforeach
         </select>
         <br>
-        <button type="submit" id="simpan" class="btn-sm btn-primary shadow-sm">
-            SIMPAN
-        </button>
+       
 
-    </form>
-    </div>
+  
         </div>
         </div>
         </div>
-        <div class="col-lg-6 d-none d-lg-block bg-pertanian"></div>
+    <div class="col-lg-6 mb-4">
+    <div class="card shadow mb-4">
+    <div class="card-body">
+        <label style="color:black">Koordinat</label>
+        <input type="text" class="form-control form-control-user" id="koordinat" name="koordinat"
+               aria-describedby="emailHelp" required> 
+<br>
+               <div class="card-body" id="googleMap" style="width:100%;height:500px;"></div>  
+               <br>
+        <button type="submit" id="simpan" class="btn-sm btn-primary shadow-sm">
+        SIMPAN
+        </button>     
+        <button type="button" id="resetPolygon" value="Reset" class="btn-sm btn-primary shadow-sm">
+         RESET
+        </button>     
+    </div> 
+    </div> 
+    </div> 
+    <div class="card-body">
+   
+        </form>
+</div> 
+</div> 
+<!-- End Row -->
+
+    <div class="col-lg-6 d-none d-lg-block bg-pertanian"></div> <!-- Backgroubd-->
     <br>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -124,6 +150,149 @@
     <script src="{{asset('vendor/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
     <script src="{{asset('asetsba2/js/demo/datatables-demo.js')}}"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCyz35pK5Ccrp8a58PJSEO9vhLC6WU3FvU&sensor=false&libraries=drawing,geometry"></script>
+    <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+  
+<script>
+var peta;
+var x;
+var path;
+var xpath=[];
+var  x = -7.70623;
+var  y = 114.00976;
+var z = 10;
+
+    $(document).ready(function () {
+        $('#iddesa').change(function () {
+                    var id = $(this).val();
+                    $.ajax({
+                        url: "/ambilkoordinat/" + id,
+                        method: "GET",
+                        data: {id: id},
+                        async: true,
+                        dataType: 'json',
+                        success: function (data) {
+                            x = data.latitude;
+                            y = data.longitude;
+                            z = 15;
+                        // alert(y);
+                            initialize(x,y,z);
+                            
+
+                        }
+                    });
+
+                    return false;
+                });
+
+            });
+
+  function initialize(x,y,z) {
+    var situbondo = new google.maps.LatLng(x,y)
+    var propertiPeta = {
+      center:situbondo,
+      zoom:z,
+      mapTypeId:google.maps.MapTypeId.HYBRID
+    };
+        peta = new google.maps.Map(document.getElementById("googleMap"), propertiPeta);
+    
+        var drawingManager = new google.maps.drawing.DrawingManager({
+            drawingMode: null,
+            drawingControl: true,
+            drawingControlOptions: {
+            position: google.maps.ControlPosition.TOP_CENTER,
+            drawingModes: [ 'polygon']
+            },
+            markerOptions: {
+                icon: "{{asset('images/padi.png')}}"},
+            polygonOptions: {
+                editable: true
+            },
+            map: peta
+
+        });
+    
+        @foreach($polygon as $values)
+        var x{{$values->idlahan}} = "{{$values->koordinat}}";
+        var y{{$values->idlahan}} = "{{$values->warna}}";
+        var namalahan{{$values->idlahan}} ="{{$values->namalahan}}";
+        var luaslahan{{$values->idlahan}} ="{{$values->luaslahan}}";
+        var pemiliklahan{{$values->idlahan}} ="{{$values->nama}}";
+        var lokasilahan{{$values->idlahan}} ="{{$values->namadesa}}";
+        var keterangan{{$values->idlahan}} ="{{$values->keterangan}}";
+        var status{{$values->idlahan}} ="{{$values->status}}";
+        //mengembalikan patch encoding geometry dari database(String)
+        var path = google.maps.geometry.encoding.decodePath(x{{$values->idlahan}});
+        var contentString =         'Nama Lahan : '+namalahan{{$values->idlahan}}+'<br>'+
+                                    'Luas Lahan : '+ luaslahan{{$values->idlahan}} +' Ha' + '<br>' +
+                                    'Pemilik Lahan : '+ pemiliklahan{{$values->idlahan}} +'<br>' +
+                                    'Lokasi Lahan : '+ lokasilahan{{$values->idlahan}} +'<br>' +
+                                    'Keterangan : '+ keterangan{{$values->idlahan}} +'<br>' +
+                                    'Status Lahan : '+'<font color=#ff0000>'+ status{{$values->idlahan}} +'</font>';
+        // menghilangkan tool draw
+       // drawingManager.setMap(null);
+                    bermudaTriangle = new google.maps.Polygon({
+                        paths: path,
+                        strokeColor: "{{$values->warna}}",
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: "{{$values->warna}}",
+                        fillOpacity: 0.35,
+                        html: contentString
+                        //,editable: true
+                    });
+                    
+                    bermudaTriangle.setMap(peta);
+
+                    infoWindow = new google.maps.InfoWindow();
+                    google.maps.event.addListener(bermudaTriangle, 'click', function(event) {
+                    infoWindow.setContent(this.html);
+                    infoWindow.setPosition(event.latLng);
+                    infoWindow.open(peta);
+});
+        @endforeach
+        
+        google.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
+            var encodedPath = google.maps.geometry.encoding.encodePath(event.overlay.getPath());
+            console.log(encodedPath);
+            document.getElementById("koordinat").value =encodedPath; 
+             xpath =event.overlay.getPath().getArray();          
+             var coords = [];
+            for (var i = 0; i < xpath.length; i++) {
+            coords.push([
+                xpath[i].lat(),
+                xpath[i].lng()
+            ]); 
+            }
+            coords.push([
+                xpath[0].lat(),
+                xpath[0].lng()
+            ]); 
+           // inisiasi polygon dengan turf.js
+           var turf_polygon = turf.polygon([coords]);
+           // hitung luas area pada polygon
+           var turf_area = turf.area(turf_polygon);
+
+            if ((turf_area / 10000).toFixed(2) <= 1) {
+            alert('Luas Area : ' + (turf_area).toFixed(2) + ' m2')
+            } else {
+            alert('Luas  Area : ' + (turf_area / 10000).toFixed(2) + ' ha')
+            }
+
+            // Mereset Polygon
+            $('#resetPolygon').click(function(){
+            event.overlay.setMap(null);
+                   
+            document.getElementById("koordinat").value =""; 
+            });
+        });     
+
+  }
+ 
+  // event jendela di-load  
+  google.maps.event.addDomListener(window, 'load', initialize(x,y,z));
+
+</script>
 
     <script>
         $(document).ready(function () {
@@ -248,8 +417,11 @@
                             html += '<option style="text-transform: lowercase;" value=' + data[i].idkelompok + '>' + data[i].namakelompok + '</option>';
                         }
                         $('#idkelompok').html(html);
+
+
                     }
                 });
+
                 return false;
             });
 
@@ -258,7 +430,7 @@
         $('#nik').change(function () {
             var kode = $("#nik").val();
             $.ajax({
-                url: "{{url('/ceknik')}}/" + kode,
+                url: "{{url('/cekniktani')}}/" + kode,
                 type: 'GET',
                 datatype: 'json',
                 error: function (x, exception) {
@@ -289,8 +461,14 @@
                                 $('#nama').val(z.nama);
                                 $('#luas').val(z.luaslahan);
                                 $('#alamat').val(z.alamat);
-                                $('#idjenis').val(z.idjenis);
+                                $('#namalahan').val(z.namalahan);
                                 $('#idkelompok').val(z.idkelompok);
+                                $('#idlahan').val(z.idlahan);
+                                $('#idstatus').val(z.idstatus);
+                                $('#idkecamatan').val(z.idkecamatan);
+                                $('#iddesa').val(z.iddesa);
+                                $('#koordinat').val(z.koordinat);
+                                $('#keterangan').val(z.keterangan);
                                 
                                 
                                 $('#simpan').text("UPDATE");

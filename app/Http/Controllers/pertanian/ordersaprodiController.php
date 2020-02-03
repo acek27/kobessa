@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Yajra\Datatables\Datatables;
+use App\order;
+
 
 class ordersaprodiController extends Controller
 {
@@ -105,9 +107,23 @@ class ordersaprodiController extends Controller
                     return "Pesanan Ditolak";
                 }
             })
+            ->addColumn('action', function ($data) {
+                if($data->status == 3){
+                $terima = '<a href="' . route('terima.saprodi',$data->PO) . '" class="terima-data"><i class="far fa-check-circle">Diterima</i></a>';
+                return $terima;
+                }
+            })
             ->make(true);
     }
 
+
+    public function terimasaprodi($id)
+    {
+         order::where('PO', $id)->update(
+            ['status' => 4]
+        );
+        return redirect()->route('ordersaprodi.index');
+    }
 
     /**
      * Show the form for creating a new resource.

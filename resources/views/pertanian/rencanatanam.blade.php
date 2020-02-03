@@ -34,6 +34,17 @@
         <option value="{{$values->idlahan}}">{{$values->namalahan}}</option>
         @endforeach
     </select>
+    <label style="color:black">Jenis Tanaman</label>
+    <select class="form-control show-tick" id="idjenis" name="idjenis" required>
+        <option value="">-- Please select --</option>
+        @foreach($jenis as $values)
+        <option value="{{$values->idjenis}}">{{$values->jenistanaman}}</option>
+        @endforeach
+    </select>
+    <label style="color:black">Komoditas</label>
+    <input type="text" class="form-control form-control-user" id="komoditas" name="komoditas" aria-describedby="emailHelp" required>
+    <label style="color:black">Tanggal Tanam</label>
+    <input type="text" class="form-control datepicker" id="datepicker" name="tgltanam" aria-describedby="emailHelp" required>
     <label style="color:black">Pilih SOP Tanam</label>
     <select class="form-control show-tick" id="idversi" name="idversi" required>
         <option value="">-- Please select --</option>
@@ -48,18 +59,7 @@
         <option value="Pembenihan">Pembenihan</option>
         <option value="Pembibitan">Pembibitan</option>
        
-    </select>
-    <label style="color:black">Tanggal Tanam</label>
-    <input type="text" class="form-control datepicker" id="datepicker" name="tgltanam" aria-describedby="emailHelp" required>
-    <label style="color:black">Jenis Tanaman</label>
-    <select class="form-control show-tick" id="idjenis" name="idjenis" required>
-        <option value="">-- Please select --</option>
-        @foreach($jenis as $values)
-        <option value="{{$values->idjenis}}">{{$values->jenistanaman}}</option>
-        @endforeach
-    </select>
-    <label style="color:black">Komoditas</label>
-    <input type="text" class="form-control form-control-user" id="komoditas" name="komoditas" aria-describedby="emailHelp" required>
+    </select>  
     <br>
     <button class="btn btn-sm btn-primary shadow-sm">
         SIMPAN</button>
@@ -104,6 +104,7 @@
                     <th style="width: 10%; text-align: left; vertical-align: middle" >Tgl Tanam</th>
                     <th style="width: 10%; text-align: left; vertical-align: middle" >Jenis Tanaman</th>
                     <th style="width: 20%; text-align: left; vertical-align: middle" >Komoditas</th>
+                    <th style="width: 20%; text-align: left; vertical-align: middle" >Action</th>
                                         
                 </tr>
             </thead>
@@ -159,10 +160,33 @@
                     data: 'komoditas',
                     name: 'komoditas'
                 },
+                {   data: 'action', name: 'action', orderable: false, searchable: false, align: 'center'},
                 
             ]
         });
         });
+
+        $('#idjenis').change(function () {
+                var id = $(this).val();
+                $.ajax({
+                    url: "/datasop/" + id,
+                    method: "POST",
+                    data: {id: id},
+                    async: true,
+                    dataType: 'json',
+                    success: function (data) {
+                        var html = '';
+                        var i;
+                        html += '<option>-- Please select --</option>';
+                        for (i = 0; i < data.length; i++) {
+                            html += '<option style="text-transform: lowercase;" value=' + data[i].idversi + '>' + data[i].versisop + '</option>';
+                        }
+                        $('#idversi').html(html);
+                       
+                    }
+                });
+                return false;
+            });
 
         $(function () {
             $('.datepicker').datepicker({

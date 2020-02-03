@@ -62,6 +62,7 @@ Route::resource('soppertanian', 'pertanian\soppertanianController');
 Route::get('tabelsoptani', 'pertanian\soppertanianController@tabelsoptani')->name('tabel.soptani');
 Route::get('tabelversisop', 'pertanian\soppertanianController@tabelversisop')->name('tabel.versisop');
 Route::post('saprodisave','pertanian\soppertanianController@save')->name('soppertanian.save');
+Route::post('simpan','pertanian\soppertanianController@simpan')->name('soppertanian.simpan');
 
 Route::resource('daftarpetani', 'pertanian\daftarpetaniController');
 
@@ -103,3 +104,9 @@ Route::get('tabelmoulahan/{id}', 'pertanian\daftarpetaniController@mouLahan')->n
 Route::get('mouprint/{id}', 'pertanian\daftarpetaniController@print')->name('mou.print');
 Route::POST('ordersaprodi/{id}', 'ekonomi\pengirimanController@order')->name('order.saprodi');
 Route::get('tolaksaprodi/{id}', 'ekonomi\pengirimanController@tolaksaprodi')->name('tolak.saprodi');
+Route::get('terimasaprodi/{id}', 'pertanian\ordersaprodiController@terimasaprodi')->name('terima.saprodi');
+Route::get('tabelhistoritanamSP', 'pertanian\rencanatanamController@tabelhistoritanamSP')->name('tabel.historitanamSP');
+Route::post('/datasop/{id}', 'pertanian\rencanatanamController@datasop');
+Route::resource('peta','pertanian\petaController');
+Route::get('/ambilkoordinat/{id}', 'pertanian\kepemilikanlahanController@ambilkoordinat');
+Route::get('jadwalprint/{id}', 'pertanian\rencanatanamController@print')->name('jadwal.print');

@@ -30,11 +30,13 @@ class aktivitasController extends Controller
 
     public function tabelaktivitas()
     {
+        $nikuser = Auth::User()->nik;
         return DataTables::of(DB::table('aktivitaspetani')
             ->join('soptanidetail', 'soptanidetail.idsop', '=', 'aktivitaspetani.idsop')
             ->join('lahan', 'lahan.idlahan', '=', 'aktivitaspetani.idlahan')
             ->join('fasetanam', 'fasetanam.idfase', '=', 'soptanidetail.idfase')
-            ->select('aktivitaspetani.*','soptanidetail.kegiatan as aktivitas','lahan.namalahan as namalahan','fasetanam.namafase as namafase')
+            ->select('aktivitaspetani.*','soptanidetail.kegiatan as aktivitas','lahan.nik as nik','lahan.namalahan as namalahan','fasetanam.namafase as namafase')
+            ->where('nik', '=', $nikuser)
             ->get())
                         ->make(true);
     }
@@ -70,6 +72,7 @@ class aktivitasController extends Controller
         $biayaisi = str_replace(".","",$biaya);
         $keterangan = $request->get('keterangan');
         $foto = $request->get('foto');
+        $date = date("Y-m-d");
       
 
         DB::table('aktivitaspetani')->insert([
@@ -77,7 +80,8 @@ class aktivitasController extends Controller
             'idsop' => $idsop,
             'biaya' => $biayaisi,
             'keterangan' => $keterangan,
-            'foto' => $foto
+            'foto' => $foto,
+            'tglaktivitas' => $date
            
             ]);
     

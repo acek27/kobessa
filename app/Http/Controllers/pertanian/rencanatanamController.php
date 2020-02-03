@@ -9,6 +9,7 @@ use Redirect,Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Yajra\Datatables\Datatables;
+use Barryvdh\DomPDF\Facade as PDF;
 
 
 class rencanatanamController extends Controller
@@ -41,13 +42,41 @@ class rencanatanamController extends Controller
 
     public function tabelhistori()
     {
+        $nikuser = Auth::User()->nik;
         return DataTables::of(DB::table('jadwaltanam')
             ->join('soppertanian', 'soppertanian.idversi', '=', 'jadwaltanam.idversi')
             ->join('lahan', 'lahan.idlahan', '=', 'jadwaltanam.idlahan')
             ->join('jenistanaman', 'jenistanaman.idjenis', '=', 'jadwaltanam.idjenis')
-            ->select('jadwaltanam.*','soppertanian.versisop as versisop','lahan.namalahan as namalahan','jenistanaman.jenistanaman as jenis')
+            ->select('jadwaltanam.*','soppertanian.versisop as versisop','lahan.nik as nik','lahan.namalahan as namalahan','jenistanaman.jenistanaman as jenis')
+            ->where('nik', '=', $nikuser)
             ->get())
+            ->addColumn('action', function ($data) {
+                $print = '<a href="' . route('jadwal.print', $data->idlahan) . '" class="print-data" target="_blank"><i class="fa fa-print">Jadwal</i></a>';
+                return $print;
+            })
                         ->make(true);
+    }
+    public function tabelhistoritanamSP()
+    {
+        return DataTables::of(DB::table('jadwaltanam')
+            ->join('soppertanian', 'soppertanian.idversi', '=', 'jadwaltanam.idversi')
+            ->join('lahan', 'lahan.idlahan', '=', 'jadwaltanam.idlahan')
+            ->join('biodatauser', 'lahan.nik', '=', 'biodatauser.nik')
+            ->join('desa', 'lahan.iddesa', '=', 'desa.iddesa')
+            ->join('kecamatan', 'kecamatan.idkecamatan', '=', 'desa.idkecamatan')
+            ->join('jenistanaman', 'jenistanaman.idjenis', '=', 'jadwaltanam.idjenis')
+            ->select('jadwaltanam.*','soppertanian.versisop as versisop','lahan.namalahan as namalahan','jenistanaman.jenistanaman as jenis',
+                     'biodatauser.nama as namapetani','lahan.nik as nik','desa.namadesa as namadesa','kecamatan.kecamatan as kecamatan')
+            ->get())
+            
+            ->make(true);
+    }
+
+    public function datasop($id)
+    {
+        $data = DB::table('soppertanian')->where('idjenis', '=', $id)
+            ->get();
+        return response()->json($data);
     }
 
     /**
@@ -57,9 +86,30 @@ class rencanatanamController extends Controller
      */
     public function create()
     {
-        
+        return view('pertanian.rencanatanamSP');
     }
 
+    public function print($id)
+    {
+        $biodata = DB::table('keanggotaanpoktan')
+        ->join('kelompok','kelompok.idkelompok','=','keanggotaanpoktan.idkelompok')
+        ->join('lahan','lahan.idlahan','=','keanggotaanpoktan.idlahan')
+        ->join('biodatauser','lahan.nik','=','biodatauser.nik')
+        ->join('desa','lahan.iddesa','=','desa.iddesa')
+        ->join('kecamatan','desa.idkecamatan','=','kecamatan.idkecamatan')
+        ->where('keanggotaanpoktan.idlahan','=',$id)->first();
+
+        
+        $jadwal =   DB::table('jadwalbertani')
+        ->where('jadwalbertani.idlahan','=',$id)->get();
+        
+
+        $pdf = PDF::loadView('jadwalbertani', compact('jadwal','biodata'))->setPaper('folio', 'potrait');
+        return $pdf->stream('Jadwal Budidaya');
+    }
+
+
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -89,7 +139,23 @@ class rencanatanamController extends Controller
     "message" => "Berhasil menambah data!"
     ]);
 
+    //membuat jadwalbertani
+    $waktu = DB::table('soptanidetail')
+    ->where('idversi','=',$idversi)
+    ->get();
+
+    foreach($waktu as $wak){
+        
+    $tglbertani = date('Y-m-d', strtotime($wak->waktu.' days', strtotime($tgltanam))); 
+    DB::table('jadwalbertani')->insert([
+            'idlahan' => $idlahan,
+            'tglaktivitas' => $tglbertani,
+            'aktivitas' =>$wak->kegiatan,
+            ]);
+    }
+
     return redirect('rencanatanam');
+    //return response()->json($tglbertani);
     }
 
     /**
