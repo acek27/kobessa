@@ -171,13 +171,13 @@
                             method: "POST",
                         }).done(function (msg) {
                             dt.ajax.reload();
-                            swal("Deleted!", "Data sudah terhapus.", "success");
+                            // swal("Deleted!", "Data sudah terhapus.", "success");
                         }).fail(function (textStatus) {
                             alert("Request failed: " + textStatus);
                         });
                     }, function (dismiss) {
                         // dismiss can be 'cancel', 'overlay', 'esc' or 'timer'
-                        swal("Cancelled", "Data batal dihapus", "error");
+                        // swal("Cancelled", "Data batal dihapus", "error");
                     });
             };
             $('body').on('click', '.hapus-data', function () {
