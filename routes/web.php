@@ -74,10 +74,10 @@ Route::resource('rencanatanam', 'pertanian\rencanatanamController');
 Route::get('tabelhistori', 'pertanian\rencanatanamController@tabelhistori')->name('tabel.histori');
 
 Route::resource('aktivitas', 'pertanian\aktivitasController');
-Route::get('tabelaktivitas', 'pertanian\aktivitasController@tabelaktivitas')->name('tabel.aktivitas');
+Route::get('tabelaktivitas/{id}', 'pertanian\aktivitasController@tabelaktivitas')->name('tabel.aktivitas');
 
 //dependency
-Route::post('/sopdetail/{id}', 'pertanian\aktivitasController@sopdetail');
+Route::post('/aktivitasdetail/{id}', 'pertanian\aktivitasController@aktivitasdetail');
 Route::post('/datadesa/{id}', 'pertanian\kelompokpetaniController@datadesa');
 Route::post('/hargasaprodi/{id}', 'pertanian\kebutuhanController@hargasaprodi');
 Route::post('/datakelompok/{id}', 'pertanian\daftarpetaniController@datakelompok');
@@ -110,3 +110,5 @@ Route::post('/datasop/{id}', 'pertanian\rencanatanamController@datasop');
 Route::resource('peta','pertanian\petaController');
 Route::get('/ambilkoordinat/{id}', 'pertanian\kepemilikanlahanController@ambilkoordinat');
 Route::get('jadwalprint/{id}', 'pertanian\rencanatanamController@print')->name('jadwal.print');
+
+Route::post('tolakaktivitas/{id}', 'pertanian\aktivitasController@tolakaktivitas');
