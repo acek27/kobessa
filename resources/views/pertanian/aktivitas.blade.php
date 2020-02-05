@@ -42,6 +42,8 @@
                         <label style="color:black">Aktivitas</label>
                         <input type="text" class="form-control uang" id="idbertani" name="idbertani"
                                aria-describedby="emailHelp" hidden>
+                        <input type="text" class="form-control uang" id="ket" name="ket"
+                               aria-describedby="emailHelp" hidden>
                         <p style="color: green" id="aktivitas">-</p>
                         <label style="color:black">Keterangan</label>
                         <p id="keterangan">-</p>
@@ -138,16 +140,22 @@
                         var date = new Date(data.tglaktivitas);
                         var selisih = new Date(current - date);
                         var days = selisih / 1000 / 60 / 60 / 24;
+                        var num = Math.round(days);
                         if (data.aktivitas != null) {
-                            if (Math.round(days) <= 0) {
-                                var num = Math.round(days);
+                            if (Math.round(days) === 0) {
+                                $('#keterangan').text("Hari ini anda harus melakukan "
+                                    + data.aktivitas);
+                                $('#ket').val("Tepat waktu");
+                            } else if (Math.round(days) <= 0) {
                                 $('#keterangan').text("Aktivitas yang harus dilakukan adalah "
                                     + data.aktivitas + ". Waktu pelaksanaan kurang dari " +
                                     Math.abs(num) + " hari.");
+                                $('#ket').val("Lebih awal " + Math.abs(num) + " hari");
                             } else {
                                 $('#keterangan').text("PERHATIAN!! Aktivitas yang harus dilakukan adalah "
                                     + data.aktivitas + ". anda telah melewati " +
-                                    Math.round(days) + " dari tanggal pelaksanaan.");
+                                    Math.round(days) + " hari dari tanggal pelaksanaan.");
+                                $('#ket').val("Terlambat " + Math.round(days) + " hari");
                             }
                         }
                         $('.divaktivitas').show('true');
@@ -157,15 +165,15 @@
             });
 
 
-            var del = function (id) {
+            var del = function (id, keterangan) {
                 swal({
                     title: "Apakah anda yakin?",
-                    text: "Anda tidak dapat mengembalikan data yang sudah terhapus!",
+                    text: keterangan,
                     type: "warning",
-                    showCancelButton: true,
+                    // showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Iya!",
-                    cancelButtonText: "Tidak!",
+                    confirmButtonText: "Tunda!",
+                    // cancelButtonText: "Tidak!",
                 }).then(
                     function (result) {
                         $.ajax({
@@ -173,7 +181,7 @@
                             method: "POST",
                         }).done(function (msg) {
                             dt.ajax.reload();
-                            // swal("Deleted!", "Data sudah terhapus.", "success");
+                            swal("Ingat!", "Anda dapat menekan tombol YA untuk melanjutkan aktivitas.", "success");
                         }).fail(function (textStatus) {
                             alert("Request failed: " + textStatus);
                         });
@@ -183,7 +191,7 @@
                     });
             };
             $('body').on('click', '.hapus-data', function () {
-                del($("#idbertani").val());
+                del($("#idbertani").val(), $("#keterangan").text());
             });
         });
 

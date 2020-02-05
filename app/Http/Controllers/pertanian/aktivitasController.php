@@ -31,21 +31,21 @@ class aktivitasController extends Controller
         $nikuser = Auth::User()->nik;
         return DataTables::of(DB::table('jadwalbertani')
             ->where("idlahan", $id))
-            ->addColumn('keterangan', function ($data) {
-                $tglaktivitas = strtotime($data->tglaktivitas);
-                $tglpelaksanaan = strtotime($data->tglpelaksanaan);
-                $selisih = ($tglpelaksanaan - $tglaktivitas) / 60 / 60 / 24;
-                if ($data->tglpelaksanaan != null) {
-                    if ($selisih > 0) {
-                        return "Telat " . abs($selisih) . " hari";
-                    }elseif ($selisih == 0){
-                        return "Tepat waktu";
-                    }
-                    else {
-                        return "lebih awal " . abs($selisih) . " hari";
-                    }
-                }
-            })
+//            ->addColumn('keterangan', function ($data) {
+//                $tglaktivitas = strtotime($data->tglaktivitas);
+//                $tglpelaksanaan = strtotime($data->tglpelaksanaan);
+//                $selisih = ($tglpelaksanaan - $tglaktivitas) / 60 / 60 / 24;
+//                if ($data->tglpelaksanaan != null) {
+//                    if ($selisih > 0) {
+//                        return "Telat " . abs($selisih) . " hari";
+//                    }elseif ($selisih == 0){
+//                        return "Tepat waktu";
+//                    }
+//                    else {
+//                        return "lebih awal " . abs($selisih) . " hari";
+//                    }
+//                }
+//            })
             ->addColumn('status', function ($data) {
                 if ($data->status == 1) {
                     return "Sudah dilaksanakan";
@@ -87,12 +87,14 @@ class aktivitasController extends Controller
     {
         $idbertani = $request->get('idbertani');
         $lahan = $request->get('idlahan');
+        $ket = $request->get('ket');
         $date = date('yy-m-d');
 
         DB::table('jadwalbertani')->where('idbertani', $idbertani)
             ->where('idlahan', $lahan)->update([
                 'status' => 1,
-                'tglpelaksanaan' => $date
+                'tglpelaksanaan' => $date,
+                'keterangan' => $ket
             ]);
 
         \Session::flash("flash_notification", [
