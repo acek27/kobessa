@@ -69,12 +69,13 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="tabelaktivitas">
-                            <thead>
+                            <thead style="text-align: center">
                             <tr>
                                 <th style="width: 20%">Tanggal Aktivitas</th>
                                 <th>Aktivitas</th>
                                 <th style="width: 20%">Tanggal Pelaksanaan</th>
                                 <th>Status</th>
+                                <th>Keterangan</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -117,6 +118,7 @@
                         name: 'tglpelaksanaan'
                     },
                     {data: 'status', name: 'status', orderable: false, searchable: false, align: 'center'},
+                    {data: 'keterangan', name: 'keterangan', orderable: false, searchable: false, align: 'center'},
                 ]
             });
 

@@ -30,23 +30,37 @@ class aktivitasController extends Controller
     {
         $nikuser = Auth::User()->nik;
         return DataTables::of(DB::table('jadwalbertani')
-            ->where("idlahan",$id)
-            ->get())
+            ->where("idlahan", $id))
+            ->addColumn('keterangan', function ($data) {
+                $tglaktivitas = strtotime($data->tglaktivitas);
+                $tglpelaksanaan = strtotime($data->tglpelaksanaan);
+                $selisih = ($tglpelaksanaan - $tglaktivitas) / 60 / 60 / 24;
+                if ($data->tglpelaksanaan != null) {
+                    if ($selisih > 0) {
+                        return "Telat " . abs($selisih) . " hari";
+                    }elseif ($selisih == 0){
+                        return "Tepat waktu";
+                    }
+                    else {
+                        return "lebih awal " . abs($selisih) . " hari";
+                    }
+                }
+            })
             ->addColumn('status', function ($data) {
-                if ($data->status == 1){
+                if ($data->status == 1) {
                     return "Sudah dilaksanakan";
                 }
-
             })
             ->make(true);
     }
 
-    public function aktivitasdetail($id)
+    public
+    function aktivitasdetail($id)
     {
         $data = DB::table('jadwalbertani')
             ->where('idlahan', '=', $id)
             ->where('status', '=', null)
-            ->orderBy("tglaktivitas","asc")
+            ->orderBy("tglaktivitas", "asc")
             ->first();
         return response()->json($data);
     }
@@ -56,7 +70,8 @@ class aktivitasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public
+    function create()
     {
 
     }
@@ -67,7 +82,8 @@ class aktivitasController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public
+    function store(Request $request)
     {
         $idbertani = $request->get('idbertani');
         $lahan = $request->get('idlahan');
@@ -93,15 +109,17 @@ class aktivitasController extends Controller
      * @param int $id
      * @return \Illuminate\Http\ResponsStoree
      */
-    public function tolakaktivitas($id)
+    public
+    function tolakaktivitas($id)
     {
         DB::table('jadwalbertani')->where('idbertani', $id)->update([
-                'status' => null,
-                'tglpelaksanaan' => null
-            ]);
+            'status' => null,
+            'tglpelaksanaan' => null
+        ]);
     }
 
-    public function show($id)
+    public
+    function show($id)
     {
         //
     }
@@ -112,7 +130,8 @@ class aktivitasController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public
+    function edit($id)
     {
         //
     }
@@ -124,7 +143,8 @@ class aktivitasController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public
+    function update(Request $request, $id)
     {
         //
     }
@@ -135,7 +155,8 @@ class aktivitasController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public
+    function destroy($id)
     {
         //
     }
