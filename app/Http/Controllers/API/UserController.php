@@ -42,10 +42,17 @@ class UserController extends Controller
      */ 
     
 
-    function list(){
+   public function details($nik){
 
-        $user = User::all();
-            return response()->json($user);
+        $user = User::where('nik',$nik)->first();
+        $data =['status_code' =>'00',
+                    'nama' =>$user->name,
+                    'email' =>$user->email,
+                    'id'    =>$user->id,
+                    'role_id'    =>$user->role_id,
+                    'nik'    =>$user->nik,
+                    ];
+            return response()->json([$data]);
         }
     
 
@@ -73,11 +80,5 @@ class UserController extends Controller
             return response()->json($data); 
         } 
     }
-
-    public function details() 
-    { 
-        $user = Auth::user(); 
-        return response()->json(['success' => $user], $this-> successStatus); 
-    } 
 
 }

@@ -20,27 +20,24 @@ class kebutuhanController extends Controller
         //
     }
 
-    public function tabellahan()
+    public function tabelsop()
     {
-        return DataTables::of(DB::table('keanggotaanpoktan')
-        ->join('kelompok', 'kelompok.idkelompok', '=', 'keanggotaanpoktan.idkelompok')
-        ->join('lahan', 'lahan.idlahan', '=', 'keanggotaanpoktan.idlahan')
-        ->join('biodatauser', 'lahan.nik', '=', 'biodatauser.nik')
-        ->join('desa', 'desa.iddesa', '=', 'kelompok.iddesa')
-
-            ->select('keanggotaanpoktan.*','biodatauser.nama as nama','lahan.namalahan as namalahan','lahan.luaslahan as luaslahan','biodatauser.nik as nik','biodatauser.alamat as alamat', 'desa.namadesa as namadesa', 'kelompok.namakelompok as namakelompok')
-            ->get())
-            ->addColumn('action', function ($data) {
-                $pilih = "<a href=\"" . route('kebutuhansaprodi.show', $data->idkeanggotaan) . "\"><i class=\"material-icons\" title=\"Data Kebutuhan Saprodi\">Pilih</i></a>";
+        return DataTables::of(DB::table('soppertanian') 
+        ->join('jenistanaman','soppertanian.idjenis','=','jenistanaman.idjenis')
+        ->select('soppertanian.*','jenistanaman.jenistanaman as jenis')
+        ->get())
+        ->addColumn('action', function ($data) {
+                $pilih = "<a href=\"" . route('kebutuhansaprodi.show', $data->idversi) . "\"><i class=\"material-icons\" title=\"Data Kebutuhan Saprodi\">Pilih</i></a>";
                 return $pilih;
             })
             ->make(true);
     }
-    public function tabelkebutuhan()
+    public function tabelkebutuhan($id)
     {
         return DataTables::of(DB::table('kebutuhansaprodi')
         ->join('saprodi', 'saprodi.idsaprodi', '=', 'kebutuhansaprodi.idsaprodi')
         ->select('kebutuhansaprodi.*','saprodi.namasaprodi as namasaprodi','saprodi.satuan as satuan')
+        ->where('idsop',"=",$id)
         ->get())
         ->addColumn('action', function ($data) {
             $del = '<a href="#" data-id="' . $data->idkebutuhansaprodi . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
@@ -64,7 +61,7 @@ class kebutuhanController extends Controller
     public function cari()
     {
 
-        return view('pertanian.carilahan');
+        return view('pertanian.carisop');
     }
 
     /**
@@ -75,19 +72,19 @@ class kebutuhanController extends Controller
      */
     public function store(Request $request)
     { 
-        for($i=1; $i<=15; $i++)
+        $x = DB::table('saprodi')->get();
+        $jum = count($x);
+        for($i=1; $i<=$jum; $i++)
         {
-            $iduser = Auth::User()->id;
-            $id = $request->get('idkeanggotaan');
-            $idlahan = $request->get('idlahan');
+     
+            $idsop = $request->get('idsop');
             $idsaprodi = $request->get('idsaprodi'.$i);
             $kebutuhan = $request->get('kebutuhan'.$i);
-            if ($idsaprodi != null || $kebutuhan != null){
+            if ($kebutuhan != null){
                 DB::table('kebutuhansaprodi')->insert([
-                    'idlahan' => $idlahan,
+                    'idsop' => $idsop,
                     'idsaprodi' => $idsaprodi,
                     'kebutuhan' => $kebutuhan,
-                    'id' => $iduser
                     ]);
             }
        
@@ -96,8 +93,8 @@ class kebutuhanController extends Controller
             "level" => "success",
             "message" => "Berhasil menambah data petani : $request->nama"
         ]);
-        
-        return redirect('/kebutuhansaprodi'.'/'.$id);
+       
+        return redirect('/kebutuhansaprodi'.'/'.$idsop);
 
     }
     
@@ -117,14 +114,9 @@ class kebutuhanController extends Controller
      */
     public function show($id)
     {
+         $idversi = $id;
          $saprodi = DB::table('saprodi')->get();
-         $data = DB::table('keanggotaanpoktan')
-         ->join('kelompok', 'kelompok.idkelompok', '=', 'keanggotaanpoktan.idkelompok')
-         ->join('lahan', 'lahan.idlahan', '=', 'keanggotaanpoktan.idlahan')
-         ->join('biodatauser', 'lahan.nik', '=', 'biodatauser.nik')
-         ->join('desa', 'desa.iddesa', '=', 'kelompok.iddesa')
-            ->where('idkeanggotaan', '=', $id)->get();
-        return view('pertanian.kebutuhansaprodi', compact('data', 'saprodi'));
+        return view('pertanian.kebutuhansaprodi', compact('saprodi','idversi'));
     }
 
     /**

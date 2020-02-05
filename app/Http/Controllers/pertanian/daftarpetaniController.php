@@ -24,10 +24,12 @@ class daftarpetaniController extends Controller
 
     public function tabelpetani()
     {
-        return DataTables::of(DB::table('biodatauser')
+        return DataTables::of(DB::table('users')
+            ->join('biodatauser', 'biodatauser.nik', '=', 'users.nik')
             ->join('desa', 'biodatauser.iddesa', '=', 'desa.iddesa')
             ->join('kecamatan', 'kecamatan.idkecamatan', '=', 'desa.idkecamatan')
             ->select('biodatauser.*', 'kecamatan.kecamatan as namakecamatan', 'desa.namadesa as namadesa')
+            ->where('role_id',"=",'6')
             ->get())
             ->addColumn('action', function ($data) {
                 $del = '<a href="#" data-id="' . $data->nik . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
@@ -98,6 +100,24 @@ class daftarpetaniController extends Controller
         $request->validate([
             'nik' => 'numeric|required'
         ]);
+
+        $cekusers = DB::table('users')->select('*')
+        ->where('nik', '=', $nik)
+        ->where('role_id', '=', '6');      
+        if ($cekusers->exists()) {
+            // DB::table('users')
+            // ->where('nik', '=', $nik)
+            // ->where('role_id', '=', '6')
+            // ->update([
+            //     'email' => $nikemail,
+            //     'name' => $nama,
+            //     'password' => Hash::make($nik),
+            // ]);
+            // \Session::flash("flash_notification", [
+            //     "level" => "success",
+            //     "message" => "Tidak Bisa Melakukan Pendaftaran, Karena NIK Petani Sudah Terdaftar! Silahkan cek di daftar petani"
+            // ]);
+        } else { 
         DB::table('users')->insert([
             'nik' => $nik,
             'name' => $nama,
@@ -105,19 +125,36 @@ class daftarpetaniController extends Controller
             'password' => Hash::make($nik),
             'role_id' => 6,
         ]);
+        
 
-        $iduser = DB::table('users')->orderBy ('id','desc')->first();
-        DB::table('biodatauser')->insert([
-            'nik' => $nik,
-            'nama' => $nama,
-            'tempatlahir' => $tl,
-            'tgllahir' => $tgl,
-            'jeniskelamin' => $jk,
-            'iddesa' => $iddesa,
-            'alamat' => $alamat,
-            'telp' => $telp,
-            'id' => $iduser->id
-        ]);
+        $pengecekan = DB::table('biodatauser')->select('*')
+            ->where('nik', '=', $nik);
+
+        if ($pengecekan->exists()) {
+            DB::table('biodatauser')
+                ->where('nik','=',$nik)
+                ->update([
+                'nama' => $nama,
+                'tempatlahir' => $tl,
+                'tgllahir' => $tgl,
+                'jeniskelamin' => $jk,
+                'iddesa' => $iddesa,
+                'alamat' => $alamat,
+                'telp' => $telp
+
+            ]);
+        } else {
+            DB::table('biodatauser')->insert([
+                'nik' => $nik,
+                'nama' => $nama,
+                'tempatlahir' => $tl,
+                'tgllahir' => $tgl,
+                'jeniskelamin' => $jk,
+                'iddesa' => $iddesa,
+                'alamat' => $alamat,
+                'telp' => $telp
+            ]);
+        }
 
         DB::table('lahan')->insert([
             'nik' => $nik,
@@ -127,7 +164,6 @@ class daftarpetaniController extends Controller
             'keterangan' => $alamatlahan
         ]);
 
-        
         
         $idl = DB::table('lahan')->orderBy ('idlahan','desc')->first();
         DB::table('keanggotaanpoktan')->insert([
@@ -141,7 +177,7 @@ class daftarpetaniController extends Controller
             "level" => "success",
             "message" => "Berhasil menambah data petani. Silahkan gunakan Username : $nikemail, Password : $nik untuk login aplikasi!"
         ]);
- 
+        }
         return redirect('/daftarpetani/create');
     }
 
@@ -226,6 +262,21 @@ public function print($id)
          $data = $id;
         return view('pertanian.cetaklahan',compact('data'));
     }
+
+    public function cekuser($id)
+    {
+        
+        $pengecekan = DB::table('users')->where('nik','=',$id)->where('role_id', '=', '6');
+        if ($pengecekan->exists()){
+            $x = DB::table('users')->where('nik',$id)->where('role_id', '=', '6')->get();
+            return response()->json($x);
+        } else {
+            $value = array();
+            $x = DB::table('biodatauser')->where('nik',$value)->get();
+        return response()->json($x);
+        }
+    }
+
 
     public function mouLahan ($id){
         return DataTables::of(DB::table('keanggotaanpoktan')

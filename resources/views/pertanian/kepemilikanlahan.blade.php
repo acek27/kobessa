@@ -93,9 +93,26 @@
     <div class="col-lg-6 mb-4">
     <div class="card shadow mb-4">
     <div class="card-body">
-        <label style="color:black">Koordinat</label>
+        <label style="color:black">Geometri Koordinat</label>
         <input type="text" class="form-control form-control-user" id="koordinat" name="koordinat"
                aria-describedby="emailHelp" required> 
+        <div class="row"> 
+        <div class="col-5 m2"> 
+        <label style="color:black">Latitude</label>
+        <input type="text" class="form-control form-control-user" id="latitude" name="latitude"
+               aria-describedby="emailHelp" required> 
+        </div>     
+        <div class="col-5 m2"> 
+        <label style="color:black">Longitude</label>
+        <input type="text" class="form-control form-control-user" id="longitude" name="longitude"
+               aria-describedby="emailHelp" required> 
+        </div>     
+        <div class="col-2 m2"> 
+        <br>
+        <button type="button" id="carilokasi" value="cari" class="btn-sm btn-primary shadow-sm">Cari Lokasi</button>   
+        </div>     
+
+        </div>     
 <br>
                <div class="card-body" id="googleMap" style="width:100%;height:500px;"></div>  
                <br>
@@ -104,6 +121,9 @@
         </button>     
         <button type="button" id="resetPolygon" value="Reset" class="btn-sm btn-primary shadow-sm">
          RESET
+        </button>     
+        <button type="button" id="hapusmarker" value="Reset" class="btn-sm btn-primary shadow-sm">
+         Hapus Marker
         </button>     
     </div> 
     </div> 
@@ -133,6 +153,7 @@
                         <th style="text-align: center; vertical-align: middle">Nama Lahan</th>
                         <th style="text-align: center; vertical-align: middle">Luas Lahan (Ha)</th>
                         <th style="text-align: center; vertical-align: middle">Lokasi Lahan</th>
+                        <th style="text-align: center; vertical-align: middle">Koordinat</th>
                         <th style="text-align: center; vertical-align: middle">Nama Kelompok</th>
                         <th style="text-align: center; vertical-align: middle">Action</th>
                     </tr>
@@ -185,6 +206,31 @@ var z = 10;
                     return false;
                 });
 
+            });
+
+            $('#carilokasi').click(function(){
+                 x = $('#latitude').val();
+                 y = $('#longitude').val();
+                 z = 15;
+                 initialize(x,y,z);
+
+                var marker=new google.maps.Marker({
+                position: new google.maps.LatLng(x,y),
+                map: peta,
+                animation: google.maps.Animation.BOUNCE
+                });
+                document.getElementById("hapusmarker").style.visibility = 'visible';
+            });
+            $('#hapusmarker').click(function(){
+                 x = $('#latitude').val();
+                 y = $('#longitude').val();
+                 z = 15;
+                 initialize(x,y,z);
+
+                var marker=new google.maps.Marker(null);
+                document.getElementById("latitude").value ="";
+                document.getElementById("longitude").value ="";
+                document.getElementById("hapusmarker").style.visibility = 'hidden';
             });
 
   function initialize(x,y,z) {
@@ -282,10 +328,14 @@ var z = 10;
             // Mereset Polygon
             $('#resetPolygon').click(function(){
             event.overlay.setMap(null);
-                   
+            document.getElementById("resetPolygon").style.visibility = 'hidden'; 
             document.getElementById("koordinat").value =""; 
             });
-        });     
+            document.getElementById("resetPolygon").style.visibility = 'visible'; 
+        });    
+
+        document.getElementById("hapusmarker").style.visibility = 'hidden'; 
+        document.getElementById("resetPolygon").style.visibility = 'hidden'; 
 
   }
  
@@ -323,6 +373,10 @@ var z = 10;
                     {
                         data:'namadesa',
                         name: 'namadesa'
+                    },
+                    {
+                        data: 'koordinat',
+                        name: 'koordinat'
                     },
                     {
                         data: 'namakelompok',

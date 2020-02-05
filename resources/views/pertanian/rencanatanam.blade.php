@@ -104,6 +104,7 @@
                     <th style="width: 10%; text-align: left; vertical-align: middle" >Tgl Tanam</th>
                     <th style="width: 10%; text-align: left; vertical-align: middle" >Jenis Tanaman</th>
                     <th style="width: 20%; text-align: left; vertical-align: middle" >Komoditas</th>
+                    <th style="width: 20%; text-align: left; vertical-align: middle" >Periode Tanam Ke</th>
                     <th style="width: 20%; text-align: left; vertical-align: middle" >Action</th>
                                         
                 </tr>
@@ -159,6 +160,10 @@
                 {
                     data: 'komoditas',
                     name: 'komoditas'
+                },
+                {
+                    data: 'periode',
+                    name: 'periode'
                 },
                 {   data: 'action', name: 'action', orderable: false, searchable: false, align: 'center'},
                 

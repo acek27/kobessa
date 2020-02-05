@@ -71,11 +71,11 @@
                         <table class="table table-bordered" id="tabelaktivitas">
                             <thead style="text-align: center">
                             <tr>
-                                <th style="width: 20%">Tanggal Aktivitas</th>
+                                <th style="width: 15%">Tanggal Aktivitas</th>
                                 <th>Aktivitas</th>
-                                <th style="width: 20%">Tanggal Pelaksanaan</th>
+                                <th style="width: 15%">Tanggal Pelaksanaan</th>
                                 <th>Status</th>
-                                <th>Keterangan</th>
+                                <th style="width: 20%">Keterangan</th>
                             </tr>
                             </thead>
                             <tbody>

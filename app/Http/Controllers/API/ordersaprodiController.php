@@ -38,7 +38,7 @@ class ordersaprodiController extends Controller
         }
     public function poktan(){
         $poktan = DB::table('kelompok')->get();
-        return response()->json(['success' => $poktan], $this-> successStatus);
+        return response()->json($poktan);
         }
     public function poktanbyDesa($id){
         $poktanBD = DB::table('kelompok')->where('iddesa','=', $id)->get();

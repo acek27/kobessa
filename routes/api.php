@@ -19,16 +19,16 @@ use Illuminate\Http\Request;
     
 // });
 //LOGIN-REGISTER
-Route::post('login', 'API\UserController@login');
+Route::post('login', 'API\UserController@login'); //sudah selesai
 Route::post('register', 'API\UserController@register');
 Route::get('userslist', 'API\UserController@list');
-Route::post('details', 'API\UserController@details');
+Route::get('details/{nik}', 'API\UserController@details');
 
 //JADWAL TANAM
-Route::get('jadwalair', 'API\jadwaltanamController@jadwalair');
-Route::get('soppertanian', 'API\jadwaltanamController@soppertanian');
-Route::get('lahan/{id}', 'API\jadwaltanamController@lahan');
-Route::get('jenistanaman', 'API\jadwaltanamController@jenistanaman');
+Route::get('jadwalair', 'API\jadwaltanamController@jadwalair'); 
+Route::get('soppertanian', 'API\jadwaltanamController@soppertanian'); //sudah selesai
+Route::get('lahan/{id}', 'API\jadwaltanamController@lahan'); // sudah selesai
+Route::get('jenistanaman', 'API\jadwaltanamController@jenistanaman'); //sudah selesai
 Route::post('simpanjadwal', 'API\jadwaltanamController@simpanjadwal');
 
 //AKTIVITAS

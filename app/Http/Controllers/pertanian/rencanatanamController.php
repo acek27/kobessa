@@ -125,34 +125,73 @@ class rencanatanamController extends Controller
         $idjenis = $request->get('idjenis');
         $komoditas = $request->get('komoditas');
 
+        $pengecekan = DB::table('jadwaltanam')->orderBy('periode','DESC');
+    if ($pengecekan->exists()) {
+        $ambil = DB::table('jadwaltanam')->orderBy('periode','DESC')->first();
+        $pt = $ambil->periode;
+        $periodeKe = $pt+1;
         DB::table('jadwaltanam')->insert([
             'idlahan' => $idlahan,
             'idversi' => $idversi,
             'metode' => $metode,
             'tgltanam' => $tgltanam,
             'idjenis' => $idjenis,
-            'komoditas' => $komoditas
+            'komoditas' => $komoditas,
+            'periode' => $periodeKe,
             ]);
     
-    \Session::flash("flash_notification", [
-    "level" => "success",
-    "message" => "Berhasil menambah data!"
-    ]);
+        \Session::flash("flash_notification", [
+        "level" => "success",
+        "message" => "Berhasil menambah data!"
+        ]);
 
-    //membuat jadwalbertani
-    $waktu = DB::table('soptanidetail')
-    ->where('idversi','=',$idversi)
-    ->get();
+        //membuat jadwalbertani
+        $waktu = DB::table('soptanidetail')
+        ->where('idversi','=',$idversi)
+        ->get();
 
-    foreach($waktu as $wak){
-        
-    $tglbertani = date('Y-m-d', strtotime($wak->waktu.' days', strtotime($tgltanam))); 
-    DB::table('jadwalbertani')->insert([
+        foreach($waktu as $wak){
+            
+        $tglbertani = date('Y-m-d', strtotime($wak->waktu.' days', strtotime($tgltanam))); 
+        DB::table('jadwalbertani')->insert([
+                'idlahan' => $idlahan,
+                'tglaktivitas' => $tglbertani,
+                'aktivitas' =>$wak->kegiatan,
+                'periode' =>$periodeKe,
+                ]);
+        }
+}else{
+        DB::table('jadwaltanam')->insert([
             'idlahan' => $idlahan,
-            'tglaktivitas' => $tglbertani,
-            'aktivitas' =>$wak->kegiatan,
+            'idversi' => $idversi,
+            'metode' => $metode,
+            'tgltanam' => $tgltanam,
+            'idjenis' => $idjenis,
+            'komoditas' => $komoditas,
+            'periode' => 1,
             ]);
-    }
+    
+        \Session::flash("flash_notification", [
+        "level" => "success",
+        "message" => "Berhasil menambah data!"
+        ]);
+
+        //membuat jadwalbertani
+        $waktu = DB::table('soptanidetail')
+        ->where('idversi','=',$idversi)
+        ->get();
+
+        foreach($waktu as $wak){
+            
+        $tglbertani = date('Y-m-d', strtotime($wak->waktu.' days', strtotime($tgltanam))); 
+        DB::table('jadwalbertani')->insert([
+                'idlahan' => $idlahan,
+                'tglaktivitas' => $tglbertani,
+                'aktivitas' =>$wak->kegiatan,
+                'periode' => 1,
+                ]);
+        }
+}
 
     return redirect('rencanatanam');
     //return response()->json($tglbertani);

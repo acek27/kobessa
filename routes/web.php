@@ -37,6 +37,7 @@ Route::get('cekkelompokpetani/{id}', 'pertanian\kelompokpetaniController@cekkelo
 Route::resource('kepemilikanlahan', 'pertanian\kepemilikanlahanController');
 Route::get('tabelkepemilikan', 'pertanian\kepemilikanlahanController@tabelkepemilikan')->name('tabel.kepemilikan');
 Route::get('cekniktani/{id}', 'pertanian\kepemilikanlahanController@cekniktani');
+Route::get('cekuser/{id}', 'pertanian\daftarpetaniController@cekuser'); ///baru
 Route::get('cekkepemilikan/{id}', 'pertanian\kepemilikanlahanController@cekkepemilikan');
 
 Route::get('cekhasiltani/{id}/{no}', 'pertanian\hasilpertanianController@cekhasiltani');
@@ -53,9 +54,10 @@ Route::get('carisuplier', 'pertanian\ordersaprodiController@cari')->name('orders
 
 
 Route::resource('kebutuhan', 'pertanian\kebutuhanController');
-Route::get('tabellahan', 'pertanian\kebutuhanController@tabellahan')->name('tabel.lahan');
-Route::get('tabelkebutuhan', 'pertanian\kebutuhanController@tabelkebutuhan')->name('tabel.kebutuhan');
-Route::get('carilahan', 'pertanian\kebutuhanController@cari')->name('kebutuhan.cari');
+Route::get('tabelsop', 'pertanian\kebutuhanController@tabelsop')->name('tabel.sop');
+Route::get('tabelkebutuhan/{id}', 'pertanian\kebutuhanController@tabelkebutuhan')->name('tabel.kebutuhan');
+Route::get('carisop', 'pertanian\kebutuhanController@cari')->name('kebutuhan.cari'); 
+
 
 //SOP PERTANIAN
 Route::resource('soppertanian', 'pertanian\soppertanianController');
@@ -110,5 +112,8 @@ Route::post('/datasop/{id}', 'pertanian\rencanatanamController@datasop');
 Route::resource('peta','pertanian\petaController');
 Route::get('/ambilkoordinat/{id}', 'pertanian\kepemilikanlahanController@ambilkoordinat');
 Route::get('jadwalprint/{id}', 'pertanian\rencanatanamController@print')->name('jadwal.print');
+
+Route::resource('daftarppl','pertanian\pplController');
+Route::get('tabelppl', 'pertanian\pplController@tabelppl')->name('tabel.ppl');
 
 Route::post('tolakaktivitas/{id}', 'pertanian\aktivitasController@tolakaktivitas');

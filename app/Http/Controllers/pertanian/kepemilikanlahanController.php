@@ -27,7 +27,7 @@ class kepemilikanlahanController extends Controller
             ->join('lahan', 'lahan.idlahan', '=', 'keanggotaanpoktan.idlahan')
             ->join('biodatauser', 'lahan.nik', '=', 'biodatauser.nik')
             ->join('desa', 'desa.iddesa', '=', 'lahan.iddesa')
-            ->select('keanggotaanpoktan.*','biodatauser.nama as nama','lahan.namalahan as namalahan','lahan.luaslahan as luaslahan','biodatauser.nik as nik','biodatauser.alamat as alamat', 'desa.namadesa as namadesa', 'kelompok.namakelompok as namakelompok')
+            ->select('keanggotaanpoktan.*','biodatauser.nama as nama','lahan.namalahan as namalahan','lahan.koordinat as koordinat','lahan.luaslahan as luaslahan','biodatauser.nik as nik','biodatauser.alamat as alamat', 'desa.namadesa as namadesa', 'kelompok.namakelompok as namakelompok')
             ->get())
             ->addColumn('action', function ($data) {
                 $del = '<a href="#" data-id="' . $data->idkeanggotaan . '" class="hapus-data"><i class="fas fa-trash"></i></a>';

@@ -25,7 +25,7 @@ class jadwaltanamController extends Controller
                             'komoditas' => $req->komoditas,
             ]);
             $berhasil = 'Berhasil Menambahkan Jadwal Tanam';
-            return response()->json(['success'=>$berhasil], $this-> successStatus); 
+            return response()->json($berhasil); 
 
         }
 
@@ -36,14 +36,14 @@ class jadwaltanamController extends Controller
       
         public function lahan($id){
         $lahan = DB::table('lahan')->where('nik','=', $id)->get();
-        return response()->json(['success' => $lahan], $this-> successStatus);
+        return response()->json($lahan);
         }
         public function soppertanian(){
         $sop = DB::table('soppertanian')->get();
-        return response()->json(['success' => $sop], $this-> successStatus);
+        return response()->json($sop);
         }
         public function jenistanaman(){
         $jenis = DB::table('jenistanaman')->get();
-        return response()->json(['success' => $jenis], $this-> successStatus);
+        return response()->json($jenis);
         }
 }
