@@ -186,6 +186,8 @@
                             alert("Request failed: " + textStatus);
                         });
                     }, function (dismiss) {
+                        // dismiss can be 'cancel', 'overlay', 'esc' or 'timer'
+                        // swal("Cancelled", "Data batal dihapus", "error");
                     });
             };
             $('body').on('click', '.hapus-data', function () {
