@@ -149,12 +149,12 @@
                             } else if (Math.round(days) <= 0) {
                                 $('#keterangan').text("Aktivitas yang harus dilakukan adalah "
                                     + data.aktivitas + ". Waktu pelaksanaan kurang dari " +
-                                    Math.abs(num) + " hari.");
+                                    Math.abs(num) + " hari.");  
                                 $('#ket').val("Lebih awal " + Math.abs(num) + " hari");
                             } else {
                                 $('#keterangan').text("PERHATIAN!! Aktivitas yang harus dilakukan adalah "
                                     + data.aktivitas + ". anda telah melewati " +
-                                    Math.round(days) + " hari dari tanggal pelaksanaan.");
+                                    Math.round(days) + " hari dari tanggal aktivitas.");
                                 $('#ket').val("Terlambat " + Math.round(days) + " hari");
                             }
                         }
@@ -172,7 +172,7 @@
                     type: "warning",
                     // showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Tunda!",
+                    confirmButtonText: "OK!",
                     // cancelButtonText: "Tidak!",
                 }).then(
                     function (result) {

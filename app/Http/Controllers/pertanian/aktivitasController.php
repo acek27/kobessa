@@ -28,9 +28,10 @@ class aktivitasController extends Controller
 
     public function tabelaktivitas($id)
     {
+        $ambil = DB::table('jadwalbertani')->where('idlahan',"=",$id)->orderBy('periode','DESC')->value('periode');
         $nikuser = Auth::User()->nik;
         return DataTables::of(DB::table('jadwalbertani')
-            ->where("idlahan", $id))
+            ->where("idlahan", $id)->where("periode", $ambil))
 //            ->addColumn('keterangan', function ($data) {
 //                $tglaktivitas = strtotime($data->tglaktivitas);
 //                $tglpelaksanaan = strtotime($data->tglpelaksanaan);
@@ -57,9 +58,11 @@ class aktivitasController extends Controller
     public
     function aktivitasdetail($id)
     {
+        $ambil = DB::table('jadwalbertani')->where('idlahan',"=",$id)->orderBy('periode','DESC')->value('periode');
         $data = DB::table('jadwalbertani')
             ->where('idlahan', '=', $id)
             ->where('status', '=', null)
+            ->where('periode', '=', $ambil)
             ->orderBy("tglaktivitas", "asc")
             ->first();
         return response()->json($data);
