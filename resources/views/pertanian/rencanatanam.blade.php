@@ -56,8 +56,8 @@
     <select class="form-control show-tick" id="metode" name="metode" required>
         <option value="">-- Please select --</option>
         
-        <option value="Pembenihan">Pembenihan</option>
-        <option value="Pembibitan">Pembibitan</option>
+        <option value="1">Pembenihan</option>
+        <option value="2">Pembibitan/Tanam</option>
        
     </select>  
     <br>

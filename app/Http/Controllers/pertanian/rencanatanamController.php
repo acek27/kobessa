@@ -22,21 +22,21 @@ class rencanatanamController extends Controller
     public function index()
     {
         $nikuser = Auth::User()->nik;
-        if(request()->ajax()) 
+        if(request()->ajax())
         {
- 
+
          $start = (!empty($_GET["start"])) ? ($_GET["start"]) : ('');
-         $end = (!empty($_GET["end"])) ? ($_GET["end"]) : ('');
- 
+         $end = (!empty($_GET["end"])) ? ($_GET["end"]) :('');
+
          $data = Event::whereDate('start', '>=', $start)->whereDate('end',   '<=', $end)->get(['id','title','start', 'end']);
          return Response::json($data);
         }
 
-        
+
         $lahan = DB::table('lahan')->where('nik','=', $nikuser)->get();
         $sop = DB::table('soppertanian')->get();
         $jenis = DB::table('jenistanaman')->get();
-        
+
         return view('pertanian.rencanatanam',compact('lahan','sop','jenis'));
     }
 
@@ -54,6 +54,13 @@ class rencanatanamController extends Controller
                 $print = '<a href="' . route('jadwal.print', $data->idlahan) . '" class="print-data" target="_blank"><i class="fa fa-print">Jadwal</i></a>';
                 return $print;
             })
+            ->addColumn('metode', function ($data) {
+               if($data->idmetode == 1){
+                   return "Pembenihan";
+               }else{
+                return "Pembibitan/Tanam";
+               }
+            })
                         ->make(true);
     }
     public function tabelhistoritanamSP()
@@ -68,7 +75,7 @@ class rencanatanamController extends Controller
             ->select('jadwaltanam.*','soppertanian.versisop as versisop','lahan.namalahan as namalahan','jenistanaman.jenistanaman as jenis',
                      'biodatauser.nama as namapetani','lahan.nik as nik','desa.namadesa as namadesa','kecamatan.kecamatan as kecamatan')
             ->get())
-            
+
             ->make(true);
     }
 
@@ -99,17 +106,17 @@ class rencanatanamController extends Controller
         ->join('kecamatan','desa.idkecamatan','=','kecamatan.idkecamatan')
         ->where('keanggotaanpoktan.idlahan','=',$id)->first();
 
-        
+
         $jadwal =   DB::table('jadwalbertani')
         ->where('jadwalbertani.idlahan','=',$id)->get();
-        
+
 
         $pdf = PDF::loadView('jadwalbertani', compact('jadwal','biodata'))->setPaper('folio', 'potrait');
         return $pdf->stream('Jadwal Budidaya');
     }
 
 
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -125,71 +132,98 @@ class rencanatanamController extends Controller
         $idjenis = $request->get('idjenis');
         $komoditas = $request->get('komoditas');
 
-        $pengecekan = DB::table('jadwaltanam')->orderBy('periode','DESC');
+        $pengecekan = DB::table('jadwaltanam')->where('idlahan',"=",$idlahan)->orderBy('periode','DESC');
     if ($pengecekan->exists()) {
-        $ambil = DB::table('jadwaltanam')->orderBy('periode','DESC')->first();
+        $ambil = DB::table('jadwaltanam')->where('idlahan',"=",$idlahan)->orderBy('periode','DESC')->first();
         $pt = $ambil->periode;
         $periodeKe = $pt+1;
         DB::table('jadwaltanam')->insert([
             'idlahan' => $idlahan,
             'idversi' => $idversi,
-            'metode' => $metode,
+            'idmetode' => $metode,
             'tgltanam' => $tgltanam,
             'idjenis' => $idjenis,
             'komoditas' => $komoditas,
             'periode' => $periodeKe,
             ]);
-    
+
         \Session::flash("flash_notification", [
         "level" => "success",
         "message" => "Berhasil menambah data!"
         ]);
 
         //membuat jadwalbertani
-        $waktu = DB::table('soptanidetail')
-        ->where('idversi','=',$idversi)
-        ->get();
+        $benih = DB::table('soptanidetail')->where('idversi','=',$idversi)->get();
+        $tanam = DB::table('soptanidetail')->where('idversi','=',$idversi)->where('idfase','>',1)->get();
 
-        foreach($waktu as $wak){
-            
-        $tglbertani = date('Y-m-d', strtotime($wak->waktu.' days', strtotime($tgltanam))); 
-        DB::table('jadwalbertani')->insert([
-                'idlahan' => $idlahan,
-                'tglaktivitas' => $tglbertani,
-                'aktivitas' =>$wak->kegiatan,
-                'periode' =>$periodeKe,
-                ]);
+        if($metode==1){
+            foreach($benih as $wak){
+            $tglbertani = date('Y-m-d', strtotime($wak->waktu.' days', strtotime($tgltanam)));
+            DB::table('jadwalbertani')->insert([
+                    'idlahan' => $idlahan,
+                    'tglaktivitas' => $tglbertani,
+                    'idfase' =>$wak->idfase,
+                    'aktivitas' =>$wak->kegiatan,
+                    'periode' =>$periodeKe,
+                    ]);
         }
+        }else{
+            foreach($tanam as $wok){
+                $tglbertani = date('Y-m-d', strtotime($wok->waktu.' days', strtotime($tgltanam)));
+                DB::table('jadwalbertani')->insert([
+                        'idlahan' => $idlahan,
+                        'tglaktivitas' => $tglbertani,
+                        'idfase' =>$wok->idfase,
+                        'aktivitas' =>$wok->kegiatan,
+                        'periode' =>$periodeKe,
+                        ]);
+                }
+
+        }
+
 }else{
         DB::table('jadwaltanam')->insert([
             'idlahan' => $idlahan,
             'idversi' => $idversi,
-            'metode' => $metode,
+            'idmetode' => $metode,
             'tgltanam' => $tgltanam,
             'idjenis' => $idjenis,
             'komoditas' => $komoditas,
             'periode' => 1,
             ]);
-    
+
         \Session::flash("flash_notification", [
         "level" => "success",
         "message" => "Berhasil menambah data!"
         ]);
 
         //membuat jadwalbertani
-        $waktu = DB::table('soptanidetail')
-        ->where('idversi','=',$idversi)
-        ->get();
+        $benih = DB::table('soptanidetail')->where('idversi','=',$idversi)->get();
+        $tanam = DB::table('soptanidetail')->where('idversi','=',$idversi)->where('idfase','>',1)->get();
 
-        foreach($waktu as $wak){
-            
-        $tglbertani = date('Y-m-d', strtotime($wak->waktu.' days', strtotime($tgltanam))); 
-        DB::table('jadwalbertani')->insert([
-                'idlahan' => $idlahan,
-                'tglaktivitas' => $tglbertani,
-                'aktivitas' =>$wak->kegiatan,
-                'periode' => 1,
-                ]);
+        if($metode==1){
+            foreach($benih as $wak){
+            $tglbertani = date('Y-m-d', strtotime($wak->waktu.' days', strtotime($tgltanam)));
+            DB::table('jadwalbertani')->insert([
+                    'idlahan' => $idlahan,
+                    'tglaktivitas' => $tglbertani,
+                    'idfase' =>$wak->idfase,
+                    'aktivitas' =>$wak->kegiatan,
+                    'periode' => 1,
+                    ]);
+        }
+        }else{
+            foreach($tanam as $wok){
+                $tglbertani = date('Y-m-d', strtotime($wok->waktu.' days', strtotime($tgltanam)));
+                DB::table('jadwalbertani')->insert([
+                        'idlahan' => $idlahan,
+                        'tglaktivitas' => $tglbertani,
+                        'idfase' =>$wok->idfase,
+                        'aktivitas' =>$wok->kegiatan,
+                        'periode' => 1,
+                        ]);
+                }
+
         }
 }
 
