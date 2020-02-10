@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\User; 
 use Illuminate\Support\Facades\Auth; 
 use Validator;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -41,10 +42,9 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response 
      */ 
     
+    public function details($id){
 
-   public function details($nik){
-
-        $user = User::where('nik',$nik)->first();
+        $user = User::where('id',$id)->first();
         $data =['status_code' =>'00',
                     'nama' =>$user->name,
                     'email' =>$user->email,
@@ -62,23 +62,34 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response 
      */ 
     public function login(Request $req){ 
-         if(Auth::attempt(['email' => $req->email, 'password' => $req->password])){ 
-            $user = Auth::user();
-            $user=User::where('email',$req->email)->first();
-            $data =['status_code' =>'00',
-                    'nama' =>$user->name,
-                    'email' =>$user->email,
-                    'id'    =>$user->id,
-                    'role_id'    =>$user->role_id,
-                    'nik'    =>$user->nik,
-                    ];
-            return response()->json($data);
-        } 
-        else{ 
-             $data =['status_code' =>'11',
-                ];
-            return response()->json($data); 
-        } 
+        if(Auth::attempt(['email' => $req->email, 'password' => $req->password])){ 
+           $user = Auth::user();
+           $user=User::where('email',$req->email)->first();
+           $data =['status_code' =>'00',
+                   'nama' =>$user->name,
+                   'email' =>$user->email,
+                   'id'    =>$user->id,
+                   'role_id'    =>$user->role_id,
+                   'nik'    =>$user->nik,
+                   ];
+           return response()->json($data);
+       } 
+       else{ 
+            $data =['status_code' =>'11',
+               ];
+           return response()->json($data); 
+       } 
+   }
+
+   public function ubahpass(Request $req){
+  
+    $user = User::find($req->id);
+    $user->password = Hash::make($req->password);
+    $user->update();
+        return response()->json([$user]);
+
     }
 
+    
+    
 }

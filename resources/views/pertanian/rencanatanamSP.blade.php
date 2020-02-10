@@ -82,8 +82,8 @@
                     name: 'versisop'
                 },
                 {
-                    data: 'metode',
-                    name: 'metode'
+                    data: 'idmetode',
+                    name: 'idmetode'
                 },
                 {
                     data: 'tgltanam',

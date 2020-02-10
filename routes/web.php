@@ -117,3 +117,7 @@ Route::resource('daftarppl','pertanian\pplController');
 Route::get('tabelppl', 'pertanian\pplController@tabelppl')->name('tabel.ppl');
 
 Route::post('tolakaktivitas/{id}', 'pertanian\aktivitasController@tolakaktivitas');
+
+
+Route::resource('monitoring', 'pertanian\monitoringController');
+Route::get('tabelaktivitas', 'pertanian\monitoringController@tabelaktivitas')->name('tabel.aktivitas');

@@ -94,7 +94,7 @@
                         <a class="collapse-item active" href="{{route('datapetani.create')}}">Data Petani</a>
                         <a class="collapse-item active" href="{{route('kelompokpetani.create')}}">Data Kelompok Petani</a>
                         <a class="collapse-item active" href="{{route('kepemilikanlahan.create')}}">Kepemilikan Lahan</a>
-                        <a class="collapse-item active" href="{{route('kebutuhan.cari')}}">Kebutuhan Saprodi</a>
+                        <a class="collapse-item active" href="{{route('daftarppl.index')}}">Daftar PPL</a>
                         <a class="collapse-item active" href="{{route('rencanatanam.create')}}">Jadwal Tanam Petani</a>
                         <a class="collapse-item active" href="{{route('peta.index')}}">Peta Pertanian</a>
                     </div>
@@ -118,7 +118,7 @@
                         <a class="collapse-item active" href="{{route('kelompokpetani.create')}}">Data Kelompok Petani</a>
                         <a class="collapse-item active" href="{{route('kepemilikanlahan.create')}}">Kepemilikan Lahan</a>
                         <a class="collapse-item active" href="{{route('kebutuhan.cari')}}">Kebutuhan Saprodi</a>
-                        <a class="collapse-item active" href="{{route('aktivitas.index')}}">Monitoring</a> 
+                        <a class="collapse-item active" href="{{route('monitoring.index')}}">Monitoring</a> 
                        
                     </div>
                 </div>

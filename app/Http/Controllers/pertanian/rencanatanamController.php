@@ -22,21 +22,21 @@ class rencanatanamController extends Controller
     public function index()
     {
         $nikuser = Auth::User()->nik;
-        if(request()->ajax())
+        if(request()->ajax()) 
         {
-
+ 
          $start = (!empty($_GET["start"])) ? ($_GET["start"]) : ('');
-         $end = (!empty($_GET["end"])) ? ($_GET["end"]) :('');
-
+         $end = (!empty($_GET["end"])) ? ($_GET["end"]) : ('');
+ 
          $data = Event::whereDate('start', '>=', $start)->whereDate('end',   '<=', $end)->get(['id','title','start', 'end']);
          return Response::json($data);
         }
 
-
-        $lahan = DB::table('lahan')->where('nik','=', $nikuser)->get();
+        
+        $lahan = DB::table('lahan')->where('nik','=', $nikuser)->where('idstatus','=', 6)->get();
         $sop = DB::table('soppertanian')->get();
         $jenis = DB::table('jenistanaman')->get();
-
+        
         return view('pertanian.rencanatanam',compact('lahan','sop','jenis'));
     }
 
@@ -75,7 +75,7 @@ class rencanatanamController extends Controller
             ->select('jadwaltanam.*','soppertanian.versisop as versisop','lahan.namalahan as namalahan','jenistanaman.jenistanaman as jenis',
                      'biodatauser.nama as namapetani','lahan.nik as nik','desa.namadesa as namadesa','kecamatan.kecamatan as kecamatan')
             ->get())
-
+            
             ->make(true);
     }
 
@@ -106,17 +106,19 @@ class rencanatanamController extends Controller
         ->join('kecamatan','desa.idkecamatan','=','kecamatan.idkecamatan')
         ->where('keanggotaanpoktan.idlahan','=',$id)->first();
 
-
+        
         $jadwal =   DB::table('jadwalbertani')
+        ->join('fasetanam','fasetanam.idfase',"=",'jadwalbertani.idfase')
+        ->select('jadwalbertani.*','fasetanam.namafase as fase')
         ->where('jadwalbertani.idlahan','=',$id)->get();
-
+        
 
         $pdf = PDF::loadView('jadwalbertani', compact('jadwal','biodata'))->setPaper('folio', 'potrait');
         return $pdf->stream('Jadwal Budidaya');
     }
 
 
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -146,7 +148,7 @@ class rencanatanamController extends Controller
             'komoditas' => $komoditas,
             'periode' => $periodeKe,
             ]);
-
+    
         \Session::flash("flash_notification", [
         "level" => "success",
         "message" => "Berhasil menambah data!"
@@ -157,7 +159,7 @@ class rencanatanamController extends Controller
         $tanam = DB::table('soptanidetail')->where('idversi','=',$idversi)->where('idfase','>',1)->get();
 
         if($metode==1){
-            foreach($benih as $wak){
+            foreach($benih as $wak){  
             $tglbertani = date('Y-m-d', strtotime($wak->waktu.' days', strtotime($tgltanam)));
             DB::table('jadwalbertani')->insert([
                     'idlahan' => $idlahan,
@@ -168,7 +170,7 @@ class rencanatanamController extends Controller
                     ]);
         }
         }else{
-            foreach($tanam as $wok){
+            foreach($tanam as $wok){  
                 $tglbertani = date('Y-m-d', strtotime($wok->waktu.' days', strtotime($tgltanam)));
                 DB::table('jadwalbertani')->insert([
                         'idlahan' => $idlahan,
@@ -179,8 +181,7 @@ class rencanatanamController extends Controller
                         ]);
                 }
 
-        }
-
+        }        
 }else{
         DB::table('jadwaltanam')->insert([
             'idlahan' => $idlahan,
@@ -191,7 +192,7 @@ class rencanatanamController extends Controller
             'komoditas' => $komoditas,
             'periode' => 1,
             ]);
-
+    
         \Session::flash("flash_notification", [
         "level" => "success",
         "message" => "Berhasil menambah data!"
@@ -202,7 +203,7 @@ class rencanatanamController extends Controller
         $tanam = DB::table('soptanidetail')->where('idversi','=',$idversi)->where('idfase','>',1)->get();
 
         if($metode==1){
-            foreach($benih as $wak){
+            foreach($benih as $wak){  
             $tglbertani = date('Y-m-d', strtotime($wak->waktu.' days', strtotime($tgltanam)));
             DB::table('jadwalbertani')->insert([
                     'idlahan' => $idlahan,
@@ -213,7 +214,7 @@ class rencanatanamController extends Controller
                     ]);
         }
         }else{
-            foreach($tanam as $wok){
+            foreach($tanam as $wok){  
                 $tglbertani = date('Y-m-d', strtotime($wok->waktu.' days', strtotime($tgltanam)));
                 DB::table('jadwalbertani')->insert([
                         'idlahan' => $idlahan,
@@ -225,6 +226,9 @@ class rencanatanamController extends Controller
                 }
 
         }
+     DB::table('lahan')->where('idlahan',"=",$idlahan)->update([
+            'idstatus' => 5,
+            ]);
 }
 
     return redirect('rencanatanam');

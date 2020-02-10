@@ -57,6 +57,7 @@ Tergabung dalam Kelompok tani      :{{$biodata->namakelompok}}
     <tr>
         <th>No.</th>
         <th>Tanggal Aktivitas</th>
+        <th>Fase</th>
         <th>Aktivitas</th>
         <th>Status</th>
     </tr>
@@ -69,6 +70,7 @@ Tergabung dalam Kelompok tani      :{{$biodata->namakelompok}}
         <tr style="height: 0">
             <td>{{ $i++ }}</td>
             <td>{{$values->tglaktivitas}}</td>
+            <td>{{$values->fase}}</td>
             <td>{{$values->aktivitas}}</td>
             <td>{{$values->status}}</td>
         </tr>

@@ -36,7 +36,6 @@
 
 @push('script')
     <script src="{{asset('plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}}"></script>
-    <script src="{{asset('plugins/dist/js/standalone/selectize.js')}}"></script>
     <script src="{{asset('vendor/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
     <script src="{{asset('asetsba2/js/demo/datatables-demo.js')}}"></script>
