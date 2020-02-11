@@ -21,7 +21,11 @@ class aktivitasController extends Controller
     public function index()
     {
         $nikuser = Auth::User()->nik;
-        $lahan = DB::table('lahan')->where('nik', '=', $nikuser)->get();
+        $lahan = DB::table('lahan')->where('nik', '=', $nikuser)->where(function ($status) {
+            $status->where('idstatus', '=', 1)
+                ->orWhere('idstatus', '=', 2)
+                ->orWhere('idstatus', '=', 3);
+        })->get();
 
         return view('pertanian.aktivitas', compact('lahan'));
     }
@@ -90,6 +94,7 @@ class aktivitasController extends Controller
     {
         $idbertani = $request->get('idbertani');
         $lahan = $request->get('idlahan');
+        $fase = $request->get('idfase');
         $ket = $request->get('ket');
         $date = date('yy-m-d');
 
@@ -98,6 +103,10 @@ class aktivitasController extends Controller
                 'status' => 1,
                 'tglpelaksanaan' => $date,
                 'keterangan' => $ket
+            ]);
+
+        DB::table('lahan')->where('idlahan', $lahan)->update([
+                'idstatus' => $fase
             ]);
 
         \Session::flash("flash_notification", [

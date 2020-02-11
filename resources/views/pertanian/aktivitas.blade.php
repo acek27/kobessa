@@ -42,6 +42,8 @@
                         <label style="color:black">Aktivitas</label>
                         <input type="text" class="form-control uang" id="idbertani" name="idbertani"
                                aria-describedby="emailHelp" hidden>
+                        <input type="text" class="form-control uang" id="idfase" name="idfase"
+                               aria-describedby="emailHelp">
                         <input type="text" class="form-control uang" id="ket" name="ket"
                                aria-describedby="emailHelp" hidden>
                         <p style="color: green" id="aktivitas">-</p>
@@ -74,6 +76,7 @@
                             <thead style="text-align: center">
                             <tr>
                                 <th style="width: 15%">Tanggal Aktivitas</th>
+                                <th>Fase</th>
                                 <th>Aktivitas</th>
                                 <th style="width: 15%">Tanggal Pelaksanaan</th>
                                 <th>Status</th>
@@ -111,6 +114,11 @@
                     data: 'tglaktivitas',
                     name: 'tglaktivitas'
                 },
+
+                    {
+                        data: 'idfase',
+                        name: 'idfase'
+                    },
                     {
                         data: 'aktivitas',
                         name: 'aktivitas'
@@ -121,6 +129,7 @@
                     },
                     {data: 'status', name: 'status', orderable: false, searchable: false, align: 'center'},
                     {data: 'keterangan', name: 'keterangan', orderable: false, searchable: false, align: 'center'},
+
                 ]
             });
 
@@ -135,6 +144,7 @@
                     success: function (data) {
                         dt.ajax.url('tabelaktivitas/' + id).load();
                         $('#idbertani').val(data.idbertani);
+                        $('#idfase').val(data.idfase);
                         $('#aktivitas').text(data.aktivitas);
                         var current = new Date();
                         var date = new Date(data.tglaktivitas);
@@ -149,7 +159,7 @@
                             } else if (Math.round(days) <= 0) {
                                 $('#keterangan').text("Aktivitas yang harus dilakukan adalah "
                                     + data.aktivitas + ". Waktu pelaksanaan kurang dari " +
-                                    Math.abs(num) + " hari.");  
+                                    Math.abs(num) + " hari.");
                                 $('#ket').val("Lebih awal " + Math.abs(num) + " hari");
                             } else {
                                 $('#keterangan').text("PERHATIAN!! Aktivitas yang harus dilakukan adalah "

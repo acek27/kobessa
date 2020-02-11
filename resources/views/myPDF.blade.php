@@ -232,7 +232,7 @@ Nama Petani            : {{$biodata->nama}}
 Jenis Kelamin          : {{$biodata->jeniskelamin}}
 Alamat                 : {{$biodata->alamat}}
 Kelompok Tani          : {{$biodata->namakelompok}}
-Luas                   : {{$biodata->luaslahan}}
+Luas                   : {{$biodata->luaslahan}} Ha
 Jumlah Pinjaman        :...............(....................... Rupiah)
 </pre>
 <p style="text-align: center; margin-top: 5px; margin-bottom: 5px;">
@@ -246,10 +246,8 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
     <tr>
         <th>No.</th>
         <th>Nama Saprodi</th>
-        <th>Jumlah</th>
-        <th>Satuan</th>
-        <th>Harga Satuan</th>
-        <th>Jumlah</th>
+        <th>Kebutuhan</th>
+        <th>Harga</th>
     </tr>
     </thead>
     <tbody>
@@ -257,24 +255,21 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
         $i=1;
     $total = 0
     @endphp
-    @foreach($saprodi as $pinjam)
+    @foreach($sop as $kebutuhan)
         <tr style="height: 0">
             <td>{{ $i++ }}</td>
-            <td>{{$pinjam->namasaprodi}}</td>
-            <td>{{$pinjam->kebutuhan}}</td>
-            <td>{{$pinjam->satuan}}</td>
-            <td>{{number_format($pinjam->hargasatuan,0,',','.')}}</td>
-            <td>{{number_format($pinjam->hargasatuan*$pinjam->kebutuhan,0,',','.')}}</td>
+            <td>{{ $kebutuhan->namasaprodi }}</td>
+            <td>{{ceil($kebutuhan->kebutuhan*$biodata->luaslahan)}}</td>
+            <td>{{number_format(ceil($kebutuhan->kebutuhan*$biodata->luaslahan)*$kebutuhan->hargasatuan,0,',','.')}}</td>
         </tr>
         @php
-            $total += $pinjam->hargasatuan*$pinjam->kebutuhan
+            $total += ceil($kebutuhan->kebutuhan*$biodata->luaslahan)*$kebutuhan->hargasatuan
         @endphp
     @endforeach
-
     <tr style="height: 0">
         <td></td>
-        <td colspan="4" style="text-align: left!important;">Total pinjaman biaya petani</td>
-        <td>{{number_format($total = $total,0,',','.')}}</td>
+        <td colspan="2" style="text-align: left!important;">Total pinjaman biaya petani</td>
+        <td>Rp{{number_format($total = $total,0,',','.')}}</td>
     </tr>
     </tbody>
 </table>
