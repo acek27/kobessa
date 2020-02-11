@@ -109,7 +109,8 @@ class ordersaprodiController extends Controller
             'namalahan' => $req->namalahan,
             'luaslahan' => $req->luaslahan,
             'iddesa' => $req->iddesa,
-            'keterangan' => $req->keterangan
+            'keterangan' => $req->keterangan,
+            'idstatus' => 6
         ]);
             $berhasil = 'Kebutuhan Saprodi Berhasil Disimpan';
             return response()->json($berhasil);
@@ -117,7 +118,7 @@ class ordersaprodiController extends Controller
     }
     public function getIDlahan(){
         $idl = DB::table('lahan')->orderBy ('idlahan','desc')->first();
-        return response()->json($idl);
+        return response()->json([$idl]);
         }
    
     public function simpanpoktan(Request $req){

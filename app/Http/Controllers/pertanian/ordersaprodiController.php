@@ -155,7 +155,7 @@ class ordersaprodiController extends Controller
             $idsaprodi = $request->get('idsaprodi' . $i);
             $kebutuhan = $request->get('kebutuhan' . $i);
             date_default_timezone_set('Asia/Jakarta');
-            $po = date('dmHi').Auth::user()->id;
+            $po = date('dmyHi').Auth::user()->id;
             if ($idsaprodi != null || $kebutuhan != null) {
                 DB::table('pesanansaprodi')->insert([
                     'idsuplier' => $idsuplier,

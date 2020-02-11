@@ -9,8 +9,8 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">PENDAFTARAN</h1>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> Buat MOU</a>
+        <a href="{{route('download')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-download fa-sm text-white-50"></i>Export Excel</a>
     </div>
     @if (session()->has('flash_notification.message'))
         <div class="alert alert-{{ session()->get('flash_notification.level') }}">
@@ -132,7 +132,7 @@
         <!-- <div class="row"> -->
             @csrf
         <label style="color:black">Nama Kelompok Tani</label> 
-        <a href="{{route('kelompokpetani.create')}}" target="_blank" class="btn btn-sm btn-primary shadow-sm">Daftar Kelompok</a>
+        <!-- <a href="{{route('kelompokpetani.create')}}" target="_blank" class="btn btn-sm btn-primary shadow-sm">Daftar Kelompok</a> -->
         <select class="form-control show-tick" id="idkelompok" name="idkelompok" required>
             <option value="">-- Please select --</option>
             @foreach($kelompok as $value)
@@ -219,6 +219,26 @@
                 success: function (x) {
                     swal("Maaf", "NIK Sudah terdaftar sebagai Petani", "error");
                     $('#nik').val("");
+                }
+            });
+            });
+
+            $('#loadnik').click(function(){
+                var kode = $("#nik").val();
+            $.ajax({
+                url: "{{url('/datanik')}}/" + kode,
+                type: 'GET',
+                datatype: 'json',
+                error: function (data, exception) {
+                    swal("MAAF!", "NIK belum terdaftar", "success");
+                   
+                },
+                success: function (data) {
+                    // alert(data['nama']);
+                    $('#nama').val(data['nama']);
+                    $('#tl').val(data['lahir_tempat']);
+                    $('#tgl').val(data['lahir_tanggal']);
+                    $('#jk').val(data['jk']);
                 }
             });
             });

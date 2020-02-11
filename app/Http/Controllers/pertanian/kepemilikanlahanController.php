@@ -102,8 +102,6 @@ class kepemilikanlahanController extends Controller
         $idkelompok = $request->get('idkelompok');
         $koordinat = $request->get('koordinat');
         $idlahan = $request->get('idlahan');
-        $idstatus = $request->get('idstatus');
-
         $pengecekan = DB::table('lahan')->select('*')
         ->where('idlahan', '=', $idlahan);
 
@@ -115,7 +113,7 @@ class kepemilikanlahanController extends Controller
                 'luaslahan' => $luas,
                 'iddesa' => $iddesa,
                 'keterangan' => $keterangan,
-                'idstatus' => $idstatus,
+                'idstatus' => 6,
                 'koordinat' => $koordinat,
         ]);
        
@@ -134,7 +132,7 @@ class kepemilikanlahanController extends Controller
                 'luaslahan' => $luas,
                 'iddesa' => $iddesa,
                 'keterangan' => $keterangan,
-                'idstatus' => $idstatus,
+                'idstatus' => 6,
                 'koordinat' => $koordinat,
             ]);
 

@@ -228,7 +228,9 @@ class rencanatanamController extends Controller
                 }
 
             }
+           
         }
+        
         DB::table('lahan')->where('idlahan', "=", $idlahan)->update([
             'idstatus' => 1,
         ]);

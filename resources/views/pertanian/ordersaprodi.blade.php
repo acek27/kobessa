@@ -35,10 +35,6 @@
                                  <input type="text" class="form-control form-control-user && col-sm-8" value="{{$value->telpsuplier}}" disabled>
                             </div>
                             <div class="form-group row">
-                                 <label style="color:black" class="col-sm-3 col-form-label">No Pesanan (PO) </label> <br>
-                                 <input type="text" class="form-control form-control-user && col-sm-8" id="po" name="po" value="@if($nopo == null){{1}}@else{{$nopo+1}}@endif" disabled>
-                            </div>
-                            <div class="form-group row">
                                  <label style="color:black" class="col-sm-3 col-form-label">Permintaan Dikirim  </label> <br>
                                  <input type="text" class="form-control datepicker && col-sm-8 && form-control form-control-user " id="datepicker" name="tglkirim" required >
                             </div>

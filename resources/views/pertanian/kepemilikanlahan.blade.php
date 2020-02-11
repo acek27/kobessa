@@ -43,13 +43,6 @@
         <label style="color:black">Luas Lahan yang dimiliki (Ha)</label>
         <input type="text" class="form-control form-control-user" id="luas" name="luas" aria-describedby="emailHelp"
                placeholder="">
-        <label style="color:black">Status Lahan</label>
-        <select class="form-control show-tick" id="idstatus" name="idstatus" required>
-            <option value="5">-- Tidak diketahui --</option>
-            <option value="4">Pengolahan Lahan</option>
-            <option value="1">Tanam</option>
-            <option value="2">Panen</option>
-            </select>
         <br><label style="color:black">LOKASI LAHAN:</label>
         <br>
         <label style="color:black">Kecamatan</label>
@@ -100,12 +93,12 @@
         <div class="col-5 m2"> 
         <label style="color:black">Latitude</label>
         <input type="text" class="form-control form-control-user" id="latitude" name="latitude"
-               aria-describedby="emailHelp" required> 
+               aria-describedby="emailHelp"> 
         </div>     
         <div class="col-5 m2"> 
         <label style="color:black">Longitude</label>
         <input type="text" class="form-control form-control-user" id="longitude" name="longitude"
-               aria-describedby="emailHelp" required> 
+               aria-describedby="emailHelp"> 
         </div>     
         <div class="col-2 m2"> 
         <br>

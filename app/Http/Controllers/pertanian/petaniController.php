@@ -19,6 +19,12 @@ class petaniController extends Controller
         return view('dashboard');
     }
 
+    public function download()
+    {
+        $download = DB::table('biodatauser')->select('*')->get();
+        return view('pertanian.download', compact('download'));
+        // return($download);
+    }
 
     public function tabelpetani()
     {

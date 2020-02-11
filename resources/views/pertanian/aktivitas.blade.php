@@ -43,7 +43,7 @@
                         <input type="text" class="form-control uang" id="idbertani" name="idbertani"
                                aria-describedby="emailHelp" hidden>
                         <input type="text" class="form-control uang" id="idfase" name="idfase"
-                               aria-describedby="emailHelp">
+                               aria-describedby="emailHelp" hidden>
                         <input type="text" class="form-control uang" id="ket" name="ket"
                                aria-describedby="emailHelp" hidden>
                         <p style="color: green" id="aktivitas">-</p>
@@ -76,7 +76,6 @@
                             <thead style="text-align: center">
                             <tr>
                                 <th style="width: 15%">Tanggal Aktivitas</th>
-                                <th>Fase</th>
                                 <th>Aktivitas</th>
                                 <th style="width: 15%">Tanggal Pelaksanaan</th>
                                 <th>Status</th>
@@ -114,11 +113,6 @@
                     data: 'tglaktivitas',
                     name: 'tglaktivitas'
                 },
-
-                    {
-                        data: 'idfase',
-                        name: 'idfase'
-                    },
                     {
                         data: 'aktivitas',
                         name: 'aktivitas'
@@ -129,7 +123,6 @@
                     },
                     {data: 'status', name: 'status', orderable: false, searchable: false, align: 'center'},
                     {data: 'keterangan', name: 'keterangan', orderable: false, searchable: false, align: 'center'},
-
                 ]
             });
 

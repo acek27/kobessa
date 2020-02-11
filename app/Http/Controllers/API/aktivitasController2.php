@@ -68,23 +68,13 @@ class aktivitasController extends Controller
 
         return response()->json($data);
     }
-    public function aktivitaslahanJBbytgl($id,$tgl){
-        $ambil = DB::table('jadwalbertani')->where('idlahan',"=",$id)->orderBy('periode','DESC')->value('periode');
-        $data = DB::table('jadwalbertani')
-        ->join('fasetanam','fasetanam.idfase',"=",'jadwalbertani.idfase')
-        ->where("jadwalbertani.idlahan", $id)->where("jadwalbertani.periode", $ambil)->where("jadwalbertani.tglaktivitas", $tgl)
-        ->select('jadwalbertani.idlahan','jadwalbertani.tglaktivitas','fasetanam.namafase','jadwalbertani.aktivitas','jadwalbertani.status','jadwalbertani.keterangan')
-        ->get();
-
-        return response()->json($data);
-    }
     public function aktivitasbySOP($id){
         $ambil = DB::table('jadwalbertani')->where('idlahan',"=",$id)->orderBy('periode','DESC')->value('periode');
         $data = DB::table('jadwalbertani')
         ->where("idlahan", $id)->where("periode", $ambil)->orderBy("tglaktivitas", 'ASC')
             ->first();
 
-        return response()->json([$data]);
+        return response()->json($data);
     }
 
 

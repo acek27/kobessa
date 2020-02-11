@@ -35,8 +35,9 @@ Route::get('lahanbyPPL/{id}', 'API\jadwaltanamController@lahanbyPPL'); //belum /
 
 Route::get('jenistanaman', 'API\jadwaltanamController@jenistanaman');
 Route::get('ambilPT/{id}', 'API\jadwaltanamController@ambilPT'); // belum
-Route::post('metodebenih', 'API\jadwaltanamController@metodebenih'); // belum [bawa idfase dan aktivitas by idversisop] 
-Route::post('metodetanam', 'API\jadwaltanamController@metodetanam'); // belum [bawa idfase dan aktivitas by idversisop] 
+Route::get('ambillahan/{nik}', 'API\jadwaltanamController@ambillahan'); // belum // ambil lahan yang status idlahannya 4,5,6 [tdk ada aktivitas]
+Route::get('metodebenih/{idversi}', 'API\jadwaltanamController@metodebenih'); // belum [bawa idfase dan aktivitas by idversisop] 
+Route::get('metodetanam/{idversi}', 'API\jadwaltanamController@metodetanam'); // belum [bawa idfase dan aktivitas by idversisop] 
 Route::post('simpanjadwaltanam', 'API\jadwaltanamController@simpanjadwaltanam');  //belum
 Route::post('simpanjadwalbertani', 'API\jadwaltanamController@simpanjadwalbertani'); //belum
 
@@ -48,6 +49,8 @@ Route::get('loadaktivitas/{id}', 'API\aktivitasController@loadaktivitas'); //ppl
 Route::get('lahanbyJB/{nik}', 'API\aktivitasController@lahanbyJB'); //load lahan sebelum schedule,aktivitas petani
 Route::get('aktivitasbylahanbyJB/{id}', 'API\aktivitasController@aktivitasbylahanbyJB'); //isi kalender [jadwal bertani petani selama 1x panen] berdasarkan periode terakhir yg sedang aktif
 Route::get('aktivitasbySOP/{id}', 'API\aktivitasController@aktivitasbySOP'); //Load data AKTIVITAS Petani [1 Aktivitas yg harus dilakukan]
+
+Route::get('aktivitaslahanJBbytgl/{id}/{tgl}', 'API\aktivitasController@aktivitaslahanJBbytgl');
 
 //ORDER SAPRODI
 Route::get('suplier', 'API\ordersaprodiController@suplier'); //belum

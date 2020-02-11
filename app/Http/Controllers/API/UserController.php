@@ -44,7 +44,7 @@ class UserController extends Controller
     
     public function details($id){
 
-        $user = User::where('id',$id)->first();
+        $user = User::where('nik',$id)->first();
         $data =['status_code' =>'00',
                     'nama' =>$user->name,
                     'email' =>$user->email,

@@ -25,6 +25,8 @@ Route::get('tabeltanaman', 'pertanian\datatanamanController@tabeltanaman')->name
 Route::get('cektanaman/{id}', 'pertanian\datatanamanController@cektanaman');
 
 Route::resource('datapetani', 'pertanian\petaniController');
+Route::get('/download', 'pertanian\petaniController@download')->name('download');
+Route::get('datapetani/export_excel', 'pertanian\petaniController@export_excel');
 Route::resource('kebutuhansaprodi', 'pertanian\kebutuhanController');
 Route::get('tabelpetani', 'pertanian\petaniController@tabelpetani')->name('tabel.petani');
 Route::get('cekpetani/{id}', 'pertanian\petaniController@cekpetani');
@@ -67,6 +69,7 @@ Route::post('saprodisave','pertanian\soppertanianController@save')->name('sopper
 Route::post('simpan','pertanian\soppertanianController@simpan')->name('soppertanian.simpan');
 
 Route::resource('daftarpetani', 'pertanian\daftarpetaniController');
+Route::get('datanik/{kode}', 'pertanian\daftarpetaniController@data_dasar')->name('data.dasar');
 
 
 Route::resource('datasaprodi', 'pertanian\saprodiController');
@@ -93,6 +96,7 @@ Route::post('fullcalendar/delete','FullCalendarController@destroy');
 
 //EKONOMI
 Route::resource('datasuplier','ekonomi\datasuplierController');
+
 
 Route::resource('pengiriman', 'ekonomi\pengirimanController');
 Route::get('caripesanan', 'ekonomi\pengirimanController@cari')->name('pesanan.cari');
@@ -121,3 +125,5 @@ Route::post('tolakaktivitas/{id}', 'pertanian\aktivitasController@tolakaktivitas
 
 Route::resource('monitoring', 'pertanian\monitoringController');
 Route::get('tabelaktivitas', 'pertanian\monitoringController@tabelaktivitas')->name('tabel.aktivitas');
+
+Route::resource('petasuplier','pertanian\petasuplierController');

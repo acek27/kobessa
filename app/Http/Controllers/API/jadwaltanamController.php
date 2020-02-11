@@ -16,14 +16,22 @@ class jadwaltanamController extends Controller
 
     public function ambilPT($id){
         $ambil = DB::table('jadwaltanam')->where('idlahan',"=",$id)->orderBy('periode','DESC')->first();
-        return response()->json($ambil);
+        return response()->json([$ambil]);
     }
-    public function metodebenih(Request $req){
-        $benih = DB::table('soptanidetail')->where('idversi','=',$req->idversi)->get();
+    public function ambillahan($nikuser){
+        $lahan = DB::table('lahan')->where('nik', '=', $nikuser)->where(function ($status) {
+            $status->where('idstatus', '=', 4)
+                ->orWhere('idstatus', '=', 5)
+                ->orWhere('idstatus', '=', 6);
+            })->get();
+        return response()->json($lahan);
+    } 
+    public function metodebenih($idversi){
+        $benih = DB::table('soptanidetail')->where('idversi','=',$idversi)->get();
         return response()->json($benih);
     }
-    public function metodetanam(Request $req){
-        $tanam = DB::table('soptanidetail')->where('idversi','=',$req->idversi)->where('idfase','>',1)->get();
+    public function metodetanam($idversi){
+        $tanam = DB::table('soptanidetail')->where('idversi','=',$idversi)->where('idfase','>',1)->get();
         return response()->json($tanam);
     }
 

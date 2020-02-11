@@ -35,9 +35,12 @@
         <label style="color:black">NIK</label>
         <input type="text" class="form-control form-control-user" id="nik" name="nik"
                aria-describedby="emailHelp" placeholder="" required>
+               <button type="button" id="cekuser" class="btn btn-sm btn-primary shadow-sm">Cek USER</button>
+               <button type="button" id="loadnik" class="btn btn-sm btn-primary shadow-sm">Load NIK</button>
         @if ($errors->any())
             {!! $errors->first('nik', '<p style="font-size: 12px; color:red">ERROR! input NIK Harus Berupa Angka</p>') !!}
         @endif
+        <br>
         <label style="color:black">Nama Petani</label>
         <input type="text" class="form-control form-control-user" value="{{old('nama')}}" id="nama" name="nama"
                aria-describedby="emailHelp" placeholder="" required>
@@ -145,6 +148,25 @@
                     {data: 'action', name: 'action', orderable: false, searchable: false, align: 'center'},
                 ]
             });
+
+            $('#cekuser').click(function(){
+                var kode = $("#nik").val();
+            $.ajax({
+                url: "{{url('/cekuser')}}/" + kode,
+                type: 'GET',
+                datatype: 'json',
+                error: function (x, exception) {
+                    swal("Kosong", "NIK belum terdaftar sebagai Petani", "success");
+                   
+                },
+                success: function (x) {
+                    swal("Maaf", "NIK Sudah terdaftar sebagai Petani", "error");
+                    $('#nik').val("");
+                }
+            });
+            });
+
+
             var del = function (id) {
                 swal({
                     title: "Apakah anda yakin?",
