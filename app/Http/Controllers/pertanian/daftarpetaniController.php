@@ -246,9 +246,10 @@ class daftarpetaniController extends Controller
             ->join('kecamatan', 'desa.idkecamatan', '=', 'kecamatan.idkecamatan')
             ->where('lahan.idlahan', '=', $id)->first();
         $sop = DB::table('kebutuhansaprodi')->join('saprodi','kebutuhansaprodi.idsaprodi','saprodi.idsaprodi')
-            ->select('kebutuhan','namasaprodi','hargasatuan')->where('idsop',3)->get();
+            ->select('kebutuhan','namasaprodi','hargasatuan','satuan')->where('idsop',1)->get();
         $pdf = PDF::loadView('myPDF', compact('biodata', 'bulanindo', 'hari_ini','sop'))->setPaper('folio', 'potrait');
         return $pdf->stream('MoU Kobessa');
+
     }
 
     /**
@@ -277,6 +278,40 @@ class daftarpetaniController extends Controller
         }
     }
 
+
+    public function data_dasar($kode){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,"http://e-desanow.situbondokab.go.id/api/d_penduduk/".$kode);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $headers = [
+           'Accept: application/json',
+           'Authorization: Bearer Ls*ZfJ7w_apSFM41QyfxazBt0PC)7@#&',
+        ];
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 300);
+        $result = curl_exec($ch);
+        
+        if (curl_errno($ch)) {
+            // this would be your first hint that something went wrong
+            die('Couldn\'t send request: ' . curl_error($ch));
+        } else {
+            // check the HTTP status code of the request
+            $resultStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            if ($resultStatus == 200) {
+                $data = json_decode($result);
+                //return $data->nama;
+                return response()->json($data);
+            } else {
+                // the request did not complete as expected. common errors are 4xx
+                // (not found, bad request, etc.) and 5xx (usually concerning
+                // errors/exceptions in the remote script execution)
+
+                die('Request failed: HTTP status code: ' . $resultStatus);
+            }
+        }
+        curl_close($ch);
+        
+    }
 
     public function mouLahan($id)
     {

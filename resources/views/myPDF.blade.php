@@ -247,6 +247,7 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
         <th>No.</th>
         <th>Nama Saprodi</th>
         <th>Kebutuhan</th>
+        <th>Satuan</th>
         <th>Harga</th>
     </tr>
     </thead>
@@ -260,6 +261,7 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
             <td>{{ $i++ }}</td>
             <td>{{ $kebutuhan->namasaprodi }}</td>
             <td>{{ceil($kebutuhan->kebutuhan*$biodata->luaslahan)}}</td>
+            <td>{{$kebutuhan->satuan}}</td>
             <td>{{number_format(ceil($kebutuhan->kebutuhan*$biodata->luaslahan)*$kebutuhan->hargasatuan,0,',','.')}}</td>
         </tr>
         @php
@@ -268,7 +270,7 @@ Jumlah Pinjaman        :...............(....................... Rupiah)
     @endforeach
     <tr style="height: 0">
         <td></td>
-        <td colspan="2" style="text-align: left!important;">Total pinjaman biaya petani</td>
+        <td colspan="3" style="text-align: left!important;">Total pinjaman biaya petani</td>
         <td>Rp{{number_format($total = $total,0,',','.')}}</td>
     </tr>
     </tbody>
