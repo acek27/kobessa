@@ -228,11 +228,10 @@ class rencanatanamController extends Controller
                 }
 
             }
-            DB::table('lahan')->where('idlahan', "=", $idlahan)->update([
-                'idstatus' => 5,
-            ]);
         }
-
+        DB::table('lahan')->where('idlahan', "=", $idlahan)->update([
+            'idstatus' => 1,
+        ]);
         return redirect('rencanatanam');
         //return response()->json($tglbertani);
     }

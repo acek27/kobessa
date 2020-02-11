@@ -108,9 +108,9 @@ class ordersaprodiController extends Controller
                 }
             })
             ->addColumn('action', function ($data) {
-                if($data->status == 3){
-                $terima = '<a href="' . route('terima.saprodi',$data->PO) . '" class="terima-data"><i class="far fa-check-circle">Diterima</i></a>';
-                return $terima;
+                if ($data->status == 3) {
+                    $terima = '<a href="' . route('terima.saprodi', $data->PO) . '" class="terima-data"><i class="far fa-check-circle">Diterima</i></a>';
+                    return $terima;
                 }
             })
             ->make(true);
@@ -119,7 +119,7 @@ class ordersaprodiController extends Controller
 
     public function terimasaprodi($id)
     {
-         order::where('PO', $id)->update(
+        order::where('PO', $id)->update(
             ['status' => 4]
         );
         return redirect()->route('ordersaprodi.index');
@@ -149,11 +149,13 @@ class ordersaprodiController extends Controller
         for ($i = 1; $i <= 15; $i++) {
             $idsuplier = $request->get('idsuplier');
             $tglkirim = $request->get('tglkirim');
-            $po = $request->get('po1');
+//            $po = $request->get('po1');
             $nik = $request->get('nik');
             $todayDate = date("Y-m-d");
             $idsaprodi = $request->get('idsaprodi' . $i);
             $kebutuhan = $request->get('kebutuhan' . $i);
+            date_default_timezone_set('Asia/Jakarta');
+            $po = date('dmHi').Auth::user()->id;
             if ($idsaprodi != null || $kebutuhan != null) {
                 DB::table('pesanansaprodi')->insert([
                     'idsuplier' => $idsuplier,
