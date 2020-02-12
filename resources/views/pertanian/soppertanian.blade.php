@@ -72,7 +72,6 @@
                                             <th style="width: 40%; text-align: left; vertical-align: middle" >Nama SOP</th>
                                             <th style="width: 40%; text-align: left; vertical-align: middle" >Pemilik SOP</th>
                                             <th style="width: 40%; text-align: left; vertical-align: middle" >Untuk Tanaman</th>
-                                            <th style="width: 60%; text-align: left; vertical-align: middle" >Action</th>
                                             
                                         </tr>
                                     </thead>
@@ -118,8 +117,11 @@
                                 </select>
                                 <label style="color:black">Nama Kegiatan</label>
                                 <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp" required>
-                                <label style="color:black">Waktu Kegiatan (Hst)</label>
+                                <label style="color:black">Waktu Kegiatan (Hst) (-) sebelum / (+) sesudah</label>
                                 <input type="text" class="form-control form-control-user" id="waktu" name="waktu" aria-describedby="emailHelp" required>
+                                <br>
+                                <label style="color:black">Perlakuan/Keterangan</label>
+                                <textarea cols="30" rows="8" type="text" class="form-control form-control-user" id="ket" name="ket" aria-describedby="emailHelp" required> </textarea>
                                 <br>
                                 <button class="btn btn-sm btn-primary shadow-sm">
                                     SIMPAN</button>
@@ -138,12 +140,12 @@
                                     <table class="table table-bordered" id="saprodi-tab2-dt" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
-                                                <th style="width: 50%; text-align: left; vertical-align: middle" >Nama SOP</th>
-                                                <th style="width: 50%; text-align: left; vertical-align: middle" >Fase Tanam</th>
-                                                <th style="width: 40%; text-align: left; vertical-align: middle" >Kegiatan</th>
-                                                <th style="width: 40%; text-align: left; vertical-align: middle" >Waktu</th>
-                                                <th style="width: 60%; text-align: left; vertical-align: middle" >Action</th>
+                                                <th style="width: 10%; text-align: left; vertical-align: middle">ID</th>
+                                                <th style="width: 30%; text-align: left; vertical-align: middle">Nama SOP</th>
+                                                <th style="width: 20%; text-align: left; vertical-align: middle">Fase Tanam</th>
+                                                <th style="width: 20%; text-align: left; vertical-align: middle">Kegiatan</th>
+                                                <th style="width: 10%; text-align: left; vertical-align: middle">Waktu</th>
+                                                <th style="width: 40%; text-align: left; vertical-align: middle">Keterangan</th>
                                                 
                                             </tr>
                                         </thead>
@@ -188,13 +190,6 @@
                     data: 'jenis',
                     name: 'jenis'
                 },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false,
-                    align: 'center'
-                },
             ]
         });
 
@@ -224,11 +219,8 @@
                     name: 'waktu'
                 },
                 {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false,
-                    align: 'center'
+                    data: 'keterangan',
+                    name: 'keterangan'
                 },
             ]
         });    
@@ -237,63 +229,6 @@
     });
 
     
-</script>
-<script>
-$(document).ready(function() {
-    var del = function (id) {
-                swal({
-                    title: "Apakah anda yakin?",
-                    text: "Anda tidak dapat mengembalikan data yang sudah terhapus!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Iya!",
-                    cancelButtonText: "Tidak!",
-                }).then(
-                    function (result) {
-                        $.ajax({
-                            url: "{{route('soppertanian.index')}}/" + id,
-                            method: "DELETE",
-                        }).done(function (msg) {
-                         dt.ajax.reload();
-                            $('#nama').val("");
-                            $('#waktu').val("");
-                            $('#idsop').val("");
-                            $('#idfase').val("");
-                            $('#simpan').text("SIMPAN");
-                            swal("Deleted!", "Data sudah terhapus.", "success");
-                        }).fail(function (textStatus) {
-                            alert("Request failed: " + textStatus);
-                        });
-                    }, function (dismiss) {
-                        // dismiss can be 'cancel', 'overlay', 'esc' or 'timer'
-                        swal("Cancelled", "Data batal dihapus", "error");
-                    });
-            };
-
-            $('body').on('click', '.hapus-data', function () {
-                del($(this).attr('data-id'));
-            });
-
-            $('body').on("click", '.edit-modal', function () {
-                var idjenis = $(this).attr('data-id');
-                $.ajax({
-                    url: "/soppertanian/"+ idsop+"/edit",
-                    type: 'GET',
-                    datatype: 'json',
-                    success: function (x) {
-                        $.each(x, function (index, z) {
-                            $('#nama').val(z.kegiatan);
-                            $('#waktu').val(z.waktu);
-                            $('#id').val(z.idsop);
-                            $('#idfase').val(z.idfase);
-                            $('#simpan').text("UPDATE");
-                        });
-
-                    }
-                });
-            });
-});
 </script>
 
 @endpush

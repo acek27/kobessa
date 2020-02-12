@@ -26,11 +26,6 @@ class soppertanianController extends Controller
             ->join('fasetanam', 'fasetanam.idfase', '=', 'soptanidetail.idfase')
             ->select('soptanidetail.*', 'fasetanam.namafase as fase','soppertanian.versisop as namasop')
             ->get())
-            ->addColumn('action', function ($data) {
-                $del = '<a href="#" data-id="' . $data->idsop . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
-                $edit = '<a href="#" data-id="' . $data->idsop . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
-                return $edit . '&nbsp' . '&nbsp' . $del;
-            })
             ->make(true);
     }
     public function tabelversisop()
@@ -39,12 +34,7 @@ class soppertanianController extends Controller
         ->join('jenistanaman','soppertanian.idjenis','=','jenistanaman.idjenis')
         ->select('soppertanian.*','jenistanaman.jenistanaman as jenis')
         ->get())
-            ->addColumn('action', function ($data) {
-                $del = '<a href="#" data-id="' . $data->idversi . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
-                $edit = '<a href="#" data-id="' . $data->idversi . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
-                return $edit . '&nbsp' . '&nbsp' . $del;
-            })
-            ->make(true);
+        ->make(true);
     }
 
     /**
@@ -72,30 +62,14 @@ class soppertanianController extends Controller
         $idversi = $request->get('idversisop');
         $nama = $request->get('nama');
         $waktu = $request->get('waktu');
-        $pengecekan = DB::table('soptanidetail')->select('*')
-            ->where('idversi', '=', $idversi)
-            ->where('idfase', '=', $idfase)
-            ->where('kegiatan', '=', $nama);
-
-        if ($pengecekan->exists()) {
-            DB::table('soptanidetail')
-                ->where('idversi', '=', $idversi)
-                ->where('idfase',$idfase)
-                ->update([
-                'kegiatan' => $nama,
-                'waktu' => $waktu
-            ]);
-
-            \Session::flash("flash_notification", [
-                "level" => "success",
-                "message" => "Data Berhasil Diupdate!"
-            ]);
-        } else {
+        $ket = $request->get('ket');
+       
             DB::table('soptanidetail')->insert([
                     'idfase'      => $idfase,
                     'idversi'      => $idversi,
                     'kegiatan'     => $nama,
-                    'waktu'     => $waktu
+                    'waktu'     => $waktu,
+                    'keterangan' => $ket,
 
                 ]);
         
@@ -103,7 +77,7 @@ class soppertanianController extends Controller
                     "level" => "success",
                     "message" => "Berhasil menambah data!"
                 ]);
-        }
+        
                return redirect('/soppertanian/create');
     }
 

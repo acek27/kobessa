@@ -182,7 +182,7 @@ class daftarpetaniController extends Controller
         return redirect('/daftarpetani/create');
     }
 
-    public function print($id)
+    public function print($sop,$id)
     {
         $tanggal = date('Y-m-d');
         $bulan = array(
@@ -245,9 +245,9 @@ class daftarpetaniController extends Controller
             ->join('desa', 'desa.iddesa', '=', 'kelompok.iddesa')
             ->join('kecamatan', 'desa.idkecamatan', '=', 'kecamatan.idkecamatan')
             ->where('lahan.idlahan', '=', $id)->first();
-        $sop = DB::table('kebutuhansaprodi')->join('saprodi','kebutuhansaprodi.idsaprodi','saprodi.idsaprodi')
-            ->select('kebutuhan','namasaprodi','hargasatuan','satuan')->where('idsop',1)->get();
-        $pdf = PDF::loadView('myPDF', compact('biodata', 'bulanindo', 'hari_ini','sop'))->setPaper('folio', 'potrait');
+        $sop = DB::table('kebutuhansaprodi')->join('saprodi', 'kebutuhansaprodi.idsaprodi', 'saprodi.idsaprodi')
+            ->select('kebutuhan', 'namasaprodi', 'hargasatuan', 'satuan')->where('idsop', $sop)->get();
+        $pdf = PDF::loadView('myPDF', compact('biodata', 'bulanindo', 'hari_ini', 'sop'))->setPaper('folio', 'potrait');
         return $pdf->stream('MoU Kobessa');
 
     }
@@ -279,18 +279,19 @@ class daftarpetaniController extends Controller
     }
 
 
-    public function data_dasar($kode){
+    public function data_dasar($kode)
+    {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,"http://e-desanow.situbondokab.go.id/api/d_penduduk/".$kode);
+        curl_setopt($ch, CURLOPT_URL, "http://e-desanow.situbondokab.go.id/api/d_penduduk/" . $kode);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $headers = [
-           'Accept: application/json',
-           'Authorization: Bearer Ls*ZfJ7w_apSFM41QyfxazBt0PC)7@#&',
+            'Accept: application/json',
+            'Authorization: Bearer Ls*ZfJ7w_apSFM41QyfxazBt0PC)7@#&',
         ];
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_TIMEOUT, 300);
         $result = curl_exec($ch);
-        
+
         if (curl_errno($ch)) {
             // this would be your first hint that something went wrong
             die('Couldn\'t send request: ' . curl_error($ch));
@@ -310,7 +311,7 @@ class daftarpetaniController extends Controller
             }
         }
         curl_close($ch);
-        
+
     }
 
     public function mouLahan($id)
@@ -324,10 +325,16 @@ class daftarpetaniController extends Controller
             ->where('lahan.nik', '=', $id)
             ->get())
             ->addColumn('action', function ($data) {
-                $print = '<a href="' . route('mou.print', $data->idlahan) . '" class="print-data" target="_blank"><i class="fa fa-print"></i></a>';
+                $print = '<a href="#" data-id="' . $data->idlahan . '" class="show-data"><i class="fa fa-print"></i></a>';
                 return $print;
             })
             ->make(true);
+    }
+
+    public function getsop()
+    {
+        $sop = DB::table('soppertanian')->get();
+        return response()->json($sop);
     }
 
     /**

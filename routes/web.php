@@ -58,7 +58,7 @@ Route::get('carisuplier', 'pertanian\ordersaprodiController@cari')->name('orders
 Route::resource('kebutuhan', 'pertanian\kebutuhanController');
 Route::get('tabelsop', 'pertanian\kebutuhanController@tabelsop')->name('tabel.sop');
 Route::get('tabelkebutuhan/{id}', 'pertanian\kebutuhanController@tabelkebutuhan')->name('tabel.kebutuhan');
-Route::get('carisop', 'pertanian\kebutuhanController@cari')->name('kebutuhan.cari'); 
+Route::get('carisop', 'pertanian\kebutuhanController@cari')->name('kebutuhan.cari');
 
 
 //SOP PERTANIAN
@@ -107,7 +107,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('tabelmoulahan/{id}', 'pertanian\daftarpetaniController@mouLahan')->name('mou.lahan');
-Route::get('mouprint/{id}', 'pertanian\daftarpetaniController@print')->name('mou.print');
+Route::get('daftarpetani/print/{sop}/{id}', 'pertanian\daftarpetaniController@print')->name('mou.print');
 Route::POST('ordersaprodi/{id}', 'ekonomi\pengirimanController@order')->name('order.saprodi');
 Route::get('tolaksaprodi/{id}', 'ekonomi\pengirimanController@tolaksaprodi')->name('tolak.saprodi');
 Route::get('terimasaprodi/{id}', 'pertanian\ordersaprodiController@terimasaprodi')->name('terima.saprodi');
@@ -127,3 +127,4 @@ Route::resource('monitoring', 'pertanian\monitoringController');
 Route::get('tabelaktivitas', 'pertanian\monitoringController@tabelaktivitas')->name('tabel.aktivitas');
 
 Route::resource('petasuplier','pertanian\petasuplierController');
+Route::get('getsop', 'pertanian\daftarpetaniController@getsop')->name('getsop');
