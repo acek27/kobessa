@@ -123,7 +123,7 @@
             $.get("{{route('getsop')}}", function (data) {
                 console.log(data);
                 $.each(data, function (index, z) {
-                    html += '<tr><td><a target="_blank" href=print'+'/'+ z.idversi +'/'+id + '>' + z.versisop + '</a></td></tr>';
+                    html += '<tr><td><a target="_blank" href=print' + '/' + z.idversi + '/' + id + '>' + z.versisop + '</a></td></tr>';
                 });
                 $('#sop').html(html);
             });

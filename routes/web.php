@@ -11,13 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-});
+
+Route::get('/', 'HomeController@index');
 /* Pertanian */
 //Route::post('/dataProvinsi/{id}', 'dataPengunjungController@dataProvinsi')->name('data.provinsi');
 Route::resource('datatanaman', 'pertanian\datatanamanController');
@@ -65,8 +61,8 @@ Route::get('carisop', 'pertanian\kebutuhanController@cari')->name('kebutuhan.car
 Route::resource('soppertanian', 'pertanian\soppertanianController');
 Route::get('tabelsoptani', 'pertanian\soppertanianController@tabelsoptani')->name('tabel.soptani');
 Route::get('tabelversisop', 'pertanian\soppertanianController@tabelversisop')->name('tabel.versisop');
-Route::post('saprodisave','pertanian\soppertanianController@save')->name('soppertanian.save');
-Route::post('simpan','pertanian\soppertanianController@simpan')->name('soppertanian.simpan');
+Route::post('saprodisave', 'pertanian\soppertanianController@save')->name('soppertanian.save');
+Route::post('simpan', 'pertanian\soppertanianController@simpan')->name('soppertanian.simpan');
 
 Route::resource('daftarpetani', 'pertanian\daftarpetaniController');
 Route::get('datanik/{kode}', 'pertanian\daftarpetaniController@data_dasar')->name('data.dasar');
@@ -88,14 +84,14 @@ Route::post('/hargasaprodi/{id}', 'pertanian\kebutuhanController@hargasaprodi');
 Route::post('/datakelompok/{id}', 'pertanian\daftarpetaniController@datakelompok');
 
 //fullcalender
-Route::get('fullcalendar','FullCalendarController@index');
-Route::post('fullcalendar/create','FullCalendarController@create');
-Route::post('fullcalendar/update','FullCalendarController@update');
-Route::post('fullcalendar/delete','FullCalendarController@destroy');
+Route::get('fullcalendar', 'FullCalendarController@index');
+Route::post('fullcalendar/create', 'FullCalendarController@create');
+Route::post('fullcalendar/update', 'FullCalendarController@update');
+Route::post('fullcalendar/delete', 'FullCalendarController@destroy');
 
 
 //EKONOMI
-Route::resource('datasuplier','ekonomi\datasuplierController');
+Route::resource('datasuplier', 'ekonomi\datasuplierController');
 
 
 Route::resource('pengiriman', 'ekonomi\pengirimanController');
@@ -107,17 +103,17 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('tabelmoulahan/{id}', 'pertanian\daftarpetaniController@mouLahan')->name('mou.lahan');
-Route::get('daftarpetani/print/{sop}/{id}', 'pertanian\daftarpetaniController@print')->name('mou.print');
+Route::get('daftarpetani/print/{sop}/{id}', 'pertanian\daftarpetaniController@print')->name('mou.print'); //baru
 Route::POST('ordersaprodi/{id}', 'ekonomi\pengirimanController@order')->name('order.saprodi');
 Route::get('tolaksaprodi/{id}', 'ekonomi\pengirimanController@tolaksaprodi')->name('tolak.saprodi');
 Route::get('terimasaprodi/{id}', 'pertanian\ordersaprodiController@terimasaprodi')->name('terima.saprodi');
 Route::get('tabelhistoritanamSP', 'pertanian\rencanatanamController@tabelhistoritanamSP')->name('tabel.historitanamSP');
 Route::post('/datasop/{id}', 'pertanian\rencanatanamController@datasop');
-Route::resource('peta','pertanian\petaController');
+Route::resource('peta', 'pertanian\petaController');
 Route::get('/ambilkoordinat/{id}', 'pertanian\kepemilikanlahanController@ambilkoordinat');
 Route::get('jadwalprint/{id}', 'pertanian\rencanatanamController@print')->name('jadwal.print');
 
-Route::resource('daftarppl','pertanian\pplController');
+Route::resource('daftarppl', 'pertanian\pplController');
 Route::get('tabelppl', 'pertanian\pplController@tabelppl')->name('tabel.ppl');
 
 Route::post('tolakaktivitas/{id}', 'pertanian\aktivitasController@tolakaktivitas');
@@ -126,5 +122,5 @@ Route::post('tolakaktivitas/{id}', 'pertanian\aktivitasController@tolakaktivitas
 Route::resource('monitoring', 'pertanian\monitoringController');
 Route::get('tabelaktivitas', 'pertanian\monitoringController@tabelaktivitas')->name('tabel.aktivitas');
 
-Route::resource('petasuplier','pertanian\petasuplierController');
-Route::get('getsop', 'pertanian\daftarpetaniController@getsop')->name('getsop');
+Route::resource('petasuplier', 'pertanian\petasuplierController');
+Route::get('getsop', 'pertanian\daftarpetaniController@getsop')->name('getsop'); //baru
