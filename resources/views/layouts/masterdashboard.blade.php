@@ -72,7 +72,7 @@
                      data-parent="#accordionSidebar">
                      <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
-                        
+
                     </div>
                 </div>
             </li>
@@ -114,13 +114,13 @@
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Menu:</h6>
-                      
+
                         <a class="collapse-item active" href="{{route('datapetani.create')}}">Data Petani</a>
                         <a class="collapse-item active" href="{{route('kelompokpetani.create')}}">Data Kelompok Petani</a>
                         <a class="collapse-item active" href="{{route('kepemilikanlahan.create')}}">Kepemilikan Lahan</a>
                         <a class="collapse-item active" href="{{route('kebutuhan.cari')}}">Kebutuhan Saprodi</a>
-                        <a class="collapse-item active" href="{{route('monitoring.index')}}">Monitoring</a> 
-                       
+                        <a class="collapse-item active" href="{{route('monitoring.index')}}">Monitoring</a>
+
                     </div>
                 </div>
             </li>
@@ -137,10 +137,10 @@
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item active" href="{{route('rencanatanam.index')}}">Rencana Tanam</a> 
-                        <a class="collapse-item active" href="{{route('aktivitas.index')}}">Aktivitas</a> 
+                        <a class="collapse-item active" href="{{route('rencanatanam.index')}}">Rencana Tanam</a>
+                        <a class="collapse-item active" href="{{route('aktivitas.index')}}">Aktivitas</a>
                         <a class="collapse-item active" href="{{route('ordersaprodi.cari')}}">Pesan Saprodi</a>
-                        <a class="collapse-item active" href="{{route('ordersaprodi.index')}}">History Pesanan</a>  
+                        <a class="collapse-item active" href="{{route('ordersaprodi.index')}}">History Pesanan</a>
                         <!-- <a class="collapse-item active" href="{{route('hasilpertanian.cari')}}">Hasil Pertanian</a> -->
                         <a class="collapse-item active" href="{{route('rencanatanam.create')}}">Jadwal Tanam Petani</a>
                     </div>
@@ -148,7 +148,7 @@
             </li>
             </li>
     @endcan
- 
+
     @can('koperasi')
         <!-- Nav Item -Ekonomi Menu -->
             <li class="nav-item">
@@ -221,7 +221,7 @@
                      data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
-                        
+
                     </div>
                 </div>
             </li>
@@ -246,10 +246,10 @@
                         <a class="collapse-item active" href="{{route('kebutuhan.cari')}}">Kebutuhan Saprodi</a>
                         <a class="collapse-item active" href="{{route('rencanatanam.create')}}">Jadwal Tanam Petani</a>
                         <h6 class="collapse-header">Menu Petani:</h6>
-                        <a class="collapse-item active" href="{{route('rencanatanam.index')}}">Rencana Tanam</a> 
-                        <a class="collapse-item active" href="{{route('aktivitas.index')}}">Aktivitas</a> 
-                        <a class="collapse-item active" href="{{route('ordersaprodi.cari')}}">Pesan Saprodi</a> 
-                        <a class="collapse-item active" href="{{route('ordersaprodi.index')}}">History Pesanan</a> 
+                        <a class="collapse-item active" href="{{route('rencanatanam.index')}}">Rencana Tanam</a>
+                        <a class="collapse-item active" href="{{route('aktivitas.index')}}">Aktivitas</a>
+                        <a class="collapse-item active" href="{{route('ordersaprodi.cari')}}">Pesan Saprodi</a>
+                        <a class="collapse-item active" href="{{route('ordersaprodi.index')}}">History Pesanan</a>
                         <a class="collapse-item active" href="{{route('hasilpertanian.cari')}}">Hasil Pertanian</a>
                     </div>
                 </div>
@@ -271,7 +271,7 @@
                     </div>
                 </div>
             </li>
-    
+
     <!-- Divider -->
         <hr class="sidebar-divider">
 
@@ -288,7 +288,7 @@
             <!-- <a class="nav-link" href="#" aria-expanded="true"
                    aria-controls="collapseEkonomi">Informasi Kualias Pakan Ternak</a>
             </li>
-    
+
         </div>
 
         <!-- Divider -->
@@ -479,7 +479,7 @@
                     <div class="topbar-divider d-none d-sm-block"></div>
 
                     <!-- Nav Item - User Information -->
-                    
+
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

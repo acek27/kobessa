@@ -102,14 +102,6 @@
                 <div class="row">
                     <div class="col-sm-2 icon"><i class="fa fa-calendar"></i></div>
                     <div class="col-sm-10">
-                        <h3>Penjadwalan Irigasi</h3>
-                        <p>Memberikan informasi kepada Petani tentang jadwal aliran daerah irigasi se-Kabupaten
-                            Situbondo.</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2 icon"><i class="fa fa-leaf"></i></div>
-                    <div class="col-sm-10">
                         <h3>Penjadwalan Masa Tanam dan Panen</h3>
                         <p>Memberikan Informasi mengenai rencana Jadwal Tanam dan Jadwal Panen Petani se-Kabupaten
                             Situbondo.</p>
@@ -126,7 +118,8 @@
                     <div class="col-sm-2 icon"><i class="fa fa-line-chart"></i></div>
                     <div class="col-sm-10">
                         <h3>Monitoring Budidaya Petani</h3>
-                        <p>Membantu memonitoring kegiatan budidaya petani oleh PPL sehingga budidaya berjalan sesuai SOP yang telah diterapkan dan petani dapat panen secara maksimal.</p>
+                        <p>Membantu memonitoring kegiatan budidaya petani oleh PPL sehingga budidaya berjalan sesuai SOP
+                            yang telah diterapkan dan petani dapat panen secara maksimal.</p>
                     </div>
                 </div>
             </div>
